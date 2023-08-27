@@ -1,0 +1,13 @@
+{
+  "packages": [
+    "./backend-service"
+  ],
+  "version": "1.0.0",
+  "npmClient": "npm",
+  "command": {
+    "run": {
+      "npmClient": "npm"
+    },
+    "bootstrap": "npm i"
+  }
+}

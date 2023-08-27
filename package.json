@@ -1,0 +1,8 @@
+{
+  "name": "ewas-service",
+  "author": "kadismile",
+  "private": true,
+  "dependencies": {
+    "lerna": "^7.1.5"
+  }
+}
