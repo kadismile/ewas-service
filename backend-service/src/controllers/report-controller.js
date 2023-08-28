@@ -1,5 +1,5 @@
 
-import { ReportType } from '../models/ReportTypeModel/ReportType.js';
+import { ReportType } from '../models/ReportTypeModel/ReportTypeModel.js';
 import { agency_validation } from '../validations/crud-validations.js'
 
 export const reportType = async (req, res) => {

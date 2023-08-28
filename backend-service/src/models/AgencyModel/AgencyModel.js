@@ -9,7 +9,8 @@ const agencySchema = new Schema({
     type: Boolean,
     default: true
   }
-},{versionKey: false});
+},
+{ timestamps: true, versionKey: false });
 
 
 agencySchema.pre('findOne', async function() {

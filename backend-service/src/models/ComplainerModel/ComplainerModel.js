@@ -28,7 +28,9 @@ const complainerSchema = new Schema({
     type: Boolean,
     default: true
   }
-},{versionKey: false});
+},
+{timestamps: true, versionKey: false }
+);
 
 
 complainerSchema.pre('findOne', async function() {
