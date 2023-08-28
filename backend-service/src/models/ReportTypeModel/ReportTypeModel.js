@@ -9,7 +9,8 @@ const reportTypeSchema = new Schema({
     type: Boolean,
     default: true
   }
-},{versionKey: false});
+},
+{ timestamps: true, versionKey: false });
 
 
 reportTypeSchema.pre('findOne', async function() {

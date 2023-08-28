@@ -5,11 +5,16 @@ const departmentSchema = new Schema({
     type: String,
     required: [true, 'Please Add Name of Department']
   },
+  acronym: {
+    type: String,
+    required: [true, 'Please Add Acronym of Department']
+  },
   isActive : {
     type: Boolean,
     default: true
   }
-},{versionKey: false});
+},
+{ timestamps: true, versionKey: false });
 
 
 departmentSchema.pre('findOne', async function() {

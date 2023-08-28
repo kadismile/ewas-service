@@ -19,7 +19,7 @@ const reportHistorySchema = new Schema({
     type: Schema.Types.String,
     ref: 'Report'
   },
-},{versionKey: false});
+},{ timestamps: true, versionKey: false });
 
 
 export const ReportHistory = model('ReportHistory', reportHistorySchema);
