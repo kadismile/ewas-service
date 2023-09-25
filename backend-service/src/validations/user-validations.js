@@ -17,3 +17,8 @@ export const user_login_validation = Joi.object({
     .required(),
   password: Joi.string().required(),
 });
+
+export const change_password_validation = Joi.object({
+  oldPassword: Joi.string().required(),
+  newPassword: Joi.string().required(),
+});

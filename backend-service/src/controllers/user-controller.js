@@ -1,6 +1,6 @@
 
 import { User } from '../models/UserModel//UserModel.js';
-import { user_create_validation, user_login_validation } from '../validations/user-validations.js'
+import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
 
 export const createUser = async (req, res) => {
   const body = req.body
@@ -80,31 +80,41 @@ export const loginUser = async (req, res) => {
         message: e
     });
   }
-
-  const account = await Account.findOne({ email });
-
-  if (!account) {
-    return req.respond.badRequest();
-  }
-
-  if (!await account.validateHash(account.password, password)) {
-    return req.respond.badRequest();
-  }
-
-  // eslint-disable-next-line no-underscore-dangle
-  delete account._doc.password;
-  delete account._doc.isAdmin;
-  delete account._doc.role;
-
-  const stake = await Stake.findOne({ account: account._id });
-
-  if (!stake) return req.respond.internalError();
-
-  return req.respond.ok({
-    authorization: stake.getJwtHash(),
-    user: account,
-  });
 };
+
+export const changePassword = async (req, res) => {
+  const body = req.body
+  const { oldPassword, newPassword } = body;
+
+  try {
+    const { error } = change_password_validation.validate(body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const user = await User.findOne({ email: req.user.email });
+    if (!user) {
+      res.status(401).json({ error: "invalid credentials"});
+    }
+    
+    if (!await user.matchPassword(oldPassword)) {
+      res.status(401).json({ error: "Invalid password provided"});
+    }
+  
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      message: 'password changed successfully'
+    });
+  } catch (error) {
+    console.error('Error', e)
+      return res.status(500).json({
+        status: "error",
+        message: e
+    });
+  }
+}
 
 const findUserByEmailOrPhone = async (phoneNumber, email) => {
   const user = await User.findOne({
