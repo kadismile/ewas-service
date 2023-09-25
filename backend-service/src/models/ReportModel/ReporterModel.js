@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import  bcrypt from 'bcrypt';
 
-const complainerSchema = new Schema({
+const reporterSchema = new Schema({
   email: {
     type: String,
     unique: true,
@@ -33,15 +33,15 @@ const complainerSchema = new Schema({
 );
 
 
-complainerSchema.pre('findOne', async function() {
+reporterSchema.pre('findOne', async function() {
   this.where({ isActive: true })
 });
 
-complainerSchema.pre('find', async function() {
+reporterSchema.pre('find', async function() {
   this.where({ isActive: true })
 });
 
-complainerSchema.pre('save', async function (next) {
+reporterSchema.pre('save', async function (next) {
   if (this.isNew || this.isModified('password')) {
     if (this.password) {
       this.password = await bcrypt.hash(this.password, await bcrypt.genSalt(10));
@@ -50,4 +50,4 @@ complainerSchema.pre('save', async function (next) {
   next();
 });
 
-export const Complainer = model('Complainer', complainerSchema);
+export const Report = model('Report', reporterSchema);

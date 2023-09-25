@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-export const create_complainer_validation = Joi.object({
+export const create_reporter_validation = Joi.object({
   fullName: Joi.string().required(),
   email: Joi.string()
     .email({ tlds: { allow: false } })
