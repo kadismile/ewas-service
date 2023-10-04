@@ -18,7 +18,7 @@ import { setAddress } from "@/redux/user-slice.js";
 
 export default function Places() {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyDTmPVyef8B2M5O8KafhpDm81Kd4RiuknU',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
     componentRestrictions: {
       country: 'fr'
