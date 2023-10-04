@@ -1,8 +1,11 @@
 
-import { Report } from '../models/ReportModel/ReporterModel.js';
+import { Report } from '../models/ReportModel/Report.js';
 import { create_reporter_validation } from '../validations/reporter-validations.js'
 import { ReportType } from '../models/ReportTypeModel/ReportTypeModel.js';
 import { agency_validation } from '../validations/crud-validations.js'
+import { user_login_validation } from '../validations/user-validations.js'
+import { create_report_validation } from '../validations/reporter-validations.js'
+import { Reporter } from '../models/ReportModel/ReporterModel.js';
 
 export const createReporter = async (req, res) => {
   try {
@@ -18,21 +21,23 @@ export const createReporter = async (req, res) => {
   if (reporter) {
     return res.status(401).json({
       status: 'failed',
-      mesage: `complainer already exist with ${phoneNumber} or ${email}`,
+      message: `Reporter Already Exist with Credentials Provided.`,
     })
   }
 
-  reporter = new Report({
+  reporter = new Reporter({
     email, fullName, phoneNumber, password,address,
   });
 
+  const token = reporter.getSignedJwtToken();
   await reporter.save();
   delete reporter._doc.password;
 
   if (reporter) {
     return res.status(201).json({
       status: 'success',
-      data: reporter
+      data: reporter,
+      token
     });
   }
   } catch (e) {
@@ -43,7 +48,51 @@ export const createReporter = async (req, res) => {
   }
 }
 
+export const loginReporter = async (req, res) => {
+  const body = req.body
+  const { email, password } = body;
 
+  try {
+    const { error } = user_login_validation.validate(body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const reporter = await Reporter.findOne({ email: email });
+    if (!reporter) {
+      return res.status(401).json(
+        { 
+          status: "failed",
+          message: "invalid credentials"
+      });
+    }
+    
+    const isMatch = await reporter.matchPassword(password);
+    if (!isMatch) {
+      return res.status(401).json(
+        { 
+          status: "failed",
+          message: "invalid credentials"
+      });
+    } else {
+      const token = reporter.getSignedJwtToken();
+      delete reporter._doc.password;
+
+      res.status(200).json({
+        status: "success",
+        token,
+        data: reporter
+      });
+
+    }
+  } catch (e) {
+      console.log('Error', e)
+      return res.status(500).json({
+        status: "error",
+        message: e
+    });
+  }
+};
 
 export const reportType = async (req, res) => {
   const body = req.body
@@ -75,15 +124,50 @@ export const reportType = async (req, res) => {
   }
 }
 
+export const createReport = async (req, res) => {
+  const body = req.body
+  const { reporterId } = body;
+
+  try {
+    const { error } = create_report_validation.validate(body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+  let reporter
+  if (reporterId && reporterId !== 'anonymous') {
+    reporter = await Reporter.findById(reporterId)
+    if (!reporter) {
+      res.status(401).json({ error: "No reporter found"});
+    }
+  }
+    
+  const report = new Report(body);
+  await report.save();
+  if (report) {
+    return res.status(201).json({
+      status: 'success',
+      data: report
+    });
+  }
+
+  } catch (e) {
+      console.log('Error', e)
+      return res.status(500).json({
+        status: "error",
+        message: e
+    });
+  }
+}
 
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
-  const account = await Complainer.findOne({
+  const reporter = await Reporter.findOne({
     $or: [
       { email },
       { phoneNumber }],
   }).select('+password');
-  if (!account) {
+  if (!reporter) {
     return null;
   }
-  return account;
+  return reporter;
 };
