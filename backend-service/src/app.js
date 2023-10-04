@@ -8,22 +8,11 @@ import routerConfig from './routes/config.js'
 import { DBconnection } from './config/database.js'
 
 const app = express();
+app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 
-app.use(
-  cors({
-    origin: (origin, cb) => cb(null, true),
-    credentials: true,
-    preflightContinue: true,
-    exposedHeaders: [
-      "Access-Control-Allow-Headers",
-      "Access-Control-Allow-Origin, Origin, X-Requested-With, Content-Type, Accept",
-      "X-Password-Expired"
-    ],
-    optionsSuccessStatus: 200
-  })
-)
+
 
 function logResponseTime(req, res, next) {
   const startHrTime = process.hrtime();
