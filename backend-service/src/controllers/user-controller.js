@@ -1,6 +1,9 @@
 
+import { manageFileUpload } from '../helpers/file-upload-helper.js'
+import { Paginator } from '../helpers/paginator-helper.js';
 import { User } from '../models/UserModel//UserModel.js';
 import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
+
 
 export const createUser = async (req, res) => {
   const body = req.body
@@ -55,12 +58,19 @@ export const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      res.status(401).json({ error: "invalid credentials"});
+      return res.status(401).json(
+        { 
+          status: "failed",
+          message: "invalid credentials"
+        });
     }
     
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      res.status(401).json({ error: "invalid credentials"});
+      res.status(401).json({ 
+        status: "failed",
+        message: "invalid credentials"
+      });
     } else {
       const token = user.getSignedJwtToken();
       delete user._doc.password;
@@ -114,6 +124,50 @@ export const changePassword = async (req, res) => {
         message: e
     });
   }
+}
+
+export const authorizeUser = async (req, res) => {
+  try {
+    const user = req.user
+    if (user) {
+      return res.status(200).json({
+        status: "success",
+        user
+      });
+    } else {
+      return res.status(200).json({
+        status: "failed",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const getUsers = async (req, res) => {
+  try {
+    const populate = [
+      ['department'],
+    ]
+    const users = await Paginator({...req.query}, User, populate);
+    res.status(200).json({
+      status: "success",
+      data: users
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const uploadFile = async (req, res) => {
+ 
 }
 
 const findUserByEmailOrPhone = async (phoneNumber, email) => {

@@ -32,7 +32,8 @@ export const protectedRoute = async (req, res, next) => {
       req.user = user
       next();
     } catch (e) {
-      next (new ApplicationError(e.message, 500))
+      req.error = 'Error With JWT'
+      next ()
     }
   } catch (err) {
     next(new ApplicationError(err.message, 500))
@@ -40,7 +41,7 @@ export const protectedRoute = async (req, res, next) => {
 };
 
 export const authorize = (roles) => async (req, res, next) => {
-  const hasPermission = roles.includes(req.user.role);
+  const hasPermission = roles.includes(req?.user?.role);
 
   if (!hasPermission) {
     return res.status(401).json({

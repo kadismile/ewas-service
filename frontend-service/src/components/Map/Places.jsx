@@ -21,7 +21,7 @@ export default function Places() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
     componentRestrictions: {
-      country: 'fr'
+      country: 'NG'
     }
   });
 
@@ -109,3 +109,5 @@ const PlacesAutocomplete = ({ setSelected }) => {
     </Combobox>
   );
 };
+
+// 4D6F0C4

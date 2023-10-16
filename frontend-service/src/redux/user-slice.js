@@ -5,6 +5,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     user: {},
+    address: {},
   },
   reducers: {
     setUser(state, action) {
@@ -16,6 +17,8 @@ export const userSlice = createSlice({
     }, 
     setAddress(state, action) {
       state.user.address = action.payload
+      const data = { mapAddress: action.payload }
+      appStorage.setItem('user', data)
     }, 
     setReport(state, action) {
       state.user.reportType = action.payload

@@ -1,15 +1,16 @@
-import { reportService } from '../services/reporterService';
 import appStorage from '@/redux/customStorage'
-export const  client = async (url, method, reqBody = undefined) => {
+export const  client = async (url, method, reqBody = undefined, contentType) => {
 
   const { token } = appStorage.getItem('user')
   const headers = {
-    'Content-Type': 'application/json',
     'Authorization': `Bearer ${ token }`
   }
+  
+  reqBody = contentType ? reqBody : JSON.stringify(reqBody) 
+
   const config = {
     method,
-    body: reqBody ? JSON.stringify(reqBody) : undefined,
+    body: reqBody,
     headers,
   };
   try {

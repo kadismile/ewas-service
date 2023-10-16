@@ -36,13 +36,20 @@ const addressSchema = new Schema({
 
 const reportSchema = new Schema({
   reportTypeId: {
+    type: Schema.Types.ObjectId,
+    ref: 'ReportType'
+  },
+  addminReportType: {
     type: String,
+    ref: 'AdminReportType'
   },
   departmentId: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'Department'
   },
   reporterId: {
     type: String,
+    ref: 'Reporter',
     required: [true, 'Please Add Reporter ID']
   },
   title: {
@@ -62,7 +69,8 @@ const reportSchema = new Schema({
     default: false
   },
   agencyId: {
-    type: Boolean
+    ref: 'Agency',
+    type: Schema.Types.ObjectId
   },
   reoccurence: {
     type: Boolean,
@@ -72,12 +80,35 @@ const reportSchema = new Schema({
     default: 'processing',
     enum:['processing', 'processed', 'pending']
   },
-
   address: {
     type: addressSchema,
     required: [true, 'Please Add Address']
   },
-
+  numberKilled: {
+    type: String,
+    default: 0,
+  },
+  numberInjured: {
+    type: String,
+    default: 0,
+  },
+  numberDisplaced: {
+    type: String,
+    default: 0,
+  },
+  mediaLinks: {
+    type: String,
+  },
+  attachments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Attachment'
+  }],
+  verified: {
+    type: String,
+    default: 'not-verified',
+    enum:['not-verified','processing', 'verified', 'returned', 'false-report']
+  },
+  
   isActive : {
     type: Boolean,
     default: true

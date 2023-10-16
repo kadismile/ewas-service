@@ -7,8 +7,13 @@ import moment from 'moment'
 import Places from '@/components/Map/Places.jsx';
 import { DisabledButton, LoadingButton, SubmitButton } from "@/components/elements/Buttons.jsx";
 import BooleanDropDown from "@/components/DropDown/BooleanDropDown";
+import appStorage from "@/redux/customStorage";
+import { reportService } from "@/services/reporterService";
+import toastr from 'toastr'
 export default function Home() {
   const { user: { address }} = useAppSelector((state) => state.userReducer);
+  const { mapAddress } = appStorage.getItem('user')
+
   const formFields = {
     title: "",
     reoccurence: "",
@@ -20,7 +25,9 @@ export default function Home() {
     killed: '',
     injured: '',
     displaced: '',
-    mediaLinks: ''
+    mediaLinks: '',
+    reportTypeId: '',
+    fileUpload: ''
   };
 
   const calendarData = (calData) => {
@@ -30,7 +37,7 @@ export default function Home() {
         ...prevState,
         errors,
         date: moment(calData).format('LL'),
-        rawDate:calData,
+        rawDate:moment(calData, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ").toDate()
       };
     });
   }
@@ -44,16 +51,27 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const handleDataFromDropDown = (data) => {
-    const { label, value } = data
+    const { value } = data
     const errors = formValues.errors;
     setFormValues((prevState) => {
       return {
         ...prevState,
         errors,
-        agency: label === 'Agency' ? value : '',
+        reportTypeId: value
       };
     });
   };
+  const AgencyDropDown = (data) => {
+    const { value } = data
+    const errors = formValues.errors;
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        agency: value
+      };
+    });
+  }
 
   const handleDropDownData = (data) => {
     const { label, value } = data
@@ -154,12 +172,24 @@ export default function Home() {
     }
   }, [formValues.intervention])
 
+  const onFileChange = (e) => {
+    console.log('Files =============> ', e.target.files)
+    const errors = formValues.errors;
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        fileUpload: e.target.files[0],
+      };
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     const {
       title,
-      reportType,
+      reportTypeId,
       description,
       rawDate,
       killed,
@@ -167,27 +197,32 @@ export default function Home() {
       displaced,
       mediaLinks,
       intervention,
-      agency
+      agency,
+      fileUpload
     } = formValues;
 
-    console.log("FormFieldssss --------------> ", {
-      title,
-      reportType,
-      description,
-      rawDate,
-      killed,
-      injured,
-      displaced,
-      mediaLinks,
-      intervention,
-      address,
-      agency
-    })
+    console.log("mediaLinks   =============>", mediaLinks)
 
-    /* const response = await reportService.registerReporter({
-      email,fullName,password,phoneNumber,address,
-    })
+    
+
+    const form = new FormData();
+    form.append('title', title);
+    form.append("dateOfIncidence", rawDate);
+    form.append("reporterId", 'anonymous');
+    form.append("reportTypeId", reportTypeId); 
+    form.append("description", description);
+    form.append("numberKilled", killed);
+    form.append("numberInjured", injured);
+    form.append("numberDisplaced", displaced);
+    form.append("mediaLinks", mediaLinks);
+    form.append("intervention", intervention);
+    form.append("agencyId", agency);
+    form.append("address", JSON.stringify(address));
+    form.append("fileUpload", fileUpload);
+
+    const response = await reportService.createReports(form)
     const { status, message, token, data } = response
+
     if (status === 'failed') {
       toastr.error(message);
       setTimeout(() => setLoading(false), 1000)
@@ -196,7 +231,7 @@ export default function Home() {
       setTimeout(() => setLoading(false), 1000)
       dispatch(setUser({ user: data, token }))
       window.location.replace("/");
-    }  */
+    }
   };
 
 
@@ -256,9 +291,16 @@ export default function Home() {
                           onChange={handleChange}
                         />
                       </div>
+                    </div>
 
-                     
-
+                    <div className="col-lg-12 col-md-12">
+                    <div class="form-group mb-30">
+                      <div class="box-upload">
+                        <div class="add-file-upload">
+                          <input class="fileupload" type="file" name="fileUpload" multiple="multiple" onChange={onFileChange}/>
+                        </div>
+                      </div>
+                    </div>
                     </div>
 
                     <div className="col-lg-6 col-md-6">
@@ -310,7 +352,7 @@ export default function Home() {
                         <div className={formCol}>
                           <div className="input-style mb-20">
                           <label className="form-label" htmlFor="input-2">Agency </label>
-                          <DropDown label={'Agency'} dataToComponent={ handleDataFromDropDown } />
+                          <DropDown label={'Agency'} dataToComponent={ AgencyDropDown } />
                         </div>
                       </div> : ""
                     }
@@ -388,14 +430,14 @@ export default function Home() {
                     </div>
 
                     {
-                        disableForm() ? (
+                       /*  disableForm() ? (
                           <DisabledButton title={'Submit Report '} className={'submit btn btn-send-message'}/>
-                        ) : !loading ? (
+                        ) : !loading ? ( */
                           <SubmitButton onClick={ handleSubmit } title={'Submit Report'} className={'submit btn btn-send-message'}/>
-                        ) : (
+                       /*  ) : (
                           <LoadingButton />
-                        )
-                      }
+                        ) */
+                    }
 
                 
                   </div>
