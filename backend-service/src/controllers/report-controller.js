@@ -6,6 +6,11 @@ import { agency_validation } from '../validations/crud-validations.js'
 import { user_login_validation } from '../validations/user-validations.js'
 import { create_report_validation } from '../validations/reporter-validations.js'
 import { Reporter } from '../models/ReportModel/ReporterModel.js';
+import { Paginator } from '../helpers/paginator-helper.js';
+import { AdminReportType } from '../models/ReportTypeModel/AdminReportTypeModel.js';
+import { manageFileUpload } from '../helpers/file-upload-helper.js';
+import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
+import mongoose from 'mongoose';
 
 export const createReporter = async (req, res) => {
   try {
@@ -126,13 +131,19 @@ export const reportType = async (req, res) => {
 
 export const createReport = async (req, res) => {
   const body = req.body
+  console.log('Request Body ================> ', body)
+  console.log('File1 ================> ', req.file)
+  console.log('File2 ================> ', req.files)
+  let newAddress = JSON.parse(body.address)
+  delete body.address
+  body.address = newAddress
   const { reporterId } = body;
 
   try {
-    const { error } = create_report_validation.validate(body);
+    /* const { error } = create_report_validation.validate(body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-    }
+    } */
 
   let reporter
   if (reporterId && reporterId !== 'anonymous') {
@@ -141,21 +152,89 @@ export const createReport = async (req, res) => {
       res.status(401).json({ error: "No reporter found"});
     }
   }
-    
+
   const report = new Report(body);
   await report.save();
+
   if (report) {
+    if (req?.file) {
+      req.files = [req.file]
+    } else {
+      for (let file of req.files) {
+        const { path, filename } = file
+        await manageFileUpload(path, filename, report)
+      }
+    }
     return res.status(201).json({
       status: 'success',
       data: report
     });
   }
-
   } catch (e) {
       console.log('Error', e)
       return res.status(500).json({
         status: "error",
         message: e
+    });
+  }
+}
+
+export const createAdminReportType = async (req, res) => {
+  const body = req.body
+  const { error } = agency_validation.validate(body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+  try {
+    const reportType = new AdminReportType(body);
+    await reportType.save();
+    if (reportType) {
+      return res.status(201).json({
+        status: 'success',
+        data: reportType
+      });
+    }
+  } catch (e) {
+    return res.status(500).json({
+      status: "error",
+      message: e
+    });
+  }
+}
+
+export const getReporters = async (req, res) => {
+  try {
+    const reporters = await Paginator({...req.query}, Reporter, []);
+    res.status(200).json({
+      status: "success",
+      data: reporters
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const getReports = async (req, res) => {
+  try {
+    const populate = [
+      ['reportTypeId'], 
+      ['agencyId'],
+      ['attachments'],
+    ]
+    const reporters = await Paginator({...req.query}, Report, populate);
+    res.status(200).json({
+      status: "success",
+      data: reporters
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
     });
   }
 }

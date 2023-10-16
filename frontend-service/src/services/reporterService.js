@@ -7,7 +7,6 @@ export const reportService =  {
   registerReporter: async (data) => {
     try {
       const url = `${serverUrl}/report/`
-      console.log('url -----------------------> ', url)
       const method = 'POST'
       const response = await client(url, method, data);
       if (!response)
@@ -49,4 +48,17 @@ export const reportService =  {
     }
   },
 
+  createReports: async (data) => {
+    try {
+      const url = `${serverUrl}/report/create`
+      const method = 'POST'
+      const contentType = 'true'
+      const response = await client(url, method, data, contentType);
+      if (!response)
+        throw new Error("Cannot Create a reporter");
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
 }

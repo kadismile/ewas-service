@@ -1,0 +1,15 @@
+.table thead tr {
+  background-color: #d1daf6;
+}
+
+.paint-red {
+  color: red;
+}
+
+.form-control[readonly] {
+  color: black;
+}
+
+.modal-width {
+  width: 70%;
+}

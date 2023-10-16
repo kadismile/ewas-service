@@ -19,7 +19,8 @@ const userSchema = new Schema({
   },
   department: {
     type: Schema.Types.String,
-    ref: 'Department'
+    ref: 'Department',
+    required: [true, 'Please Add department']
   },
   phoneNumber: {
     type: String,
