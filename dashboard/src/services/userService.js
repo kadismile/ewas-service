@@ -23,9 +23,15 @@ export const userService =  {
       const url = `${serverUrl}/auth/authorized`
       const method = 'POST'
       const response = await client(url, method);
-      if (!response)
-        throw new Error("Not Authorized");
-      return response
+      if (!response) {
+        return {
+          status: 'failed',
+          error: true
+        }
+      } else {
+        return response
+      }
+      
     } catch (e) {
       throw e
     }

@@ -910,7 +910,7 @@ h6,
   transition: 0.2s;
 }
 .btn.btn-notify {
-  background: url(../imgs/page/dashboard/notify.svg) no-repeat center;
+  background: url(../images/notify.svg) no-repeat center;
   display: inline-block;
   vertical-align: middle;
   height: 52px;
@@ -921,7 +921,7 @@ h6,
   content: "";
   height: 8px;
   width: 8px;
-  background: url(../imgs/page/dashboard/icon-notify.svg) no-repeat center;
+  background: url(../images/icon-notify.svg) no-repeat center;
   position: absolute;
   top: 15px;
   right: 15px;

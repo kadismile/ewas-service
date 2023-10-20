@@ -3,6 +3,7 @@ import agencyRouter  from './agency-routes.js'
 import reportRouter  from './report-routes.js'
 import departmentRouter  from './department-routes.js'
 import userRouter  from './user-routes.js'
+import notificationRouter  from './notification-routes.js'
 
 export default [
   ['/', indexRouter],
@@ -10,4 +11,5 @@ export default [
   ['/report', reportRouter],
   ['/department', departmentRouter],
   ['/auth', userRouter],
+  ['/notification', notificationRouter],
 ];

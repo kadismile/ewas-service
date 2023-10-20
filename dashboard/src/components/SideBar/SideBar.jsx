@@ -11,7 +11,6 @@ export const SideBar = () => {
   return (
     <>
       <div className="nav">
-        <a className="btn btn-expanded" />
           <nav className="nav-main-menu">
             <ul className="main-menu">
               <li> 
@@ -80,15 +79,21 @@ export const SideBar = () => {
             </ul>
           </nav>
           <div className="border-bottom mb-20 mt-20" />
-          <div className="box-profile-completed text-center mb-30">
-            <div id="circle-staticstic-demo" />
-            <h6 className="mb-10">Profile Completed</h6>
-            <p className="font-xs color-text-mutted">Please add detailed information to your profile. This will help you develop your career more quickly.</p>
-          </div>
-          <div className="sidebar-border-bg mt-50"><span className="text-grey">WE ARE</span><span className="text-hiring">HIRING</span>
-            <p className="font-xxs color-text-paragraph mt-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae architecto</p>
-            <div className="mt-15"><a className="btn btn-paragraph-2" href="#">Know More</a></div>
-          </div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        
         </div>
     </>
   )
