@@ -95,4 +95,46 @@ export const crudService =  {
     }
   },
 
+    getNotifications:async () => {
+    try {
+      const url = `${serverUrl}/notification`
+      const method = 'GET'
+      const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  getOneReport:async (reportID) => {
+    if (!reportID ) 
+    return {
+      status: 'failed',
+      message: '',
+    }
+    try {
+      const url = `${serverUrl}/report/one?_id=${reportID}`
+      const method = 'GET'
+      const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  updateNotification: async (reportId) => {
+    if (reportId) 
+    return {
+      status: 'failed',
+      message: '',
+    }
+    try {
+      const url = `${serverUrl}/notification?_id=${reportId}`
+      const method = 'PUT'
+      const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 }

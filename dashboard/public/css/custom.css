@@ -13,3 +13,8 @@
 .modal-width {
   width: 70%;
 }
+
+.form_error {
+  color: red;
+  margin-left: 7px;
+}

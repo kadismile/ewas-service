@@ -1,8 +1,12 @@
 import { store } from '../../redux/store';
 import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
+import { useEffect,  useState } from 'react';
+import { crudService } from '../../services/crudService';
+import parse from 'html-react-parser';
 
 export const Header = () => {
+  const [data, setdata] = useState([]);
   let user = store?.getState()?.user?.user
   if (user) {
     user = user.user
@@ -16,13 +20,26 @@ export const Header = () => {
     window.location.replace("/");
   }
 
+  useEffect(() => {
+    crudService.getNotifications()
+    .then((res) => {
+      const { data } = res;
+      setdata(data)
+    });
+  }, [])
+
   return (
     <>
       <header className="header sticky-bar"> 
         <div className="container">
           <div className="main-header">
             <div className="header-left">
-              <div className="header-logo"><a className="d-flex" href="index.html"><img alt="jobBox" src="/images/logo.svg" /></a></div><span className="btn btn-grey-small ml-10">Admin area</span>
+              <div className="header-logo">
+                <a className="d-flex" href="index.html">
+                  {/* <img alt="jobBox" src="/images/logo.svg" /> */}
+                  <h3> E W E R</h3>
+                </a>
+                </div><span className="btn btn-grey-small ml-10">Admin area</span>
             </div>
             <div className="header-search"> 
               <div className="box-search"> 
@@ -36,6 +53,22 @@ export const Header = () => {
             </div>
             <div className="header-right">
               <div className="block-signin">
+
+                <div class="dropdown d-inline-block">
+                  <a class="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
+                  <ul class="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
+                    {
+                      data.map((not)=> {
+                        return (
+                          <li>
+                            <a class="dropdown-item active" >{ parse(not.message) }</a>
+                         </li>
+                        )
+                      })
+                    }
+                  
+                  </ul>
+                </div>
                 <div className="dropdown d-inline-block">
                   <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
                     <li><a className="dropdown-item active" href="#">10 notifications</a></li>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { userService } from "../services/userService";
 import { MiniSpinner } from "../components/elements/spinners";
+import { PageLoader } from "../components/elements/spinners";
 
 export const Users = (props) => {
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ export const Users = (props) => {
         data: { data },
       } = res;
       setdata(data);
-      setLoading(false);
+      setTimeout(() => setLoading(false), 500)
     });
   }
 
@@ -36,6 +37,8 @@ export const Users = (props) => {
 
   return (
     <>
+    { 
+      loading? <PageLoader /> :
       <div className="box-content">
         <div className="box-heading">
           <div className="box-title">
@@ -122,7 +125,8 @@ export const Users = (props) => {
 
         
 
-      </div>
+      </div> 
+    }
     </>
   );
 }

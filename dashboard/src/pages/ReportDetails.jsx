@@ -1,17 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { store } from '../redux/store';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment'
 import { MediaDisplay } from '../components/elements/MediaDisplay';
 import { DisplayFileModal } from "../modals/DisplayFileModal";
+import { crudService } from "../services/crudService";
+import { AssignmentModal } from "../modals/AssignmentModel";
+import { VerifyReportModal } from "../modals/VerifyReportModal";
+
 export const ReportDetails = () => {
+  let user = store?.getState()?.user?.user
+    if (user) {
+      user = user.user
+    }
   const [showModal, setShowModal] = useState(false);
-  const [url, setUrl] = useState({});
+  const [showAssModal, setShowAssModal] = useState(false);
+  const [showVerifyModal, setVerifyModal] = useState(false);
+  const [assData, setAssData] = useState();
+  const [report, setReport] = useState(undefined);
+  const [reportHistory, setreportHistory] = useState(undefined);
+  const [loading, setLoading] = useState(true);
+  const { pathname } = useLocation()
 
-  const location = useLocation();
-  const { state :{report} } = location;
+  useEffect(() => {
+    const match = pathname.match(/\/report\/([^/]+)/);
+    if (match && match[1]) {
+      const reportId = match[1];
+      crudService.getOneReport(reportId)
+      .then((res) => {
+        const { status, data: { report, reportHistory} } = res
+        if (status === 'success') {
+          setReport(report)
+          setreportHistory(reportHistory)
+          setLoading(false)
+          updateNotification(reportId)
+        }
+      })
+    } else {
+      console.log('No match found');
+    }
+  }, [])
 
-  if (!report || !report._id) {
-    return <div>No report data available</div>;
+  const updateNotification = async (reportId) => {
+    await crudService.updateNotification(reportId)
   }
 
   const capitalize = (value) => {
@@ -36,27 +67,55 @@ export const ReportDetails = () => {
     }
   }
 
-  const handleShowModal = (file) => {
+  const handleShowModal = (data) => {
     setShowModal(true);
-    setUrl(file)
+    setShowAssModal(true);
+    setAssData(data)
+    setVerifyModal(data)
+    // setUrl(file)
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowAssModal(false);
+    setVerifyModal(false)
   };
+
+  const displayAssignmentButton = () => {
+    if (report.department === user.department) {
+      return false
+    }
+    return false
+  }
+
+  const displayVerifyButton = () => {
+    if (report?.userId?._id === user._id) {
+      return true
+    }
+  }
+
+  const handleVerifyModal = (data) => {
+    setVerifyModal(true)
+    setAssData(data)
+  }
 
   return (
     <>
-    <DisplayFileModal show={showModal} onHide={handleCloseModal} data={url} />
-    <div className="box-content">
+    {/* <DisplayFileModal show={showModal} onHide={handleCloseModal} data={url} /> */}
+    <AssignmentModal show={showAssModal} onHide={handleCloseModal} data={assData} />
+    <VerifyReportModal show={showVerifyModal} onHide={handleCloseModal} data={assData} />
+    {
+      loading ? '......Loading ' : 
+
+      <div className="box-content">
         <div className="box-heading">
           <div className="box-title"> 
-            <h3 className="mb-35">{report.title}</h3>
+            <h3 className="mb-35">{report?.title}</h3>
           </div>
           <div className="box-breadcrumb"> 
             <div className="breadcrumbs">
               <ul> 
-                <li><span style={{color: colorStatus(report.status)}}>{capitalize(report.status)}</span></li>
+                <li><span style={{color: colorStatus(report?.status), fontSize: '12px'}}>{capitalize(report?.status)}</span></li>
               </ul>
             </div>
           </div>
@@ -67,33 +126,64 @@ export const ReportDetails = () => {
               <div className="container">               
                 <div className="panel-white mb-30">
                   <div className="box-padding">
-                    <h5 className="icon-edu">Details</h5>
+                  <div className="panel-head">
+                    <h5>Details</h5>
+                    {
+                      displayVerifyButton() ?
+                      <a className="menudrop" id="dropdownMenu2" type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        data-bs-display="static"
+                    /> : ''
+                    }
+                    
+                    <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2" >
+                    {
+                      displayAssignmentButton() ? 
+                      <li>
+                        <a onClick={() => handleShowModal(report._id)} className="dropdown-item active" href="#">
+                          Assign to self
+                        </a>
+                      </li> : <li> </li>
+                    } 
+                      {
+                        displayVerifyButton() ? <li>
+                        <a onClick={() => handleVerifyModal(report._id)  } className="dropdown-item" href="#">
+                          verify report
+                        </a>
+                      </li> : ''
+                      }
+                      
+                    </ul>
+                    <p> Submitted By: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{capitalize(report.reporterId)}</b> </p>
+                    <p> Date: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{moment(report.createdAt).format('DD MMM, YYYY')}</b> </p>
+                  </div>
                     <div className="row mt-30">
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Date of Incidence</label>
-                              <input className="form-control" type="text" readOnly value={formatDate(report.dateOfIncidence)} />
+                              <input className="form-control" type="text" readOnly value={formatDate(report?.dateOfIncidence)} />
                             </div>
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Incident Type</label>
-                              <input className="form-control" type="text" readOnly value={report.reportTypeId.name}  />
+                              <input className="form-control" type="text" readOnly value={report?.reportTypeId.name}  />
                             </div>
                           </div>
 
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Srcurity Agency Intervention</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.intervention)} />
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.intervention)} />
                             </div>
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Srcurity Agency </label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.agencyId.name)} />
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.agencyId.name)} />
                             </div>
                           </div>
                           </div>
@@ -104,25 +194,25 @@ export const ReportDetails = () => {
                           <div className="col-lg-3 col-md-6">
                           <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Number killed </label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.numberKilled)} />
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.numberKilled)} />
                             </div>
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Number Injured</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.numberInjured)} />
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.numberInjured)} />
                             </div>
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Number Displaced</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.numberDisplaced)} />
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.numberDisplaced)} />
                             </div>
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Re Occurence</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.reoccurence)} />
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.reoccurence)} />
                             </div>
                           </div>
                         </div> 
@@ -132,12 +222,12 @@ export const ReportDetails = () => {
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Address</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.address.fullAddress)} />                            </div>
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.address.fullAddress)} />                            </div>
                           </div>
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Media Links</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report.mediaLinks)} />                            </div>
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.mediaLinks)} />                            </div>
                           </div>
                           
                         </div> 
@@ -149,7 +239,7 @@ export const ReportDetails = () => {
                                 <textarea className="form-control"
                                 readOnly
                                 name="message" rows={10} 
-                                value={ report.description }
+                                value={ report?.description }
                                 />
                               </div>
                           </div>
@@ -179,38 +269,18 @@ export const ReportDetails = () => {
                           </div>
                         </div>
                         <div className="box-timeline mt-50">
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2008 - 2012</span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">National Design Academy</h5>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur dipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-                            </div>
-                            <div className="timeline-actions"> <a className="btn btn-editor" /><a className="btn btn-remove" /></div>
-                          </div>
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2012 - 2014</span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">University of Oxford</h5>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur dipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-                            </div>
-                            <div className="timeline-actions"> <a className="btn btn-editor" /><a className="btn btn-remove" /></div>
-                          </div>
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2014 - 2016</span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">California Institute of Technology</h5>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur dipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-                            </div>
-                            <div className="timeline-actions"> <a className="btn btn-editor" /><a className="btn btn-remove" /></div>
-                          </div>
-                          <div className="item-timeline"> 
-                            <div className="timeline-year"> <span>2016 - Now</span></div>
-                            <div className="timeline-info"> 
-                              <h5 className="color-brand-1 mb-20">Stanford University</h5>
-                              <p className="color-text-paragraph-2 mb-15">Lorem ipsum dolor sit amet, consectetur dipiscing elit. Proin a ipsum tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-                            </div>
-                            <div className="timeline-actions"> <a className="btn btn-editor" /><a className="btn btn-remove" /></div>
-                          </div>
+                          { reportHistory.map((rHistory) => {
+                              return (
+                              <div className="item-timeline"> 
+                                <div className="timeline-year"> <span>{moment(rHistory.createdAt).format('DD MMM YYYY h:mma')}</span></div>
+                                <div className="timeline-info"> 
+                                  <p className="color-brand-1 mb-20" style={{fontSize: '15px'}}>{rHistory.comment}</p>
+                                  <hr/>
+                                </div>
+                              </div>
+                              )
+                          })}
+                          
                         </div>
                       </div>
                     </div>
@@ -221,9 +291,10 @@ export const ReportDetails = () => {
             </div>
           </div>
         </div>
-        
       
       </div>
-    </>
+   
+    }
+     </>
   )
 }

@@ -1,12 +1,13 @@
 import kue from 'kue';
+import { createClient } from 'redis';
 import multer from 'multer';
 import { uuid } from 'uuidv4';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs'
 import {v2 as cloudinary} from 'cloudinary';
-import { Report } from '../models/ReportModel/Report.js';
 import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
+import { Report } from '../models/ReportModel/Report.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,10 +56,27 @@ export const manageFileUpload = async (filePath, fileName, report) => {
     .create(type)
     .priority('high')
     .save()
+
+  const RedisClient = createClient({
+    password: process.env.REDIS_PASSWORD,
+    socket: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
+    }
+  });
+  
+ /*  const queue = kue.createQueue({
+      redis: process.env.REDIS_URL
+  }); */
   
   const queue = kue.createQueue({
-      redis: process.env.REDIS_URL
-  });  
+    redis: {
+      createClientFactory: function(){
+          return RedisClient
+      }
+    }
+});
+
   queue.process(type, async function (job, done) {
     try {
       const result = await cloudinary.uploader.upload(filePath, {
@@ -75,7 +93,6 @@ export const manageFileUpload = async (filePath, fileName, report) => {
   });
 
   queue.on('job complete', async function (id, result) {
-
     const { asset_id, public_id, signature, format, url, secure_url } = result
     const attachment = new Attachment({
       asset_id,public_id,signature,format,url,secure_url,
@@ -83,9 +100,10 @@ export const manageFileUpload = async (filePath, fileName, report) => {
     })
     await attachment.save();
     console.log(`Job ${id} saving attachment to DB:`, signature);
-    report.attachments.push(attachment._id)
-    await report.save();
-
+    await Report.findOneAndUpdate(
+      { _id: report._id},
+      { $push: { attachments: attachment._id } },
+    );
   });
 }
 

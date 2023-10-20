@@ -5,6 +5,7 @@ import AWN from "awesome-notifications";
 import toastr from 'toastr'
 import { EditAgencyModal } from "../modals/EditAgencyModal";
 import { AddAgencyModal } from "../modals/AddAgencyModal";
+import { PageLoader } from "../components/elements/spinners";
 
 export const Agency = (props) => {
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ export const Agency = (props) => {
     crudService.getAgency().then((res) => {
       const { data } = res;
       setdata(data);
-      setLoading(false);
+      setTimeout(() => setLoading(false), 500)
     });
   }
 
@@ -79,7 +80,8 @@ export const Agency = (props) => {
       <EditAgencyModal show={showModal} onHide={handleCloseModal} data={editData} />
       <AddAgencyModal show={showAddModal} onHide={handleCloseModal} data={editData} />
       
-      <div className="box-content">
+      { 
+        loading? <PageLoader /> :<div className="box-content">
         <div className="box-heading">
           <div className="box-title">
             <h3 className="mb-35">Agency Management</h3>
@@ -155,7 +157,8 @@ export const Agency = (props) => {
 
         
 
-      </div>
+        </div>
+      }
     </>
   );
 }

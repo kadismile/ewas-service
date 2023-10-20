@@ -15,10 +15,11 @@ const reportHistorySchema = new Schema({
     type: Schema.Types.String,
     ref: 'User'
   },
-  reporter: {
+  reportId: {
     type: Schema.Types.String,
     ref: 'Report'
   },
+  
 },{ timestamps: true, versionKey: false });
 
 

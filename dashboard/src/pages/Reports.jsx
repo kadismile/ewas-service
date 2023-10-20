@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { crudService } from "../services/crudService";
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { PageLoader } from "../components/elements/spinners";
 
 export const Reports = (props) => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,7 @@ export const Reports = (props) => {
         data: { data },
       } = res;
       setdata(data);
-      setLoading(false);
+      setTimeout(() => setLoading(false), 500)
     });
   }
 
@@ -24,6 +25,7 @@ export const Reports = (props) => {
 
   return (
     <>
+    { loading? <PageLoader /> :
       <div className="box-content">
         <div className="box-heading">
           <div className="box-title"> 
@@ -100,6 +102,7 @@ export const Reports = (props) => {
         </div>
 
       </div>
+    }
     </>
   );
 }

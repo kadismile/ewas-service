@@ -1,4 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { reportsAfterSave } from '../ReportModel/reports_after-save.js';
+
+
 
 const addressSchema = new Schema({
   country: {
@@ -96,6 +99,10 @@ const reportSchema = new Schema({
     type: String,
     default: 0,
   },
+  userId: {
+    type: String,
+    ref: 'User',
+  },
   mediaLinks: {
     type: String,
   },
@@ -123,6 +130,12 @@ reportSchema.pre('findOne', async function() {
 
 reportSchema.pre('find', async function() {
   this.where({ isActive: true })
+});
+
+reportSchema.post('save', async function (doc) {
+  doc.isNew
+  await reportsAfterSave(doc)
+  console.log(`Notification sent to user ${doc.title}`);
 });
 
 export const Report = model('Report', reportSchema);

@@ -8,7 +8,7 @@ import { user_create_validation, user_login_validation, change_password_validati
 export const createUser = async (req, res) => {
   const body = req.body
   const { 
-    fullName, email, phoneNumber, password, departmentId
+    fullName, email, phoneNumber, password, department, role
   } = body
   try {
     const { error } = user_create_validation.validate(body);
@@ -26,7 +26,7 @@ export const createUser = async (req, res) => {
     }
 
     user = new User({
-      fullName, email, phoneNumber, password, departmentId
+      fullName, email, phoneNumber, password, department, role
     });
 
     await user.save();

@@ -10,7 +10,11 @@ import { Paginator } from '../helpers/paginator-helper.js';
 import { AdminReportType } from '../models/ReportTypeModel/AdminReportTypeModel.js';
 import { manageFileUpload } from '../helpers/file-upload-helper.js';
 import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
-import mongoose from 'mongoose';
+import { ReportHistory } from '../models/ReportHistoryModel/ReportHistoryModel.js';
+import { User } from '../models/UserModel/UserModel.js';
+import { Department } from '../models/DepartmentModel/DepartmentModel.js';
+import { sendCPSnotification } from '../helpers/notification-helpers.js';
+
 
 export const createReporter = async (req, res) => {
   try {
@@ -131,9 +135,6 @@ export const reportType = async (req, res) => {
 
 export const createReport = async (req, res) => {
   const body = req.body
-  console.log('Request Body ================> ', body)
-  console.log('File1 ================> ', req.file)
-  console.log('File2 ================> ', req.files)
   let newAddress = JSON.parse(body.address)
   delete body.address
   body.address = newAddress
@@ -224,6 +225,7 @@ export const getReports = async (req, res) => {
       ['reportTypeId'], 
       ['agencyId'],
       ['attachments'],
+      ['userId'],
     ]
     const reporters = await Paginator({...req.query}, Report, populate);
     res.status(200).json({
@@ -239,6 +241,101 @@ export const getReports = async (req, res) => {
   }
 }
 
+export const getOneReport = async (req, res) => {
+  try {
+    const _id = req.query._id
+    const report = await Report.findOne({ _id })
+    .populate('attachments')
+    .populate('agencyId')
+    .populate('reportTypeId')
+    .populate('userId');
+
+    const reportHistory = await ReportHistory.find({reportId: _id})
+    res.status(200).json({
+      status: "success",
+      data: { report, reportHistory }
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const acceptReport = async (req, res) => {
+  try {
+    const{ reportId, userId } = req.body;
+    const report = await Report.findOne({ _id: reportId });
+    if (report.userId) {
+      const alreadyAssignedUser = await User.findOne({ _id: report.userId}).populate('department')
+      if (alreadyAssignedUser?.department._id == req.user.department) {
+        return res.status(200).json({
+          status: "success",
+          message: `
+          Report Already Assigned to ${alreadyAssignedUser.fullName}
+          of ${alreadyAssignedUser.department.acronym} department`
+        });
+      }
+    } else {
+      await Report.findOneAndUpdate({_id: reportId}, {
+        userId,
+      })
+      const historyData = {
+        user: userId,
+        reportId,
+        comment: `report assigned to ${req.user.fullName}`
+      }
+      const history = new ReportHistory(historyData)
+      await history.save()
+      res.status(201).json({
+        status: "success",
+        message: 'report assigned successfully'
+      });
+    }
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const verifyReport = async (req, res) => {
+  try {
+    const { comments, verified, reportId, userId } = req.body
+    const report = await Report.findOne({ _id: reportId })
+
+    if (report && report.userId === userId) {
+      const CPS_DEPARTMENT = process.env.CPS_DEPARTMENT
+      await Report.findOneAndUpdate({_id: reportId}, {
+        verified,
+        userId: null, // making it null so the report will be un-assigned to the current user
+        departmentId: CPS_DEPARTMENT
+      })
+      const historyData = {
+        user: userId,
+        reportId,
+        comment: `${req.user.fullName} added a comment <br/>
+        ${comments}`
+      }
+      const history = new ReportHistory(historyData)
+      await history.save()
+      const department = await Department.findOne({ _id: req.user.department })
+      const { acronym } = department
+      await createNotification(report, acronym)
+      res.status(201).json({
+        status: "success",
+        message: 'report was succsfuly verified '
+      });
+    }
+  } catch (error) {
+    console.log('Error ', error)
+  }
+}
+
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   const reporter = await Reporter.findOne({
     $or: [
@@ -250,3 +347,15 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   }
   return reporter;
 };
+
+const createNotification = async (report, departmentAcronym) => {
+  switch (departmentAcronym) {
+    case "CIDS": // this should be CAMS though ..pls change it ibro tomorrow 
+      // send Notiication to CPS because its CIDS, CIDS moves the workflow to CPS
+      await sendCPSnotification(report)
+      break;
+    default:
+      break;
+  }
+  return true
+}

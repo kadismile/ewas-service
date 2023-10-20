@@ -165,7 +165,6 @@ export const Login = () => {
                               }
                                 
                               </div>
-                              <div className="text-muted text-center">Don't have an Account? <a href="register.html">Sign up</a></div>
                             </form>
                           </div>
                         </div>
