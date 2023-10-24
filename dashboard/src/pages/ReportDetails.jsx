@@ -20,6 +20,7 @@ export const ReportDetails = () => {
   const [report, setReport] = useState(undefined);
   const [reportHistory, setreportHistory] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const [displayAssignmentButton, setAssignmentButton] = useState(false)
   const { pathname } = useLocation()
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export const ReportDetails = () => {
           setreportHistory(reportHistory)
           setLoading(false)
           updateNotification(reportId)
+          setDisplayButton()
         }
       })
     } else {
@@ -67,11 +69,8 @@ export const ReportDetails = () => {
     }
   }
 
-  const handleShowModal = (data) => {
+  const handleShowModal = () => {
     setShowModal(true);
-    setShowAssModal(true);
-    setAssData(data)
-    setVerifyModal(data)
     // setUrl(file)
   };
 
@@ -81,11 +80,10 @@ export const ReportDetails = () => {
     setVerifyModal(false)
   };
 
-  const displayAssignmentButton = () => {
-    if (report.department === user.department) {
-      return false
+  const setDisplayButton = () => {
+    if (report?.departmentId === user?.departmentId) {
+      setAssignmentButton(true)
     }
-    return false
   }
 
   const displayVerifyButton = () => {
@@ -96,6 +94,11 @@ export const ReportDetails = () => {
 
   const handleVerifyModal = (data) => {
     setVerifyModal(true)
+    setAssData(data)
+  }
+
+  const handleAssingmentModal = (data) => {
+    setShowAssModal(true);
     setAssData(data)
   }
 
@@ -129,19 +132,19 @@ export const ReportDetails = () => {
                   <div className="panel-head">
                     <h5>Details</h5>
                     {
-                      displayVerifyButton() ?
+                      displayAssignmentButton ?
                       <a className="menudrop" id="dropdownMenu2" type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                         data-bs-display="static"
-                    /> : ''
+                    ></a> : ''
                     }
                     
                     <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2" >
                     {
-                      displayAssignmentButton() ? 
+                      displayAssignmentButton && !report?.userId ? 
                       <li>
-                        <a onClick={() => handleShowModal(report._id)} className="dropdown-item active" href="#">
+                        <a onClick={() => handleAssingmentModal(report._id)} className="dropdown-item active" href="#">
                           Assign to self
                         </a>
                       </li> : <li> </li>

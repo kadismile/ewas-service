@@ -38,6 +38,7 @@ export const reportService =  {
       } else {
         url = `${serverUrl}/report/type`
       }
+      console.log('Res 0000000000------------------------> ', url)
       const method = 'GET'
       const response = await client(url, method);
       if (!response)

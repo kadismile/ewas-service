@@ -1,8 +1,10 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import { Footer } from "../components/Footer/Footer";
 import { PageLoader } from "../components/elements/spinners";
 import {reportService} from '../services/reportsService.js'
-
+import mapboxgl from 'mapbox-gl';
+ 
+mapboxgl.accessToken = 'pk.eyJ1Ijoia2FkaXNtaWxlMSIsImEiOiJjbG8zMTk4MzAwbXkwMmttc21hd2l0a2E0In0.L7hsWeL1L6qBjWINHxBiTg';
 
 export const Home = () => {
   const [loading, setLoading] = useState(true)
@@ -22,7 +24,22 @@ export const Home = () => {
    useEffect(() => {
     fetchData()
   }, []);
-  
+
+
+  const ref = useRef(null);
+  const [map, setMap] = useState(null);
+  useEffect(() => {
+    if (ref.current && !map) {
+      const map = new mapboxgl.Map({
+        container: ref.current,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [9.0820, 8.6753],
+        zoom: 1
+      });
+      setMap(map);
+    }
+  }, [ref, map]);
+
   return (
     <>
       { loading? <PageLoader /> :
@@ -109,7 +126,7 @@ export const Home = () => {
                       </ul>
                     </div>
                     <div className="panel-body"> 
-                      <div id="chartdiv" />
+                        <div className="map-container" ref={ref} />
                     </div>
                   </div>
                 </div>
