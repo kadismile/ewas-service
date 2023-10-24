@@ -1,6 +1,9 @@
 {
   "name": "ewas-service",
   "author": "kadismile",
+  "engines": {
+    "node": "18.12.1"
+  },
   "private": true,
   "dependencies": {
     "lerna": "^7.1.5"

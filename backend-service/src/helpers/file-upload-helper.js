@@ -1,5 +1,3 @@
-import kue from 'kue';
-import { createClient } from 'redis';
 import multer from 'multer';
 import { uuid } from 'uuidv4';
 import path from 'path';
@@ -8,6 +6,7 @@ import fs from 'fs'
 import {v2 as cloudinary} from 'cloudinary';
 import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
 import { Report } from '../models/ReportModel/Report.js';
+import { queueHelper } from '../helpers/queue-helper.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -50,33 +49,8 @@ cloudinary.config({
 });
 
 export const manageFileUpload = async (filePath, fileName, report) => {
-  const queues = kue.createQueue();
-  const type = 'uploadFile';
-  queues
-    .create(type)
-    .priority('high')
-    .save()
-
-  const RedisClient = createClient({
-    password: process.env.REDIS_PASSWORD,
-    socket: {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT
-    }
-  });
-  
- /*  const queue = kue.createQueue({
-      redis: process.env.REDIS_URL
-  }); */
-  
-  const queue = kue.createQueue({
-    redis: {
-      createClientFactory: function(){
-          return RedisClient
-      }
-    }
-});
-
+  const type = 'uploadFile'; 
+  let queue = queueHelper(type, 'high')
   queue.process(type, async function (job, done) {
     try {
       const result = await cloudinary.uploader.upload(filePath, {
