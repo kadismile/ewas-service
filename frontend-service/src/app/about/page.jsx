@@ -1,323 +1,288 @@
-export default function About () {
+export default function About() {
   return (
     <>
-    <main className="main">
-              <section className="section-box mb-70">
-                <div className="banner-hero hero-1 banner-homepage5">
-                  <div className="banner-inner">
-                    <div className="row">
-                      <div className="col-xl-7 col-lg-12">
-                        <div className="block-banner">
-                          <h1 className="heading-banner wow animate__animated animate__fadeInUp">Report,<br className="d-none d-lg-block" />That Incidence</h1>
-                          <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
-                          Help save millions of lives and properties by reporting incidents and conflicts as soon as you notice them, right before they escalate. Join us in saving lives across Nigeria. </div>
-                          <div className="mt-30"> 
-                            <a className="btn btn-default mr-15">REPORT INCIDENCE</a>
-                          </div>
-                          <div className="mt-50 mb-20"><span className="font-md color-text-paragraph-2">Partner Agency</span></div>
-                          <div className="box-logos-485">
-                            <div className="box-swiper">
-                              <div className="swiper-container swiper-group-4-banner swiper">
-                                <div className="swiper-wrapper">
-                                  <div className="swiper-slide"><a href="#"><img src="images/agency/T2.png" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="images/agency/T3.png" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="images/agency/T4.png" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="fonts/sony.svg" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="fonts/acer.svg" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="fonts/nokia.svg" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="fonts/asus.svg" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="fonts/casio.svg" alt="jobBox" /></a></div>
-                                  <div className="swiper-slide"><a href="#"><img src="fonts/dell.svg" alt="jobBox" /></a></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-5 col-lg-12 d-none d-xl-block col-md-6">
-                        <div className="banner-imgs">
-                          <div className="banner-1 shape-1"><img className="img-responsive" alt="jobBox" src="images/slider/356by356.png" /></div>
-                          <div className="banner-2 shape-2"><img className="img-responsive" alt="jobBox" src="images/slider/ed1.png" /></div>
-                          <div className="banner-3 shape-3"><img className="img-responsive" alt="jobBox" src="images/slider/165 c.png" /></div>
-                          <div className="banner-4 shape-3"><img className="img-responsive" alt="jobBox" src="images/slider/145 B.png" /></div>
-                          <div className="banner-5 shape-2"><img className="img-responsive" alt="jobBox" src="images/slider/131 by 131.png" /></div>
-                          <div className="banner-6 shape-1"><img className="img-responsive" alt="jobBox" src="images/slider/120 by 120.png" /></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="box-search-2">
-                      <div className="block-banner">
-                        <div className="form-find mt-40 wow animate__animated animate__fadeIn" data-wow-delay=".2s">
-                          <form>
-                            <input className="form-input input-keysearch mr-10" type="text" placeholder="Your keyword... " />
-                            <select className="form-input mr-10 select-active">
-                              <option value>Location</option>
-                              <option value="AX">Aland Islands</option>
-                              <option value="AF">Afghanistan</option>
-                              <option value="AL">Albania</option>
-                              <option value="DZ">Algeria</option>
-                              <option value="AD">Andorra</option>
-                              <option value="AO">Angola</option>
-                              <option value="AI">Anguilla</option>
-                              <option value="AQ">Antarctica</option>
-                              <option value="AG">Antigua and Barbuda</option>
-                              <option value="AR">Argentina</option>
-                              <option value="AM">Armenia</option>
-                              <option value="AW">Aruba</option>
-                              <option value="AU">Australia</option>
-                              <option value="AT">Austria</option>
-                              <option value="AZ">Azerbaijan</option>
-                              <option value="BS">Bahamas</option>
-                              <option value="BH">Bahrain</option>
-                              <option value="BD">Bangladesh</option>
-                              <option value="BB">Barbados</option>
-                              <option value="BY">Belarus</option>
-                              <option value="PW">Belau</option>
-                              <option value="BE">Belgium</option>
-                              <option value="BZ">Belize</option>
-                              <option value="BJ">Benin</option>
-                              <option value="BM">Bermuda</option>
-                              <option value="BT">Bhutan</option>
-                              <option value="BO">Bolivia</option>
-                              <option value="BQ">Bonaire, Saint Eustatius and Saba</option>
-                              <option value="BA">Bosnia and Herzegovina</option>
-                              <option value="BW">Botswana</option>
-                              <option value="BV">Bouvet Island</option>
-                              <option value="BR">Brazil</option>
-                              <option value="IO">British Indian Ocean Territory</option>
-                              <option value="VG">British Virgin Islands</option>
-                              <option value="BN">Brunei</option>
-                              <option value="BG">Bulgaria</option>
-                              <option value="BF">Burkina Faso</option>
-                              <option value="BI">Burundi</option>
-                              <option value="KH">Cambodia</option>
-                              <option value="CM">Cameroon</option>
-                              <option value="CA">Canada</option>
-                              <option value="CV">Cape Verde</option>
-                              <option value="KY">Cayman Islands</option>
-                              <option value="CF">Central African Republic</option>
-                              <option value="TD">Chad</option>
-                              <option value="CL">Chile</option>
-                              <option value="CN">China</option>
-                              <option value="CX">Christmas Island</option>
-                              <option value="CC">Cocos (Keeling) Islands</option>
-                              <option value="CO">Colombia</option>
-                              <option value="KM">Comoros</option>
-                              <option value="CG">Congo (Brazzaville)</option>
-                              <option value="CD">Congo (Kinshasa)</option>
-                              <option value="CK">Cook Islands</option>
-                              <option value="CR">Costa Rica</option>
-                              <option value="HR">Croatia</option>
-                              <option value="CU">Cuba</option>
-                              <option value="CW">CuraÇao</option>
-                              <option value="CY">Cyprus</option>
-                              <option value="CZ">Czech Republic</option>
-                              <option value="DK">Denmark</option>
-                              <option value="DJ">Djibouti</option>
-                              <option value="DM">Dominica</option>
-                              <option value="DO">Dominican Republic</option>
-                              <option value="EC">Ecuador</option>
-                              <option value="EG">Egypt</option>
-                              <option value="SV">El Salvador</option>
-                              <option value="GQ">Equatorial Guinea</option>
-                              <option value="ER">Eritrea</option>
-                              <option value="EE">Estonia</option>
-                              <option value="ET">Ethiopia</option>
-                              <option value="FK">Falkland Islands</option>
-                              <option value="FO">Faroe Islands</option>
-                              <option value="FJ">Fiji</option>
-                              <option value="FI">Finland</option>
-                              <option value="FR">France</option>
-                              <option value="GF">French Guiana</option>
-                              <option value="PF">French Polynesia</option>
-                              <option value="TF">French Southern Territories</option>
-                              <option value="GA">Gabon</option>
-                              <option value="GM">Gambia</option>
-                              <option value="GE">Georgia</option>
-                              <option value="DE">Germany</option>
-                              <option value="GH">Ghana</option>
-                              <option value="GI">Gibraltar</option>
-                              <option value="GR">Greece</option>
-                              <option value="GL">Greenland</option>
-                              <option value="GD">Grenada</option>
-                              <option value="GP">Guadeloupe</option>
-                              <option value="GT">Guatemala</option>
-                              <option value="GG">Guernsey</option>
-                              <option value="GN">Guinea</option>
-                              <option value="GW">Guinea-Bissau</option>
-                              <option value="GY">Guyana</option>
-                              <option value="HT">Haiti</option>
-                              <option value="HM">Heard Island and McDonald Islands</option>
-                              <option value="HN">Honduras</option>
-                              <option value="HK">Hong Kong</option>
-                              <option value="HU">Hungary</option>
-                              <option value="IS">Iceland</option>
-                              <option value="IN">India</option>
-                              <option value="ID">Indonesia</option>
-                              <option value="IR">Iran</option>
-                              <option value="IQ">Iraq</option>
-                              <option value="IM">Isle of Man</option>
-                              <option value="IL">Israel</option>
-                              <option value="IT">Italy</option>
-                              <option value="CI">Ivory Coast</option>
-                              <option value="JM">Jamaica</option>
-                              <option value="JP">Japan</option>
-                              <option value="JE">Jersey</option>
-                              <option value="JO">Jordan</option>
-                              <option value="KZ">Kazakhstan</option>
-                              <option value="KE">Kenya</option>
-                              <option value="KI">Kiribati</option>
-                              <option value="KW">Kuwait</option>
-                              <option value="KG">Kyrgyzstan</option>
-                              <option value="LA">Laos</option>
-                              <option value="LV">Latvia</option>
-                              <option value="LB">Lebanon</option>
-                              <option value="LS">Lesotho</option>
-                              <option value="LR">Liberia</option>
-                              <option value="LY">Libya</option>
-                              <option value="LI">Liechtenstein</option>
-                              <option value="LT">Lithuania</option>
-                              <option value="LU">Luxembourg</option>
-                              <option value="MO">Macao S.A.R., China</option>
-                              <option value="MK">Macedonia</option>
-                              <option value="MG">Madagascar</option>
-                              <option value="MW">Malawi</option>
-                              <option value="MY">Malaysia</option>
-                              <option value="MV">Maldives</option>
-                              <option value="ML">Mali</option>
-                              <option value="MT">Malta</option>
-                              <option value="MH">Marshall Islands</option>
-                              <option value="MQ">Martinique</option>
-                              <option value="MR">Mauritania</option>
-                              <option value="MU">Mauritius</option>
-                              <option value="YT">Mayotte</option>
-                              <option value="MX">Mexico</option>
-                              <option value="FM">Micronesia</option>
-                              <option value="MD">Moldova</option>
-                              <option value="MC">Monaco</option>
-                              <option value="MN">Mongolia</option>
-                              <option value="ME">Montenegro</option>
-                              <option value="MS">Montserrat</option>
-                              <option value="MA">Morocco</option>
-                              <option value="MZ">Mozambique</option>
-                              <option value="MM">Myanmar</option>
-                              <option value="NA">Namibia</option>
-                              <option value="NR">Nauru</option>
-                              <option value="NP">Nepal</option>
-                              <option value="NL">Netherlands</option>
-                              <option value="AN">Netherlands Antilles</option>
-                              <option value="NC">New Caledonia</option>
-                              <option value="NZ">New Zealand</option>
-                              <option value="NI">Nicaragua</option>
-                              <option value="NE">Niger</option>
-                              <option value="NG">Nigeria</option>
-                              <option value="NU">Niue</option>
-                              <option value="NF">Norfolk Island</option>
-                              <option value="KP">North Korea</option>
-                              <option value="NO">Norway</option>
-                              <option value="OM">Oman</option>
-                              <option value="PK">Pakistan</option>
-                              <option value="PS">Palestinian Territory</option>
-                              <option value="PA">Panama</option>
-                              <option value="PG">Papua New Guinea</option>
-                              <option value="PY">Paraguay</option>
-                              <option value="PE">Peru</option>
-                              <option value="PH">Philippines</option>
-                              <option value="PN">Pitcairn</option>
-                              <option value="PL">Poland</option>
-                              <option value="PT">Portugal</option>
-                              <option value="QA">Qatar</option>
-                              <option value="IE">Republic of Ireland</option>
-                              <option value="RE">Reunion</option>
-                              <option value="RO">Romania</option>
-                              <option value="RU">Russia</option>
-                              <option value="RW">Rwanda</option>
-                              <option value="ST">São Tomé and Príncipe</option>
-                              <option value="BL">Saint Barthélemy</option>
-                              <option value="SH">Saint Helena</option>
-                              <option value="KN">Saint Kitts and Nevis</option>
-                              <option value="LC">Saint Lucia</option>
-                              <option value="SX">Saint Martin (Dutch part)</option>
-                              <option value="MF">Saint Martin (French part)</option>
-                              <option value="PM">Saint Pierre and Miquelon</option>
-                              <option value="VC">Saint Vincent and the Grenadines</option>
-                              <option value="SM">San Marino</option>
-                              <option value="SA">Saudi Arabia</option>
-                              <option value="SN">Senegal</option>
-                              <option value="RS">Serbia</option>
-                              <option value="SC">Seychelles</option>
-                              <option value="SL">Sierra Leone</option>
-                              <option value="SG">Singapore</option>
-                              <option value="SK">Slovakia</option>
-                              <option value="SI">Slovenia</option>
-                              <option value="SB">Solomon Islands</option>
-                              <option value="SO">Somalia</option>
-                              <option value="ZA">South Africa</option>
-                              <option value="GS">South Georgia/Sandwich Islands</option>
-                              <option value="KR">South Korea</option>
-                              <option value="SS">South Sudan</option>
-                              <option value="ES">Spain</option>
-                              <option value="LK">Sri Lanka</option>
-                              <option value="SD">Sudan</option>
-                              <option value="SR">Suriname</option>
-                              <option value="SJ">Svalbard and Jan Mayen</option>
-                              <option value="SZ">Swaziland</option>
-                              <option value="SE">Sweden</option>
-                              <option value="CH">Switzerland</option>
-                              <option value="SY">Syria</option>
-                              <option value="TW">Taiwan</option>
-                              <option value="TJ">Tajikistan</option>
-                              <option value="TZ">Tanzania</option>
-                              <option value="TH">Thailand</option>
-                              <option value="TL">Timor-Leste</option>
-                              <option value="TG">Togo</option>
-                              <option value="TK">Tokelau</option>
-                              <option value="TO">Tonga</option>
-                              <option value="TT">Trinidad and Tobago</option>
-                              <option value="TN">Tunisia</option>
-                              <option value="TR">Turkey</option>
-                              <option value="TM">Turkmenistan</option>
-                              <option value="TC">Turks and Caicos Islands</option>
-                              <option value="TV">Tuvalu</option>
-                              <option value="UG">Uganda</option>
-                              <option value="UA">Ukraine</option>
-                              <option value="AE">United Arab Emirates</option>
-                              <option value="GB">United Kingdom (UK)</option>
-                              <option value="US">USA (US)</option>
-                              <option value="UY">Uruguay</option>
-                              <option value="UZ">Uzbekistan</option>
-                              <option value="VU">Vanuatu</option>
-                              <option value="VA">Vatican</option>
-                              <option value="VE">Venezuela</option>
-                              <option value="VN">Vietnam</option>
-                              <option value="WF">Wallis and Futuna</option>
-                              <option value="EH">Western Sahara</option>
-                              <option value="WS">Western Samoa</option>
-                              <option value="YE">Yemen</option>
-                              <option value="ZM">Zambia</option>
-                              <option value="ZW">Zimbabwe</option>
-                            </select>
-                            <div className="box-industry">
-                              <select className="form-input mr-10 select-active input-industry">
-                                <option value={0}>Industry</option>
-                                <option value={1}>Software</option>
-                                <option value={2}>Finance</option>
-                                <option value={3}>Recruting</option>
-                                <option value={4}>Management</option>
-                                <option value={5}>Advertising</option>
-                                <option value={6}>Development</option>
-                              </select>
-                            </div>
-                            <button className="btn btn-default btn-find font-sm">Search</button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
+      <main className="main">
+        <section className="section-box">
+          <div className="breacrumb-cover bg-img-about">
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-6">
+                  <h2 className="mb-10">About Us</h2>
+                  <p className="font-lg color-text-paragraph-2">
+                    Know Who are we
+                  </p>
+                </div>
+                <div className="col-lg-6 text-lg-end">
+                  <ul className="breadcrumbs mt-40">
+                    <li>
+                      <a className="home-icon" href="#">
+                        Home
+                      </a>
+                    </li>
+                    <li>About Us</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="section-box mt-50">
+          <div className="post-loop-grid">
+            <div className="container">
+              <div className="text-center">
+                <h6 className="f-18 color-text-mutted text-uppercase">
+                  ABOUT US
+                </h6>
+                <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">
+                  ABOUT EWER SYSTEM
+                </h2>
+                <p className="font-sm color-text-paragraph wow animate__animated animate__fadeInUp w-lg-50 mx-auto">
+                  This EWER system is dedicated to safeguarding lives and
+                  livelihoods through cutting-edge Early Warning and Early
+                  Response solutions. Our mission is to create a safer and more
+                  resilient world by providing timely, accurate, and actionable
+                  information when it matters most.
+                </p>
+              </div>
+              <div className="row mt-70">
+                <div className="col-lg-6 col-md-12 col-sm-12">
+                  <img src="/images/img-about2.png" alt="joxBox" />
+                </div>
+                <div className="col-lg-6 col-md-12 col-sm-12">
+                  <h3 className="mt-15">OUR VISION</h3>
+                  <div className="mt-20">
+                    <p className="font-md color-text-paragraph mt-20">
+                      We envision a world where communities, Citizens, and
+                      governments are empowered with the tools and knowledge to
+                      mitigate the impact of Crisis, emergencies, and conflicts.
+                      We believe in a future where lives are saved, resources
+                      are conserved, and chaos is replaced with informed,
+                      coordinated, and effective responses.
+                    </p>
+                    <h3 className="mt-15">Who We Are</h3>
+                    <p className="font-md color-text-paragraph mt-20">
+                      We are a USAID-sponsored Activity that brings together
+                      Mercy Corps Nigeria (MCN), the West African Network for
+                      Peace-building (WANEP), the Institute for Peace and
+                      Conflict Resolution (IPCR), the Plateau Peace-building
+                      Agency (PPBA), and the Kaduna State Peace Commission
+                      (KSPC) in a consortium to enhance the effectiveness of
+                      Early Warning and Early Response (EWER) system in troubled
+                      regions across Nigeria.
+                    </p>
                   </div>
                 </div>
-              </section>
+                <div className="col-lg-12 col-md-12 col-sm-12">
+                  <p className="font-md color-text-paragraph mt-20">
+                    This PARTNER project seeks to &quot;strategically reimagine
+                    the entire EWER process whereby early warning information is
+                    monitored, collated, analyzed, formatted, and disseminated
+                    to stakeholders in the system that are positioned to receive
+                    and act upon that information.&quot; This will promote quick
+                    response, improve social cohesion, and enhance
+                    peace-building efforts among Nigerian communities at the
+                    state and federal levels.
+                  </p>
+                  <p className="font-md color-text-paragraph mt-20">
+                    The goal of the EWER system is to enable citizens and
+                    organizations to meaningfully engage in effective early
+                    warning signaling and early and timely responses from
+                    authorities.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="section-box mt-30 mb-40">
+          <div className="container">
+            <h2 className="text-center mb-15 wow animate__animated animate__fadeInUp">
+              Our Approach
+            </h2>
 
-    </main>
+            <div className="row mt-50">
+              <div className="col-sm-6 mb-20">
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title">
+                      <h5 className="text-center">Cutting-Edge Technology</h5>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <p className="font-md color-text-paragraph text-justify-center">
+                      We harness the latest technological advancements, such as
+                      AI, machine learning, and IoT, to deliver accurate and
+                      timely information.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 mb-20">
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title">
+                      <h5 className="text-center">Data-Driven Insights</h5>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <p className="font-md color-text-paragraph text-justify-center">
+                      Our systems collect, process, and analyze vast amounts of
+                      data to provide actionable insights for decision-makers.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 mb-20">
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title">
+                      <h5 className="text-center">
+                        Community-Centric Solutions
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <p className="font-md color-text-paragraph text-justify-center">
+                      We work closely with communities and local stakeholders to
+                      ensure our responses are tailored to their unique needs
+                      and challenges.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm-6 mb-20">
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title">
+                      {" "}
+                      <h5 className="text-center">Continuous Innovation</h5>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    {" "}
+                    <p className="font-md color-text-paragraph text-justify-center">
+                      We are committed to staying at the forefront of disaster
+                      management, continuously improving our systems to better
+                      protect lives and property.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-box mb-40">
+          <div className="container">
+            <h2 className="text-center mb-15 wow animate__animated animate__fadeInUp">
+              Key Features and Benefits of the EWERS System
+            </h2>
+            <div className="row mt-50 text-justify">
+              <div className="col-sm-4 mb-20">
+                <h6>Real-Time Data Integration</h6>
+                <p className="font-md color-text-paragraph">
+                  Our system seamlessly integrates real-time data from a wide
+                  range of sources, including real time reporting, satellite
+                  imagery, and more. This enables us to provide up-to-the-
+                  minute information about potential threats.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>Advanced Predictive Analytics</h6>
+                <p className="font-md color-text-paragraph">
+                  Using state-of-the-art predictive analytics and machine
+                  learning algorithms, our system can forecast potential
+                  conflicy with a high degree of accuracy. This means you can
+                  stay ahead of disasters and take proactive measures.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>Customizable Alerts</h6>
+                <p className="font-md color-text-paragraph">
+                  We understand that different communities and organizations
+                  have unique needs. Our system allows for the customization of
+                  alert thresholds and delivery methods, ensuring that you
+                  receive the information you need in the way you want it.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>Geospatial Mapping</h6>
+                <p className="font-md color-text-paragraph">
+                  Our interactive geospatial mapping interface provides a clear
+                  visual representation of the evolving situation. Users can
+                  easily identify at-risk areas, evacuation routes all from the
+                  comfort of a mobile device.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>Community Engagement</h6>
+                <p className="font-md color-text-paragraph">
+                  We believe in the power of community involvement. Our system
+                  includes features that facilitate community engagement and
+                  communication, ensuring that everyone is informed and
+                  prepared.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>Response Coordination</h6>
+                <p className="font-md color-text-paragraph">
+                  In addition to early warning, our system supports emergency
+                  response coordination. It connects response teams, allows for
+                  resource allocation, and provides real-time communication
+                  during crises.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>User-Centric Design</h6>
+                <p className="font-md color-text-paragraph">
+                  We have prioritized user experience in the development of our
+                  system, making it user-friendly and intuitive for a wide range
+                  of users.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6> Reliability</h6>
+                <p className="font-md color-text-paragraph">
+                  We take data security and system reliability seriously. Our
+                  robust infrastructure ensures that the system remains
+                  operational even in challenging conditions.
+                </p>
+              </div>
+              <div className="col-sm-4 mb-20">
+                <h6>Continuous Improvement</h6>
+                <p className="font-md color-text-paragraph">
+                  We are committed to staying at the forefront of technology and
+                  disaster management. Our system is designed for continuous
+                  improvement and updates to adapt to emerging challenges.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="section-box mt-50 mb-20">
+          <div className="container">
+            <div className="box-newsletter">
+              <div className="row">
+                <div className="col-xl-3 col-12 text-center d-none d-xl-block"></div>
+                <div className="col-lg-12 col-xl-6 col-12">
+                  <p className="text-white">
+                    Join us today and become a part of a community of volunteers
+                    committed to saving lives across Nigeria…
+                  </p>
+                  <div className="box-form-newsletter mt-40 text-center">
+                    <a href={"/register"} className="btn btn-block btn-brand-1">
+                      BECOME A VOLUNTEER
+                    </a>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-12 text-center d-none d-xl-block">
+                  <img />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </>
-  )
+  );
 }

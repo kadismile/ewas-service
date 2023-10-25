@@ -7826,9 +7826,7 @@ ul li:last-child .card-list-4 {
     max-width: 100%;
     padding: 0;
   }
-  .banner-hero.hero-1 {
-    background: #f2f6fd;
-  }
+  
   .banner-hero.hero-1 .block-banner {
     padding-top: 50px;
     padding-bottom: 50px;
@@ -8056,7 +8054,8 @@ ul li:last-child .card-list-4 {
   }
   .banner-hero .block-banner .form-find {
     padding: 15px;
-    margin-top: 40px !important;
+    margin-top: 20px !important;
+      margin-bottom: 20px !important;
   }
   .banner-hero .block-banner .form-find form {
     display: block;
