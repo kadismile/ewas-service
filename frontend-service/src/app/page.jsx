@@ -1,6 +1,7 @@
-'use client'
-import ReportDialogModal from '@/components/Modals/ReportDialogModal';
-import { useState } from 'react';
+"use client";
+import ReportDialogModal from "@/components/Modals/ReportDialogModal";
+import { useState } from "react";
+import { FrontArticle } from "@/components/Blog/FrontPageArticle";
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
 
@@ -14,20 +15,16 @@ export default function Home() {
   return (
     <>
       <main className="main">
-
         <section className="section-box d-block d-sm-none">
-            <div className="breacrumb-cover bg-img-home">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-6">
-              
-                    <p className="font-lg color-text-paragraph-2">
-                      
-                    </p>
-                  </div>
+          <div className="breacrumb-cover bg-img-home">
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-6">
+                  <p className="font-lg color-text-paragraph-2"></p>
                 </div>
               </div>
             </div>
+          </div>
         </section>
 
         <section className="section-box mb-70">
@@ -36,22 +33,57 @@ export default function Home() {
               <div className="row">
                 <div className="col-xl-7 col-lg-12">
                   <div className="block-banner">
-                    <h1 className="heading-banner wow animate__animated animate__fadeInUp">Report that &nbsp;<br className="d-none d-lg-block" />Incident.</h1>
-                    <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
-                    Help save millions of lives and properties by reporting incidents and conflicts as soon as you notice them, right before they escalate. Join us in saving lives across Nigeria. </div>
-                    <div className="mt-30"> 
-                    <a onClick={handleShowModal} className="btn btn-default mr-15">REPORT INCIDENCT</a>
-                    <ReportDialogModal show={showModal} onHide={handleCloseModal} />
+                    <h1 className="heading-banner wow animate__animated animate__fadeInUp">
+                      Report that &nbsp;
+                      <br className="d-none d-lg-block" />
+                      Incident.
+                    </h1>
+                    <div
+                      className="banner-description mt-20 wow animate__animated animate__fadeInUp"
+                      data-wow-delay=".1s"
+                    >
+                      Help save millions of lives and properties by reporting
+                      incidents and conflicts as soon as you notice them, right
+                      before they escalate. Join us in saving lives across
+                      Nigeria.{" "}
                     </div>
-                    <div className="mt-50 mb-20"><span className="font-md color-text-paragraph-2">Partner Agency</span></div>
+                    <div className="mt-30">
+                      <a
+                        onClick={handleShowModal}
+                        className="btn btn-success mr-15"
+                      >
+                        REPORT INCIDENCT
+                      </a>
+                      <ReportDialogModal
+                        show={showModal}
+                        onHide={handleCloseModal}
+                      />
+                    </div>
+                    <div className="mt-50 mb-20">
+                      <span className="font-md color-text-paragraph-2">
+                        PARTNER AGENCIES
+                      </span>
+                    </div>
                     <div className="box-logos-485">
                       <div className="box-swiper">
                         <div className="swiper-container swiper-group-4-banner swiper">
                           <div className="swiper-wrapper">
-                            <div className="swiper-slide"><a href="#"><img src="images/agency/T2.png" alt="jobBox" /></a></div>
-                            <div className="swiper-slide"><a href="#"><img src="images/agency/T3.png" alt="jobBox" /></a></div>
-                            <div className="swiper-slide"><a href="#"><img src="images/agency/T4.png" alt="jobBox" /></a></div>
-                        {/*     <div className="swiper-slide"><a href="#"><img src="fonts/sony.svg" alt="jobBox" /></a></div>
+                            <div className="swiper-slide">
+                              <a href="#">
+                                <img src="/images/agency/T2.png" alt="jobBox" />
+                              </a>
+                            </div>
+                            <div className="swiper-slide">
+                              <a href="#">
+                                <img src="/images/agency/T3.png" alt="jobBox" />
+                              </a>
+                            </div>
+                            <div className="swiper-slide">
+                              <a href="#">
+                                <img src="/images/agency/T4.png" alt="jobBox" />
+                              </a>
+                            </div>
+                            {/*     <div className="swiper-slide"><a href="#"><img src="fonts/sony.svg" alt="jobBox" /></a></div>
                             <div className="swiper-slide"><a href="#"><img src="fonts/acer.svg" alt="jobBox" /></a></div>
                             <div className="swiper-slide"><a href="#"><img src="fonts/nokia.svg" alt="jobBox" /></a></div>
                             <div className="swiper-slide"><a href="#"><img src="fonts/asus.svg" alt="jobBox" /></a></div>
@@ -65,20 +97,63 @@ export default function Home() {
                 </div>
                 <div className="col-xl-5 col-lg-12 d-none d-xl-block col-md-6">
                   <div className="banner-imgs">
-                    <div className="banner-1 shape-1"><img className="img-responsive" alt="jobBox" src="images/slider/356by356.png" /></div>
-                    <div className="banner-2 shape-2"><img className="img-responsive" alt="jobBox" src="images/slider/ed1.png" /></div>
-                    <div className="banner-3 shape-3"><img className="img-responsive" alt="jobBox" src="images/slider/165 c.png" /></div>
-                    <div className="banner-4 shape-3"><img className="img-responsive" alt="jobBox" src="images/slider/145 B.png" /></div>
-                    <div className="banner-5 shape-2"><img className="img-responsive" alt="jobBox" src="images/slider/131 by 131.png" /></div>
-                    <div className="banner-6 shape-1"><img className="img-responsive" alt="jobBox" src="images/slider/120 by 120.png" /></div>
+                    <div className="banner-1 shape-1">
+                      <img
+                        className="img-responsive"
+                        alt="jobBox"
+                        src="/images/slider/356by356.png"
+                      />
+                    </div>
+                    <div className="banner-2 shape-2">
+                      <img
+                        className="img-responsive"
+                        alt="jobBox"
+                        src="/images/slider/ed1.png"
+                      />
+                    </div>
+                    <div className="banner-3 shape-3">
+                      <img
+                        className="img-responsive"
+                        alt="jobBox"
+                        src="/images/slider/165 c.png"
+                      />
+                    </div>
+                    <div className="banner-4 shape-3">
+                      <img
+                        className="img-responsive"
+                        alt="jobBox"
+                        src="/images/slider/145 B.png"
+                      />
+                    </div>
+                    <div className="banner-5 shape-2">
+                      <img
+                        className="img-responsive"
+                        alt="jobBox"
+                        src="/images/slider/131 by 131.png"
+                      />
+                    </div>
+                    <div className="banner-6 shape-1">
+                      <img
+                        className="img-responsive"
+                        alt="jobBox"
+                        src="/images/slider/120 by 120.png"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="box-search-2">
                 <div className="block-banner">
-                  <div className="form-find mt-40 wow animate__animated animate__fadeIn" data-wow-delay=".2s">
+                  <div
+                    className="form-find mt-40 wow animate__animated animate__fadeIn"
+                    data-wow-delay=".2s"
+                  >
                     <form>
-                      <input className="form-input input-keysearch mr-10" type="text" placeholder="Your keyword... " />
+                      <input
+                        className="form-input input-keysearch mr-10"
+                        type="text"
+                        placeholder="Your keyword... "
+                      />
                       <select className="form-input mr-10 select-active">
                         <option value>Location</option>
                         <option value="AX">Aland Islands</option>
@@ -108,12 +183,16 @@ export default function Home() {
                         <option value="BM">Bermuda</option>
                         <option value="BT">Bhutan</option>
                         <option value="BO">Bolivia</option>
-                        <option value="BQ">Bonaire, Saint Eustatius and Saba</option>
+                        <option value="BQ">
+                          Bonaire, Saint Eustatius and Saba
+                        </option>
                         <option value="BA">Bosnia and Herzegovina</option>
                         <option value="BW">Botswana</option>
                         <option value="BV">Bouvet Island</option>
                         <option value="BR">Brazil</option>
-                        <option value="IO">British Indian Ocean Territory</option>
+                        <option value="IO">
+                          British Indian Ocean Territory
+                        </option>
                         <option value="VG">British Virgin Islands</option>
                         <option value="BN">Brunei</option>
                         <option value="BG">Bulgaria</option>
@@ -176,7 +255,9 @@ export default function Home() {
                         <option value="GW">Guinea-Bissau</option>
                         <option value="GY">Guyana</option>
                         <option value="HT">Haiti</option>
-                        <option value="HM">Heard Island and McDonald Islands</option>
+                        <option value="HM">
+                          Heard Island and McDonald Islands
+                        </option>
                         <option value="HN">Honduras</option>
                         <option value="HK">Hong Kong</option>
                         <option value="HU">Hungary</option>
@@ -269,7 +350,9 @@ export default function Home() {
                         <option value="SX">Saint Martin (Dutch part)</option>
                         <option value="MF">Saint Martin (French part)</option>
                         <option value="PM">Saint Pierre and Miquelon</option>
-                        <option value="VC">Saint Vincent and the Grenadines</option>
+                        <option value="VC">
+                          Saint Vincent and the Grenadines
+                        </option>
                         <option value="SM">San Marino</option>
                         <option value="SA">Saudi Arabia</option>
                         <option value="SN">Senegal</option>
@@ -282,7 +365,9 @@ export default function Home() {
                         <option value="SB">Solomon Islands</option>
                         <option value="SO">Somalia</option>
                         <option value="ZA">South Africa</option>
-                        <option value="GS">South Georgia/Sandwich Islands</option>
+                        <option value="GS">
+                          South Georgia/Sandwich Islands
+                        </option>
                         <option value="KR">South Korea</option>
                         <option value="SS">South Sudan</option>
                         <option value="ES">Spain</option>
@@ -337,7 +422,9 @@ export default function Home() {
                           <option value={6}>Development</option>
                         </select>
                       </div>
-                      <button className="btn btn-default btn-find font-sm">Search</button>
+                      <button className="btn btn-success btn-find font-sm">
+                        Search
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -345,99 +432,8 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        <section className="section-box mt-50">
-          <div className="section-box wow animate__animated animate__fadeIn">
-            <div className="container">
-              <div className="text-start">
-                <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">Latest Incidence and Indicators Article</h2>
-              </div>
-              <div className="mt-50">
-                <div className="tab-content" id="myTabContent-1">
-                  <div className="tab-pane fade show active" id="tab-job-1" role="tabpanel" aria-labelledby="tab-job-1">
-                    <div className="row">
-                      <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                        <div className="card-grid-2 grid-bd-16 hover-up">
-                          <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
-                            <div className="image-box">
-                              <figure><img src="images/img1.png" alt="jobBox" /></figure>
-                            </div>
-                          </div>
-                          <div className="card-block-info">
-                            <h5><a href="job-details.html">Herders and farmers Clashes in Nigeria</a></h5>
-                            <div className="card-2-bottom mt-20">
-                              <div className="row">
-                                
-                              </div>
-                            </div>
-                            <p className="font-sm color-text-paragraph mt-20">
-                              The struggle between herders and farmers in Nigeria over farmland and pasture is a serious and escalating 
-                              conflict registering huge casualties and raising tensions particularly in the country’s Middle Belt. 
-                              Drought and desertification in the north have forced pastoralist herdsmen to seek grazing lands further 
-                              south resulting in competition over resources and clashes with settled farmers
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                        <div className="card-grid-2 grid-bd-16 hover-up">
-                          <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
-                            <div className="image-box">
-                              <figure><img src="images/img1.png" alt="jobBox" /></figure>
-                            </div>
-                          </div>
-                          <div className="card-block-info">
-                            <h5><a href="job-details.html">Herders and farmers Clashes in Nigeria</a></h5>
-                            <div className="card-2-bottom mt-20">
-                              <div className="row">
-                                
-                              </div>
-                            </div>
-                            <p className="font-sm color-text-paragraph mt-20">
-                              The struggle between herders and farmers in Nigeria over farmland and pasture is a serious and escalating 
-                              conflict registering huge casualties and raising tensions particularly in the country’s Middle Belt. 
-                              Drought and desertification in the north have forced pastoralist herdsmen to seek grazing lands further 
-                              south resulting in competition over resources and clashes with settled farmers
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                        <div className="card-grid-2 grid-bd-16 hover-up">
-                          <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
-                            <div className="image-box">
-                              <figure><img src="images/img1.png" alt="jobBox" /></figure>
-                            </div>
-                          </div>
-                          <div className="card-block-info">
-                            <h5><a href="job-details.html">Herders and farmers Clashes in Nigeria</a></h5>
-                            <div className="card-2-bottom mt-20">
-                              <div className="row">
-                                
-                              </div>
-                            </div>
-                            <p className="font-sm color-text-paragraph mt-20">
-                              The struggle between herders and farmers in Nigeria over farmland and pasture is a serious and escalating 
-                              conflict registering huge casualties and raising tensions particularly in the country’s Middle Belt. 
-                              Drought and desertification in the north have forced pastoralist herdsmen to seek grazing lands further 
-                              south resulting in competition over resources and clashes with settled farmers
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                                        
-                    </div>
-                    <div className="text-center mt-10"><a className="btn btn-brand-1 btn-icon-more hover-up">See more </a></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FrontArticle />
       </main>
     </>
-    
-  )
+  );
 }

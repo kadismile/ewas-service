@@ -1,15 +1,15 @@
-
-import { manageFileUpload } from '../helpers/file-upload-helper.js'
-import { Paginator } from '../helpers/paginator-helper.js';
-import { User } from '../models/UserModel//UserModel.js';
-import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
-
+import { manageFileUpload } from "../helpers/file-upload-helper.js";
+import { Paginator } from "../helpers/paginator-helper.js";
+import { User } from "../models/UserModel//UserModel.js";
+import {
+  user_create_validation,
+  user_login_validation,
+  change_password_validation,
+} from "../validations/user-validations.js";
 
 export const createUser = async (req, res) => {
-  const body = req.body
-  const { 
-    fullName, email, phoneNumber, password, department, role
-  } = body
+  const body = req.body;
+  const { fullName, email, phoneNumber, password, department, role } = body;
   try {
     const { error } = user_create_validation.validate(body);
     if (error) {
@@ -20,34 +20,38 @@ export const createUser = async (req, res) => {
     if (user) {
       // send a mail here welcoming the new User
       return res.status(301).json({
-        status: 'failed',
-        message: `User already exists with ${email} and ${phoneNumber}`
+        status: "failed",
+        message: `User already exists with ${email} and ${phoneNumber}`,
       });
     }
 
     user = new User({
-      fullName, email, phoneNumber, password, department, role
+      fullName,
+      email,
+      phoneNumber,
+      password,
+      department,
+      role,
     });
 
     await user.save();
     if (user) {
       return res.status(201).json({
-        status: 'success',
-        data: user
+        status: "success",
+        data: user,
       });
     }
-  
-    } catch (e) {
-      console.log('Error', e)
-      return res.status(500).json({
-        status: "error",
-        message: e
-      });
+  } catch (e) {
+    console.log("Error", e);
+    return res.status(500).json({
+      status: "error",
+      message: e,
+    });
   }
 };
 
 export const loginUser = async (req, res) => {
-  const body = req.body
+  const body = req.body;
   const { email, password } = body;
 
   try {
@@ -58,18 +62,17 @@ export const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      return res.status(401).json(
-        { 
-          status: "failed",
-          message: "invalid credentials"
-        });
+      return res.status(401).json({
+        status: "failed",
+        message: "invalid credentials",
+      });
     }
-    
+
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      res.status(401).json({ 
+      res.status(401).json({
         status: "failed",
-        message: "invalid credentials"
+        message: "invalid credentials",
       });
     } else {
       const token = user.getSignedJwtToken();
@@ -79,21 +82,20 @@ export const loginUser = async (req, res) => {
       res.status(200).json({
         status: "success",
         token,
-        user
+        user,
       });
-
     }
   } catch (e) {
-      console.log('Error', e)
-      return res.status(500).json({
-        status: "error",
-        message: e
+    console.log("Error", e);
+    return res.status(500).json({
+      status: "error",
+      message: e,
     });
   }
 };
 
 export const changePassword = async (req, res) => {
-  const body = req.body
+  const body = req.body;
   const { oldPassword, newPassword } = body;
 
   try {
@@ -103,36 +105,36 @@ export const changePassword = async (req, res) => {
     }
     const user = await User.findOne({ email: req.user.email });
     if (!user) {
-      res.status(401).json({ error: "invalid credentials"});
+      res.status(401).json({ error: "invalid credentials" });
     }
-    
-    if (!await user.matchPassword(oldPassword)) {
-      res.status(401).json({ error: "Invalid password provided"});
+
+    if (!(await user.matchPassword(oldPassword))) {
+      res.status(401).json({ error: "Invalid password provided" });
     }
-  
+
     user.password = newPassword;
     await user.save();
 
     res.status(200).json({
       status: "success",
-      message: 'password changed successfully'
+      message: "password changed successfully",
     });
   } catch (error) {
-    console.error('Error', e)
-      return res.status(500).json({
-        status: "error",
-        message: e
+    console.error("Error", e);
+    return res.status(500).json({
+      status: "error",
+      message: e,
     });
   }
-}
+};
 
 export const authorizeUser = async (req, res) => {
   try {
-    const user = req.user
+    const user = req.user;
     if (user) {
       return res.status(200).json({
         status: "success",
-        user
+        user,
       });
     } else {
       return res.status(200).json({
@@ -142,40 +144,34 @@ export const authorizeUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "failed",
-      error
+      error,
     });
   }
-}
+};
 
 export const getUsers = async (req, res) => {
   try {
-    const populate = [
-      ['department'],
-    ]
-    const users = await Paginator({...req.query}, User, populate);
+    const populate = [["department"]];
+    const users = await Paginator({ ...req.query }, User, populate);
     res.status(200).json({
       status: "success",
-      data: users
+      data: users,
     });
   } catch (error) {
-    console.log('Error ------', error)
+    console.log("Error ------", error);
     return res.status(500).json({
       status: "failed",
-      error
+      error,
     });
   }
-}
+};
 
-export const uploadFile = async (req, res) => {
- 
-}
+export const uploadFile = async (req, res) => {};
 
 const findUserByEmailOrPhone = async (phoneNumber, email) => {
   const user = await User.findOne({
-    $or: [
-      { email },
-      { phoneNumber }],
-  }).select('+password');
+    $or: [{ email }, { phoneNumber }],
+  }).select("+password");
   if (!user) {
     return null;
   }

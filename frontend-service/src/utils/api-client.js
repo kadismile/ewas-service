@@ -1,12 +1,11 @@
-import appStorage from '@/redux/customStorage'
-export const  client = async (url, method, reqBody = undefined, contentType) => {
-
-  const { token } = appStorage.getItem('user')
+import appStorage from "@/redux/customStorage";
+export const client = async (url, method, reqBody = undefined, contentType) => {
+  const { token } = appStorage.getItem("user");
   const headers = {
-    'Authorization': `Bearer ${ token }`
-  }
-  
-  reqBody = contentType ? reqBody : JSON.stringify(reqBody) 
+    Authorization: `Bearer ${token}`,
+  };
+
+  reqBody = contentType ? reqBody : JSON.stringify(reqBody);
 
   const config = {
     method,
@@ -15,8 +14,8 @@ export const  client = async (url, method, reqBody = undefined, contentType) => 
   };
   try {
     const response = await window.fetch(url, config);
-    return response.json()
+    return response.json();
   } catch (err) {
-    console.log('Client Error -------> ', err)
+    console.log("Client Error -------> ", err);
   }
-}
+};
