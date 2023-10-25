@@ -1,14 +1,17 @@
-"use client"; 
-import { reportService } from '../../services/reporterService.js'
+"use client";
+import { reportService } from "../../services/reporterService.js";
 import { useState } from "react";
 import { useAppDispatch } from "@/redux/store.js";
 import { setUser } from "@/redux/user-slice.js";
-import toastr from 'toastr'
-import styles from './login.module.css'
-
-import Link from 'next/link'
-import { DisabledButton, LoadingButton, SubmitButton } from "@/components/elements/Buttons.jsx";
-export default function Login () {
+import toastr from "toastr";
+import styles from "./login.module.css";
+import Link from "next/link";
+import {
+  DisabledButton,
+  LoadingButton,
+  SubmitButton,
+} from "@/components/elements/Buttons.jsx";
+export default function Login() {
   const dispatch = useAppDispatch();
   const formFields = {
     email: "",
@@ -41,7 +44,6 @@ export default function Login () {
     if (!isError && !submitForm) {
       return false;
     }
-    
   };
 
   const handleChange = (event) => {
@@ -64,7 +66,6 @@ export default function Login () {
   };
 
   const validateForm = (name, errors, value) => {
-
     switch (name) {
       case "password":
         errors.password = "";
@@ -74,7 +75,7 @@ export default function Login () {
         } else {
           setSubmitForm(true);
         }
-      return errors.password;
+        return errors.password;
 
       case "email":
         errors.email = "";
@@ -98,39 +99,41 @@ export default function Login () {
     const { email, password } = formValues;
 
     const response = await reportService.loginReporter({
-      email,password
-    })
-    const { status, message, data, token } = response
-    if (status === 'failed') {
+      email,
+      password,
+    });
+    const { status, message, data, token } = response;
+    if (status === "failed") {
       toastr.error(message);
-      setTimeout(() => setLoading(false), 1000)
+      setTimeout(() => setLoading(false), 1000);
     } else {
-      toastr.success('Login Successful');
-      setTimeout(() => setLoading(false), 1000)
-      dispatch(setUser({ user: data, token }))
+      toastr.success("Login Successful");
+      setTimeout(() => setLoading(false), 1000);
+      dispatch(setUser({ user: data, token }));
       window.location.replace("/");
     }
   };
 
-const { errors} = formValues
+  const { errors } = formValues;
 
-return (
-  <main className="main">
+  return (
+    <main className="main">
       <section className="pt-100 login-register">
-        <div className="container"> 
+        <div className="container">
           <div className="row login-register-cover">
             <div className="col-lg-4 col-md-6 col-sm-12 mx-auto">
               <div className="text-center">
                 <h2 className="mt-10 mb-5 text-brand-1"> Sign In</h2>
               </div>
               <form className="login-register text-start mt-20" action="#">
-
                 <div className="form-group">
-                  <label className="form-label" htmlFor="input-2">Email *</label>
-                  <input 
+                  <label className="form-label" htmlFor="input-2">
+                    Email *
+                  </label>
+                  <input
                     className="form-control"
-                    type="email" 
-                    placeholder="your email" 
+                    type="email"
+                    placeholder="your email"
                     onChange={handleChange}
                     name="email"
                     value={formValues.email}
@@ -139,40 +142,59 @@ return (
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="input-4">Password *</label>
-                  <input 
-                    className="form-control" 
-                    type="password" 
+                  <label className="form-label" htmlFor="input-4">
+                    Password *
+                  </label>
+                  <input
+                    className="form-control"
+                    type="password"
                     onChange={handleChange}
                     name="password"
                     value={formValues.password}
                     placeholder="************"
                   />
-                  { errors.password ? <span className={styles.form_error}> {errors.password}</span> : ""}
-                </div>
-              
-                <div className="form-group">
-                  {
-                    disableForm() ? (
-                      <DisabledButton title={'Login'} className={'btn btn-brand-1 hover-up w-100'}/>
-                    ) : !loading ? (
-                      <SubmitButton onClick={ handleSubmit } title={'Login'} className={'btn btn-brand-1 hover-up w-100'}/>
-                    ) : (
-                      <LoadingButton />
-                    )
-                  }
+                  {errors.password ? (
+                    <span className={styles.form_error}>
+                      {" "}
+                      {errors.password}
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
-                <div className="text-muted text-center">Already have an account? 
+                <div className="form-group">
+                  {disableForm() ? (
+                    <DisabledButton
+                      title={"Login"}
+                      className={"btn btn-brand-1 hover-up w-100"}
+                    />
+                  ) : !loading ? (
+                    <SubmitButton
+                      onClick={handleSubmit}
+                      title={"Login"}
+                      className={"btn btn-brand-1 hover-up w-100"}
+                    />
+                  ) : (
+                    <LoadingButton />
+                  )}
+                </div>
+
+                <div className="text-muted text-center">
+                  Already have an account?
                   <Link href="/login">Sign in</Link>
                 </div>
               </form>
             </div>
-            <div className="img-1 d-none d-lg-block"><img className="shape-1" src="images/img-1.svg" alt="JobBox" /></div>
-            <div className="img-2"><img src="images/img-2.svg" alt="JobBox" /></div>
+            <div className="img-1 d-none d-lg-block">
+              <img className="shape-1" src="/images/img-1.svg" alt="JobBox" />
+            </div>
+            <div className="img-2">
+              <img src="/images/img-2.svg" alt="JobBox" />
+            </div>
           </div>
         </div>
       </section>
     </main>
-)
+  );
 }

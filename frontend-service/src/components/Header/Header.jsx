@@ -1,14 +1,14 @@
-"use client"; 
-import appStorage from '@/redux/customStorage';
-import Link from 'next/link'
+"use client";
+import appStorage from "@/redux/customStorage";
+import Link from "next/link";
 
-export default function Header () {
-  const { getItem } = appStorage
-  const { user }= getItem('user')
+export default function Header() {
+  const { getItem } = appStorage;
+  const { user } = getItem("user");
   const logout = () => {
-    localStorage.clear()
+    localStorage.clear();
     window.location.replace("/");
-  }
+  };
 
   return (
     <>
@@ -17,16 +17,18 @@ export default function Header () {
           <div className="main-header">
             <div className="header-left">
               <div className="header-logo">
-              <Link className="d-flex" href="/">
-                <img alt="jobBox" src="images/LOGO.png" />
-              </Link>
+                <Link className="d-flex" href="/">
+                  <img alt="jobBox" src="images/LOGO.png" />
+                </Link>
               </div>
             </div>
             <div className="header-nav">
               <nav className="nav-main-menu">
                 <ul className="main-menu">
                   <li>
-                    <Link className="active" href="/">Home</Link>
+                    <Link className="active" href="/">
+                      Home
+                    </Link>
                   </li>
                   <li>
                     <Link href="/about">About Us</Link>
@@ -46,17 +48,35 @@ export default function Header () {
               </div>
             </div>
             <div className="header-right">
-              {
-                user ? 
-                  <div className="block-signin">
-                    <Link className="text-link-bd-btom hover-up" href="register"> { user.fullName } </Link> / &nbsp;
-                    <Link className="text-link-bd-btom hover-up" href='/' onClick={logout}> { 'logout' } </Link>
-                  </div> : 
-              <div className="block-signin">
-              <Link className="text-link-bd-btom hover-up" href="register">Register</Link>
-              <Link  className="btn btn-default btn-shadow ml-40 hover-up" href="login"> Sign in</Link>
-            </div>
-              }
+              {user ? (
+                <div className="block-signin">
+                  <Link className="text-link-bd-btom hover-up" href="register">
+                    {" "}
+                    {user.fullName}{" "}
+                  </Link>{" "}
+                  / &nbsp;
+                  <Link
+                    className="text-link-bd-btom hover-up"
+                    href="/"
+                    onClick={logout}
+                  >
+                    {" "}
+                    {"logout"}{" "}
+                  </Link>
+                </div>
+              ) : (
+                <div className="block-signin">
+                  <Link className="text-link-bd-btom hover-up" href="register">
+                    Register
+                  </Link>
+                  <Link
+                    className="btn btn-success btn-sm btn-shadow ml-40 hover-up"
+                    href="login"
+                  >
+                    SIGN IN
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -76,17 +96,17 @@ export default function Header () {
                 {/* mobile menu start*/}
                 <nav>
                   <ul className="mobile-menu font-heading">
-                  <li>
-                    <Link href="/">Home</Link>
-                  </li>
                     <li>
-                    <Link href="/about">About Us</Link>
+                      <Link href="/">Home</Link>
+                    </li>
+                    <li>
+                      <Link href="/about">About Us</Link>
                     </li>
                     <li>
                       <Link href="/articles">Articles</Link>
                     </li>
                     <li>
-                    <Link href="/contact">Contact Us</Link>
+                      <Link href="/contact">Contact Us</Link>
                     </li>
                   </ul>
                 </nav>

@@ -612,7 +612,7 @@ h6 {
 }
 
 .color-text-paragraph-2 {
-  color: #66789C;
+  color: #e1f7e8;
 }
 
 .color-text-mutted {
@@ -2764,10 +2764,12 @@ ul li:last-child .card-list-4 {
 }
 
 .banner-hero {
-  padding: 0px 65px 0px 15px;
   position: relative;
-  max-width: 1770px;
-  margin: 0 auto;
+    width: 100%;
+    padding: 100px 0px 80px 0px;
+    max-width: 100%;
+    background: url(../images/banner.jpg) no-repeat top center;
+    background-size: cover;
 }
 .banner-hero .banner-inner {
   z-index: 5;
@@ -2906,10 +2908,9 @@ ul li:last-child .card-list-4 {
   color: #4F5E64;
 }
 .banner-hero .heading-banner {
-  color: #05264E;
   font-size: 48px;
   line-height: 60px;
-  color: #05264E;
+  color: #ffffff;
 }
 .banner-hero .color-brand-2 {
   color: #3C65F5;
@@ -2929,7 +2930,7 @@ ul li:last-child .card-list-4 {
 .banner-hero .banner-description {
   position: relative;
   font-size: 18px;
-  color: #4F5E64;
+  color: #eff3f5;
 }
 .banner-hero.banner-image-single {
   padding: 20px 0px 20px 0px;
@@ -3063,6 +3064,7 @@ ul li:last-child .card-list-4 {
   padding: 30px 0;
   float: left;
   width: 100%;
+  background: #154734;
 }
 .header .main-header {
   display: flex;
@@ -3134,7 +3136,8 @@ ul li:last-child .card-list-4 {
   font-weight: 500;
   font-size: 14px;
   line-height: 18px;
-  color: #05264E;
+  color: #ffffff;
+  text-transform: uppercase;
   display: block;
   padding: 0px;
   text-decoration: none;
@@ -3226,7 +3229,8 @@ ul li:last-child .card-list-4 {
   font-weight: 500;
   font-size: 14px;
   line-height: 150%;
-  color: #05264E;
+  color: #ffffff;
+  text-transform: uppercase;
   display: inline-block;
   position: relative;
   text-decoration-line: underline;
@@ -3254,7 +3258,7 @@ ul li:last-child .card-list-4 {
   left: 0;
   transition: all 0.3s ease 0s;
   border-bottom: 1px solid #E0E6F6;
-  background: #fff;
+  background:#154734;;
 }
 .sticky-bar.stick.sticky-white-bg {
   background-color: #fff;

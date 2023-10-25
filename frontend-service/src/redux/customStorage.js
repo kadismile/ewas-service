@@ -8,7 +8,7 @@ const appStorage = {
     return JSON.parse(oldItem);
   },
   setItem(_key, value) {
-    console.log('Key ----------------> ', _key)
+    console.log("Key ----------------> ", _key);
     const oldItem = this.getItem(_key);
     const newValue = { ...oldItem, ...value };
     localStorage.setItem(_key, JSON.stringify(newValue));
