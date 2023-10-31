@@ -2,13 +2,15 @@ import {useState, useEffect, useRef} from 'react'
 import { Footer } from "../components/Footer/Footer";
 import { PageLoader } from "../components/elements/spinners";
 import {reportService} from '../services/reportsService.js'
-import mapboxgl from 'mapbox-gl';
- 
-mapboxgl.accessToken = 'pk.eyJ1Ijoia2FkaXNtaWxlMSIsImEiOiJjbG8zMTk4MzAwbXkwMmttc21hd2l0a2E0In0.L7hsWeL1L6qBjWINHxBiTg';
+import ReactMapGL, { Marker, Popup, NavigationControl } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css'
+
+
 
 export const Home = () => {
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
+  const [coordinates, setCoordinates] = useState([])
 
   setTimeout(() => setLoading(false), 1000)
   const fetchData = () => {
@@ -17,28 +19,24 @@ export const Home = () => {
         data: { data },
       } = res;
       setReports(data);
+      prepareCoordinates(data)
       setTimeout(() => setLoading(false), 500)
     });
   }
 
-   useEffect(() => {
+  useEffect(() => {
     fetchData()
   }, []);
 
-
-  const ref = useRef(null);
-  const [map, setMap] = useState(null);
-  useEffect(() => {
-    if (ref.current && !map) {
-      const map = new mapboxgl.Map({
-        container: ref.current,
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [9.0820, 8.6753],
-        zoom: 1
-      });
-      setMap(map);
+  const prepareCoordinates = (reports) => {
+    let coordinates = []
+    if (reports.length) {
+      for (let report of reports) {
+        coordinates.push(report)
+      }
     }
-  }, [ref, map]);
+    setCoordinates(coordinates)
+  }
 
   return (
     <>
@@ -118,15 +116,45 @@ export const Home = () => {
                 <div className="container"> 
                   <div className="panel-white">
                     <div className="panel-head"> 
-                      <h5>Map Statistics</h5><a className="menudrop" id="dropdownMenu2" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static" />
+                      <h5>Map Statistics</h5>
+                      <a className="menudrop" id="dropdownMenu2" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static" />
                       <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2">
                         <li><a className="dropdown-item active" href="#">Add new</a></li>
                         <li><a className="dropdown-item" href="#">Settings</a></li>
                         <li><a className="dropdown-item" href="#">Actions</a></li>
                       </ul>
                     </div>
-                    <div className="panel-body"> 
-                        <div className="map-container" ref={ref} />
+                    <div className="panel-body">
+                      <ReactMapGL
+                       anchor={'top'}
+                        mapboxAccessToken={process.env.REACT_APP_MAP_BOX_KEY}
+                          mapLib={import('mapbox-gl')}
+                          initialViewState={{
+                            longitude: 9.0820,
+                            latitude: 8.6753,
+                            zoom: 5.5
+                          }}
+                          style={{width: '100%', height: '700px'}}
+                          mapStyle="mapbox://styles/mapbox/light-v11"
+                        >
+                          {
+                            reports.map((report, index) => {
+                              return (
+                                <Marker 
+                                  key={index}
+                                  longitude={Number(report.address.longitude)} 
+                                  latitude={Number(report.address.latitude)}
+                                  anchor="bottom"
+                                >
+                                  <div className="marker">
+                                      <img src="images/map-dot.jpeg" style={{width: '5%'}} alt='dot'/>
+                                  </div>
+                                </Marker>
+                              )
+                            })
+                          }
+                         {/*  <NavigationControl /> */}
+                      </ReactMapGL>  
                     </div>
                   </div>
                 </div>
@@ -138,12 +166,7 @@ export const Home = () => {
                 <div className="container"> 
                   <div className="panel-white">
                     <div className="panel-head"> 
-                      <h5>Most Recent  Reports</h5><a className="menudrop" id="dropdownMenu4" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static" />
-                      <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu4">
-                        <li><a className="dropdown-item active" href="#">Add new</a></li>
-                        <li><a className="dropdown-item" href="#">Settings</a></li>
-                        <li><a className="dropdown-item" href="#">Actions</a></li>
-                      </ul>
+                      <h5>Most Recent  Reports</h5>
                     </div>
                     <div className="panel-body">
                     {

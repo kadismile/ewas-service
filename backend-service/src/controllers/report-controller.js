@@ -305,7 +305,7 @@ export const acceptReport = async (req, res) => {
 
 export const verifyReport = async (req, res) => {
   try {
-    const { comments, verified, reportId, userId } = req.body
+    const { comments, verified, reportId, userId, verificationMethod, responder } = req.body
     const report = await Report.findOne({ _id: reportId })
 
     if (report && report.userId === userId) {
@@ -313,7 +313,9 @@ export const verifyReport = async (req, res) => {
       await Report.findOneAndUpdate({_id: reportId}, {
         verified,
         userId: null, // making it null so the report will be un-assigned to the current user
-        departmentId: CPS_DEPARTMENT
+        departmentId: CPS_DEPARTMENT,
+        verificationMethod,
+        responder
       })
       const historyData = {
         user: userId,

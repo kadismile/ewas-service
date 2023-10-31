@@ -1,17 +1,28 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons"
 import { userService } from '../services/userService'
 import toastr from 'toastr'
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/user-slice";
 
-export const Login = () => {
+export const ResetPassword = () => {
+  const { resetToken } = useParams();
+  const [user, setuser] = useState(undefined)
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    userService.verifyPasswordToken(resetToken)
+    .then((res) => {
+      const {status, data} = res
+      if (status === 'success') {
+        setuser(data)
+      } else {
+        toastr.error('invalid url')
+      }
+    })
+  }, [])
+
   const formFields = {
-    email: "",
-    password: ""
+    newPassword: "",
+    repeatPassword: "",
   };
 
   const [submitForm, setSubmitForm] = useState(false);
@@ -47,25 +58,27 @@ export const Login = () => {
 
   const validateForm = (name, errors, value) => {
     switch (name) {
-      case "password":
-        errors.password = "";
-        if (value.length && value.length <= 3) {
-          errors.password = "password must be more than 3 characters long!";
+      case "newPassword":
+        errors.newPassword = "";
+        if (!value.length && value.length < 5) {
+          errors.newPassword = "pls add password";
           setSubmitForm(false);
         } else {
           setSubmitForm(true);
         }
-        return errors.password;
-
-      case "email":
-        errors.email = "";
-        if (!value.length) {
-          errors.email = "pls add email";
+        return errors.newPassword;
+        
+      case "repeatPassword":
+        errors.repeatPassword = "";
+        if (!value.length && value.length < 5) {
+          errors.repeatPassword = "pls add password";
           setSubmitForm(false);
+        } else if (value !== formValues.newPassword) {
+          errors.repeatPassword = "password mismatch";
         } else {
           setSubmitForm(true);
         }
-        return errors.email;
+        return errors.repeatPassword;
       default:
         setSubmitForm(false);
         break;
@@ -94,17 +107,16 @@ export const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const { email, password } = formValues;
-    const response = await userService.loginUser(email, password)
-    const { status } = response
+    const { newPassword } = formValues;
+    const { email } = user;
+    const response = await userService.resetPassword({email, newPassword})
+    const { status, message } = response
     if (status === 'failed') {
-      toastr.error('Invalid Login Details');
+      toastr.error(message);
       setTimeout(() => setLoading(false), 1000)
     } else {
-      const { token, user } = response
-      toastr.success('Login Successfully');
+      toastr.success(message);
       setTimeout(() => setLoading(false), 1000)
-      dispatch(setUser({ token, user }));
       window.location.replace("/");
     }
   };
@@ -124,50 +136,49 @@ export const Login = () => {
                         <div className="col-lg-4 col-md-6 col-sm-12 mx-auto">
                           <div className="form-login-cover">
                             <div className="text-center">
-                              <p className="font-sm text-brand-2">Welcome back! </p>
-                              <h2 className="mt-10 mb-5 text-brand-1">Member Login</h2>
+                              <h3 className="mt-10 mb-5 text-brand-1">Reset Your Password</h3>
                             </div>
                             <form className="login-register text-start mt-20" action="#">
                               <div className="form-group">
-                                <label className="form-label" htmlFor="input-1">Email address *</label>
+                                <label className="form-label" htmlFor="input-1">New Password *</label>
                                 <input 
                                   className="form-control" 
-                                  id="input-1" type="text" 
-                                  name="email" 
-                                  placeholder="yourname@gmail.com"
+                                  id="input-1" type="password" 
+                                  name="newPassword" 
+                                  placeholder="***********"
                                   onChange={handleChange}
-                                  value={formValues.email}
+                                  value={formValues.newPassword}
                                 />
                               </div>
+
                               <div className="form-group">
-                                <label className="form-label" htmlFor="input-4">Password *</label>
-                                <input className="form-control" 
-                                type="password" 
-                                name="password" 
-                                placeholder="************"
-                                onChange={handleChange}
-                                value={formValues.password}
-                              />
+                                <label className="form-label" htmlFor="input-1">Confirm New Password *</label>
+                                <input 
+                                  className="form-control" 
+                                  id="input-1" type="password" 
+                                  name="repeatPassword" 
+                                  placeholder="***********"
+                                  onChange={handleChange}
+                                  value={formValues.repeatPassword}
+                                />
                               </div>
-                              <div className="login_footer form-group d-flex justify-content-between">
-                                <label className="cb-container">
-                                  <input type="checkbox" /><span className="text-small">Remenber me</span><span className="checkmark" />
-                                </label>
-                                <Link className='text-muted' to="/forgot-password">
-                                    Forgot Password
-                                </Link> 
-                              </div>
+                              
                               <div className="form-group">
                               {
                                 disableForm() ? (
-                                  <DisabledButton title={'Login'} className={'btn btn-brand-1 w-100'}/>
+                                  <DisabledButton title={'Submit'} className={'btn btn-brand-1 w-100'}/>
                                 ) : !loading ? (
-                                  <SubmitButton onClick={ handleSubmit } title={'Login'} className={'btn btn-brand-1 w-100'}/>
+                                  <SubmitButton onClick={ handleSubmit } title={'Submit'} className={'btn btn-brand-1 w-100'}/>
                                 ) : (
                                   <LoadingButton />
                                 )
                               }
+                              </div>
+                              <div className="login_footer form-group d-flex justify-content-between">
                                 
+                                <Link className='text-muted' to="/login">
+                                    Back to Login
+                                </Link> 
                               </div>
                             </form>
                           </div>

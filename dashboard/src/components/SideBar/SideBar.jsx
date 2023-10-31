@@ -79,6 +79,11 @@ export const SideBar = () => {
             </ul>
           </nav>
           <div className="border-bottom mb-20 mt-20" />
+          <div class="footer-social">
+            <a class="icon-socials icon-linkedin" href="#">A</a>
+            <a class="icon-socials icon-facebook" href="#">B</a>
+            <a class="icon-socials icon-twitter" href="#">C</a>
+          </div>
           <br />
           <br />
           <br />

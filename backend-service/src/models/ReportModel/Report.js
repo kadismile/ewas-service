@@ -2,6 +2,10 @@ import { Schema, model } from 'mongoose';
 import { reportsAfterSave } from '../ReportModel/reports_after-save.js';
 
 
+const generateRandomLetters = () => {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  return Array.from({ length: 3 }, () => letters[Math.floor(Math.random() * letters.length)]).join('');
+};
 
 const addressSchema = new Schema({
   country: {
@@ -115,7 +119,19 @@ const reportSchema = new Schema({
     default: 'not-verified',
     enum:['not-verified','processing', 'verified', 'returned', 'false-report']
   },
-  
+  reportSlug: {
+    type: String,
+    unique: true,
+    required: true,
+    default: () => generateRandomLetters() + Math.floor(100 + Math.random() * 900)
+  },
+  verificationMethod: {
+    type: String,
+  },
+  responder: {
+    type: Schema.Types.ObjectId,
+    ref: 'Agency'
+  },
   isActive : {
     type: Boolean,
     default: true

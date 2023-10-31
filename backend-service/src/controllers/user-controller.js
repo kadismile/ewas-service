@@ -1,6 +1,7 @@
 
 import { manageFileUpload } from '../helpers/file-upload-helper.js'
 import { Paginator } from '../helpers/paginator-helper.js';
+import { sendResetPasswordToken } from '../helpers/user-helper.js';
 import { User } from '../models/UserModel//UserModel.js';
 import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
 
@@ -103,25 +104,25 @@ export const changePassword = async (req, res) => {
     }
     const user = await User.findOne({ email: req.user.email });
     if (!user) {
-      res.status(401).json({ error: "invalid credentials"});
+      return res.status(401).json({  status: "failed", error: "invalid credentials"});
     }
     
     if (!await user.matchPassword(oldPassword)) {
-      res.status(401).json({ error: "Invalid password provided"});
+      return res.status(401).json({ status: "failed", error: "Invalid old password provided"});
     }
   
     user.password = newPassword;
     await user.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: 'password changed successfully'
     });
   } catch (error) {
-    console.error('Error', e)
+    console.error('Error', error)
       return res.status(500).json({
         status: "error",
-        message: e
+        message: error
     });
   }
 }
@@ -166,8 +167,71 @@ export const getUsers = async (req, res) => {
   }
 }
 
-export const uploadFile = async (req, res) => {
- 
+export const sendResetPassEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      await sendResetPasswordToken(user);
+      return res.status(200).json({
+        status: "success",
+        message: 'A password reset link as been sent to your email'
+      });
+    } else {
+      return res.status(300).json({
+        status: "failed",
+        message: 'No Email Found'
+      });
+    }
+  } catch (error) {
+    console.log("Error ", error)
+  }
+};
+
+export const verifyPassToken = async (req, res) => {
+  try {
+    const { passwordToken } = req.body;
+    const user = await User.findOne({ passwordToken });
+    if (user) {
+      return res.status(200).json({
+        status: "success",
+        data: user
+      });
+    } else {
+      return res.status(404).json({
+        status: "failed",
+        message: 'No User Found'
+      });
+    }
+  } catch (error) {
+    console.log("Error ", error)
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const body = req.body
+  const { newPassword, email } = body;
+  try {
+    const user = await User.findOne({email});
+    if (!user) {
+      return res.status(401).json({  status: "failed", error: "invalid credentials"});
+    }
+
+    user.password = newPassword;
+    user.passwordToken = null
+    await user.save();
+
+    return res.status(200).json({
+      status: "success",
+      message: 'password changed successfully'
+    });
+  } catch (error) {
+    console.error('Error', error)
+      return res.status(500).json({
+        status: "error",
+        message: error
+    });
+  }
 }
 
 const findUserByEmailOrPhone = async (phoneNumber, email) => {

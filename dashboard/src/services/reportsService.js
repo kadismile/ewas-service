@@ -72,5 +72,18 @@ export const reportService =  {
     }
   },
 
+  getReportTypes: async (label) => {
+    try {
+      const url = `${serverUrl}/agency`;
+      const method = 'GET';
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Cannot Retrieve Report Types");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   
 }

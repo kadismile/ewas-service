@@ -20,12 +20,11 @@ export const LoadMoreSpinner = () => {
 
 export const PageLoader = () => {
   return (
-    <div>
-        <div className="preloader d-flex align-items-center justify-content-center">
-          <div className="preloader-inner position-relative">
-            <div className="text-center"><img src="/images/loading.gif" alt="dashboard" /></div>
-          </div>
-        </div>
+    <>
+    <div className='spinner'>
+      <img src='/images/loader.gif' alt='' width={'20%'}/>
     </div>
+       
+    </>
   )
 }

@@ -74,4 +74,50 @@ export const userService =  {
       throw e
     }
   },
+
+  changePassword:async (data) => {
+    try {
+      const url = `${serverUrl}/auth/change-password`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot change bundle");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  sendResetPassEmail: async (email) => {
+    try {
+      const url = `${serverUrl}/auth/send-reset-password-email`
+      const method = 'POST'
+      const response = await client(url, method, { email });
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  verifyPasswordToken:async (passwordToken) => {
+    try {
+      const url = `${serverUrl}/auth/verify-passwordToken`
+      const method = 'POST'
+      const response = await client(url, method, { passwordToken });
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  resetPassword :async (data) => {
+    try {
+      const url = `${serverUrl}/auth/reset-password`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 }

@@ -1,10 +1,11 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import { store } from '../redux/store';
 import { Modal } from 'react-bootstrap';
 import { DisabledButton, LoadingButton, SubmitButton } from '../components/elements/Buttons';
 import { reportService } from '../services/reportsService';
 import toastr from 'toastr';
 import Select from 'react-select';
+import { RespondersDropDown } from '../components/elements/RespondersDropDown';
 
 
 export const VerifyReportModal = (props) => {
@@ -16,7 +17,7 @@ export const VerifyReportModal = (props) => {
     comments: ''
   };
 
-  const options = () => {
+  const verificationOptions = () => {
       return [
       {
         value: 'verified',
@@ -30,6 +31,23 @@ export const VerifyReportModal = (props) => {
         value: 'returned',
         label: 'returned'
       }
+    ]
+  }
+
+  const verificationMethods = () => {
+    return [
+      {
+        value: 'sms',
+        label: 'sms'
+      },
+      {
+        value: 'phone calls',
+        label: 'phone calls'
+      },
+      {
+        value: 'emails',
+        label: 'emails'
+      },
     ]
   }
 
@@ -54,6 +72,8 @@ export const VerifyReportModal = (props) => {
   });
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
+  const [selectedMethod, setSelectedMethod] = useState('');
+  const [responder, setResponder] = useState('');
 
   const disableForm = () => {
     const newValues = { ...formValues };
@@ -118,6 +138,16 @@ export const VerifyReportModal = (props) => {
     setSelectedOption(value)
   }
 
+  const handleMethodClick = async (data) => {
+    const { value } = data
+    setSelectedMethod(value)
+  }
+
+  const handleData = (data) => {
+    const { value } = data
+    setResponder(value)
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { comments } = formValues
@@ -125,11 +155,11 @@ export const VerifyReportModal = (props) => {
       comments,
       verified: selectedOption,
       reportId: props.data,
-      userId: user._id
+      userId: user._id,
+      verificationMethod: selectedMethod,
+      responder,
     }
-    console.log('data ===========> ', data)
     const response = await reportService.verifyReport(data)
-    console.log('response ===========> ', response)
     const { message } = response
     toastr.success(message, { timeOut: 6000 });
     props.onHide()
@@ -174,9 +204,22 @@ export const VerifyReportModal = (props) => {
               styles={customStyles}
               defaultValue={{ label: 'Verify Report', value: selectedOption }}
               onChange={ handleClick }
-              options={ options() }
+              options={ verificationOptions() }
               className={'select-react'}
             />
+            <br/>
+            <br/>
+
+            <Select
+              styles={customStyles}
+              defaultValue={{ label: 'Verification Method', value: selectedMethod }}
+              onChange={ handleMethodClick }
+              options={ verificationMethods() }
+              className={'select-react'}
+            />
+            <br/>
+            <br/>
+            <RespondersDropDown dataToComponent={handleData} />
             <br/>
             <br/>
             <div className="form-group">

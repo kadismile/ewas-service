@@ -10,9 +10,13 @@ import BooleanDropDown from "@/components/DropDown/BooleanDropDown";
 import appStorage from "@/redux/customStorage";
 import { reportService } from "@/services/reporterService";
 import toastr from 'toastr'
+import StateDropDown from "@/components/DropDown/StateDropDown";
+import LGADropDown from "@/components/DropDown/LGADropDown";
+import { prepareAddresss } from '../../utils/address-helper'
 export default function Home() {
-  const { user: { address }} = useAppSelector((state) => state.userReducer);
   const { mapAddress } = appStorage.getItem('user')
+
+
 
   const formFields = {
     title: "",
@@ -22,12 +26,11 @@ export default function Home() {
     description: '',
     date: '',
     rawDate: '',
-    killed: '',
-    injured: '',
-    displaced: '',
-    mediaLinks: '',
     reportTypeId: '',
-    fileUpload: ''
+    fileUpload: '',
+    state: '',
+    localGOvt: '',
+    landMark: ''
   };
 
   const calendarData = (calData) => {
@@ -43,6 +46,7 @@ export default function Home() {
   }
 
   const [submitForm, setSubmitForm] = useState(false);
+  const [lga, setLga] = useState(['select a state']);
   const [formCol, setFormCol] = useState('col-lg-6 col-md-12')
   const [formValues, setFormValues] = useState({
     ...formFields,
@@ -61,6 +65,34 @@ export default function Home() {
       };
     });
   };
+
+  const handleStateData = (data) => {
+    const { value } = data
+    const errors = formValues.errors;
+    setLga(value.lgas)
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        state: value.state,
+      };
+    });
+  };
+
+  const handleLgaData = (data) => {
+    const { value } = data
+    const errors = formValues.errors;
+    setLga(value.lgas)
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        localGOvt: value,
+      };
+    });
+  };
+
+
   const AgencyDropDown = (data) => {
     const { value } = data
     const errors = formValues.errors;
@@ -106,9 +138,6 @@ export default function Home() {
     if (!isError && !submitForm) {
       return false;
     }
-    if (!address?.fullAddress) {
-      return true
-    }
     
   };
 
@@ -143,6 +172,16 @@ export default function Home() {
         }
       return errors.description;
 
+      case "landMark":
+        errors.landMark = "";
+        if (value.length && value.length <= 10) {
+          errors.landMark = "land mark must be more than 10 characters long!";
+          setSubmitForm(false);
+        } else {
+          setSubmitForm(true);
+        }
+      return errors.landMark; 
+
       default:
         setSubmitForm(false);
         break;
@@ -173,7 +212,6 @@ export default function Home() {
   }, [formValues.intervention])
 
   const onFileChange = (e) => {
-    console.log('Files =============> ', e.target.files)
     const errors = formValues.errors;
     setFormValues((prevState) => {
       return {
@@ -187,34 +225,43 @@ export default function Home() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const {
+    let {
       title,
       reportTypeId,
       description,
       rawDate,
-      killed,
-      injured,
-      displaced,
-      mediaLinks,
       intervention,
       agency,
-      fileUpload
+      fileUpload,
+      state,
+      localGOvt,
+      landMark,
+      reoccurence
     } = formValues;
 
-    console.log("mediaLinks   =============>", mediaLinks)
+    if (!agency) {
+      agency = '64ebdc6d73479f64f18966f8'
+    }
 
-    
+  
+    // const address = {
+    //   state,
+    //   localGOvt,
+    //   landMark
+    // }
+
+    const address = await prepareAddresss(state + " " +localGOvt + " " + landMark)
+    address.state = state
+    address.localGovt = localGOvt
+    console.log("Address ===================> ", address)
 
     const form = new FormData();
     form.append('title', title);
+    form.append("reoccurence", reoccurence);
     form.append("dateOfIncidence", rawDate);
     form.append("reporterId", 'anonymous');
     form.append("reportTypeId", reportTypeId); 
     form.append("description", description);
-    form.append("numberKilled", killed);
-    form.append("numberInjured", injured);
-    form.append("numberDisplaced", displaced);
-    form.append("mediaLinks", mediaLinks);
     form.append("intervention", intervention);
     form.append("agencyId", agency);
     form.append("address", JSON.stringify(address));
@@ -227,7 +274,7 @@ export default function Home() {
       toastr.error(message);
       setTimeout(() => setLoading(false), 1000)
     } else {
-      toastr.success('Registration Successful');
+      toastr.success('Report Submitted Successfully');
       setTimeout(() => setLoading(false), 1000)
       dispatch(setUser({ user: data, token }))
       window.location.replace("/");
@@ -286,7 +333,7 @@ export default function Home() {
                         <textarea
                           className="font-sm color-text-paragraph-2"
                           name="description"
-                          placeholder="Describe the Incidence"
+                          placeholder="Describe the Incidence With Detailed Number of casualities "
                           value={formValues.description}
                           onChange={handleChange}
                         />
@@ -294,16 +341,21 @@ export default function Home() {
                     </div>
 
                     <div className="col-lg-12 col-md-12">
-                    <div class="form-group mb-30">
-                      <div class="box-upload">
-                        <div class="add-file-upload">
-                          <input class="fileupload" type="file" name="fileUpload" multiple="multiple" onChange={onFileChange}/>
+                      <div className="form-group mb-30">
+                        <div class="box-upload">
+                        <label className="form-label" htmlFor="input-2">File Upload Max file size 15MB </label>
+                          <div className="add-file-upload">
+                            <input className="fileupload" type="file" name="fileUpload" multiple="multiple" onChange={onFileChange}/>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                    
+                        </div>
                     </div>
 
-                    <div className="col-lg-6 col-md-6">
+
+                    
+
+                    <div className="col-lg-4 col-md-4">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Title of Incident *</label>
                         <input
@@ -319,7 +371,7 @@ export default function Home() {
 
                     
 
-                    <div className="col-lg-6 col-md-6">
+                    <div className="col-lg-4 col-md-4">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Date of Incident *</label>
                         <input
@@ -333,13 +385,46 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className={formCol}>
+                    <div className="col-lg-4 col-md-4">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Incident Type *</label>
                         <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
                       </div>
                     </div>
 
+                  
+                    <div className="col-lg-4 col-md-4">
+                      <div className="input-style mb-20">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">State*</label>
+                          <StateDropDown label={'State'} dataToComponent={ handleStateData } />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-lg-4 col-md-4">
+                      <div className="input-style mb-20">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Local Government*</label>
+                          <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleLgaData } />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-4 col-md-4">
+                      <div className="input-style mb-20">
+                        <div className="input-style mb-20">
+                      <label className="form-label" htmlFor="input-2">Land mark *</label>
+                        <input
+                          className="font-sm color-text-paragraph-2"
+                          name="landMark"
+                          value={formValues.landMark}
+                          placeholder="Land Mark"
+                          type="text"
+                          onChange={(handleChange)}
+                        />
+                      </div>
+                      </div>
+                    </div>
                     <div className={formCol}>
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Security Agency Intervention Done? </label>
@@ -357,7 +442,7 @@ export default function Home() {
                       </div> : ""
                     }
 
-                    <div className="col-lg-3 col-md-6">
+                   {/*  <div className="col-lg-3 col-md-6">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Number killed</label>
                         <input
@@ -369,9 +454,9 @@ export default function Home() {
                           onChange={handleChange}
                         />
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="col-lg-3 col-md-6">
+                    {/* <div className="col-lg-3 col-md-6">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Number Injured</label>
                         <input
@@ -383,9 +468,9 @@ export default function Home() {
                           onChange={handleChange}
                         />
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="col-lg-3 col-md-6">
+                    {/* <div className="col-lg-3 col-md-6">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Number Displaced</label>
                         <input
@@ -397,25 +482,18 @@ export default function Home() {
                           onChange={handleChange}
                         />
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="col-lg-3 col-md-6">
+                    <div className={formCol}>
                       <div className="">
                       <label className="form-label" htmlFor="input-2">Re Occurence</label>
                         <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
                       </div>
                     </div>
 
-                  <div className="col-lg-6 col-md-6">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Address of Incidence</label>
-                        <div className="form-group">
-                        <Places />
-                  </div>
-                      </div>
-                    </div>
+                  
 
-                    <div className="col-lg-6 col-md-6">
+                    {/* <div className="col-lg-6 col-md-6">
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Media Links</label>
                         <input
@@ -427,7 +505,7 @@ export default function Home() {
                           type="text"
                         />
                       </div>
-                    </div>
+                    </div> */}
 
                     {
                        /*  disableForm() ? (

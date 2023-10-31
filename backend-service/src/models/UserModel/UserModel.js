@@ -26,6 +26,9 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Please Add Phone']
   },
+  passwordToken: {
+    type: Number,
+  },
   role: {
     type: String,
     enum: ['user', 'admin', 'superAdmin'],

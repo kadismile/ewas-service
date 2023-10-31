@@ -2,11 +2,18 @@ import appStorage from '@/redux/customStorage'
 export const  client = async (url, method, reqBody = undefined, contentType) => {
 
   const { token } = appStorage.getItem('user')
-  const headers = {
-    'Authorization': `Bearer ${ token }`
+  let headers
+  if (contentType) {
+    headers = {
+      'Authorization': `Bearer ${ token }`,
+    };
+  } else {
+    headers = {
+      'Authorization': `Bearer ${ token }`,
+      'content-type': 'application/json',
+    };
+    reqBody = JSON.stringify(reqBody) 
   }
-  
-  reqBody = contentType ? reqBody : JSON.stringify(reqBody) 
 
   const config = {
     method,

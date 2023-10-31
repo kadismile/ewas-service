@@ -2,11 +2,11 @@ import kue from 'kue';
 import { createClient } from 'redis';
 
 
-export const queueHelper = (type, priority) => {
+export const queueHelper = (type, priority, queueData) => {
   const environment = process.env.NODE_ENV
   const queues = kue.createQueue();
   queues
-    .create(type)
+    .create(type, queueData)
     .priority(priority)
     .save()
 
