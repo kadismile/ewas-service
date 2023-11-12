@@ -12,7 +12,6 @@ import {
 } from "react-geocode";
 
 export const prepareAddresss = (address) => {
-  console.log('Address ===========> ', address)
   setDefaults({
     key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, // Your API key here.
     language: "en", // Default language for responses.

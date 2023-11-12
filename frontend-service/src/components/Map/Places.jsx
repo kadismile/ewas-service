@@ -73,7 +73,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
     const state = address_components[4]?.long_name
     let countryData = address_components.find((res)=> { return (res.types).includes('country', 'political') });
     const { long_name, short_name } = countryData;
-    const latLng = await getLatLng(results[0]);
+    const latLng = getLatLng(results[0]);
     const {lat, lng } = latLng;
 
     const formAddress = {
@@ -83,7 +83,8 @@ const PlacesAutocomplete = ({ setSelected }) => {
       state,
       countryCode: short_name,
       latitude: lat,
-      longitude:lng
+      longitude:lng,
+      userTypedAddress: value
     };
 
     setSelected(formAddress);
@@ -109,5 +110,3 @@ const PlacesAutocomplete = ({ setSelected }) => {
     </Combobox>
   );
 };
-
-// 4D6F0C4

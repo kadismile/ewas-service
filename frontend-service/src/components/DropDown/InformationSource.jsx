@@ -3,7 +3,7 @@ import { useState } from "react";
 import Select from 'react-select';
 
 
-export default function BooleanDropDown ({ label, dataToComponent }) {
+export default function InformationSource ({ label, dataToComponent }) {
   const [selectedOption, setSelectedOption] = useState('No');
 
   const handleClick = async (data) => {
@@ -13,8 +13,11 @@ export default function BooleanDropDown ({ label, dataToComponent }) {
   }
 
   const options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
+    { value: 'Facebook', label: 'Facebook' },
+    { value: 'Twitter', label: 'Twitter' },
+    { value: 'Whatsapp', label: 'Whatsapp' },
+    { value: 'Eye witness', label: 'Eye witness' },
+    { value: 'Website Link', label: 'Website Link' },
   ];
 
   const customStyles = {
@@ -37,7 +40,6 @@ export default function BooleanDropDown ({ label, dataToComponent }) {
         defaultValue={{ label, value: selectedOption }}
         onChange={ handleClick }
         options={ options }
-        
     />
   );
 };

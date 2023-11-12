@@ -30,14 +30,14 @@ export const reportService =  {
     }
   },
 
-  getOneReport:async (reportID) => {
-    if (!reportID ) 
+  getOneReport:async (reportSlug) => {
+    if (!reportSlug ) 
     return {
       status: 'failed',
       message: '',
     }
     try {
-      const url = `${serverUrl}/report/one?_id=${reportID}`
+      const url = `${serverUrl}/report/one?reportSlug=${reportSlug}`
       const method = 'GET'
       const response = await client(url, method);
       return response
@@ -72,9 +72,9 @@ export const reportService =  {
     }
   },
 
-  getReportTypes: async (label) => {
+  getReportTypes: async () => {
     try {
-      const url = `${serverUrl}/agency`;
+      const url = `${serverUrl}/report/type`;
       const method = 'GET';
       const response = await client(url, method);
       if (!response)

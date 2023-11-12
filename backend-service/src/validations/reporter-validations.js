@@ -36,5 +36,6 @@ export const create_report_validation = Joi.object({
     latitude: Joi.string(),
     localGovt: Joi.string(),
     state: Joi.string(),
+    userTypedAddress: Joi.string(),
   }).required(),
 });

@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { GoogleSearchModal } from "../../modals/GoogleSearchModal";
 
 export const SideBar = () => {
+  const [showModal, setShowModal] = useState(false);
   const location = useLocation();
   const getActiveLink = (pathname) => {
     const path = location.pathname;
@@ -8,8 +11,19 @@ export const SideBar = () => {
       return "active";
     }
   };
+  
+  const handleShowModal = (data) => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
+    <GoogleSearchModal show={showModal} onHide={handleCloseModal} />
+
       <div className="nav">
           <nav className="nav-main-menu">
             <ul className="main-menu">
@@ -80,9 +94,9 @@ export const SideBar = () => {
           </nav>
           <div className="border-bottom mb-20 mt-20" />
           <div class="footer-social">
-            <a class="icon-socials icon-linkedin" href="#">A</a>
-            <a class="icon-socials icon-facebook" href="#">B</a>
-            <a class="icon-socials icon-twitter" href="#">C</a>
+            <a class="icon-socials icon-linkedin" onClick={() => handleShowModal()} href="#"> <i class="fa-brands fa-google fa-2x"></i> </a> &nbsp; &nbsp;
+            <a class="icon-socials icon-facebook" href="#"><i class="fa-brands fa-twitter fa-2x"></i></a> &nbsp; &nbsp;
+            <a class="icon-socials icon-twitter" href="#"><i class="fa-brands fa-facebook fa-2x"></i></a> &nbsp; &nbsp;
           </div>
           <br />
           <br />

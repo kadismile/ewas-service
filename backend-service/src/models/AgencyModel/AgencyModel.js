@@ -9,8 +9,8 @@ const agencySchema = new Schema({
     type: String,
     unique: true,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
-    required: [true, 'Please Add Email'],
   },
+  
   phoneNumbers: {
     type: [String],
     required: [true, 'Please Add Name']

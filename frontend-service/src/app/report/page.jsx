@@ -13,24 +13,28 @@ import toastr from 'toastr'
 import StateDropDown from "@/components/DropDown/StateDropDown";
 import LGADropDown from "@/components/DropDown/LGADropDown";
 import { prepareAddresss } from '../../utils/address-helper'
+import { TimeDropDown, TimePicker } from "@/components/elements/TimePicker";
+import InformationSource from "@/components/DropDown/InformationSource";
+
+
 export default function Home() {
-  const { mapAddress } = appStorage.getItem('user')
-
-
+  let { mapAddress } = appStorage.getItem('user')
 
   const formFields = {
-    title: "",
+    timeOfIncidence: "",
     reoccurence: "",
     intervention: "",
+    informationSource: '',
+    mediaLinks: '',
     agency:"",
+    resolved: "",
     description: '',
     date: '',
     rawDate: '',
     reportTypeId: '',
     fileUpload: '',
     state: '',
-    localGOvt: '',
-    landMark: ''
+    localGovt: '',
   };
 
   const calendarData = (calData) => {
@@ -40,7 +44,7 @@ export default function Home() {
         ...prevState,
         errors,
         date: moment(calData).format('LL'),
-        rawDate:moment(calData, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ").toDate()
+        rawDate: moment(calData, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ").toDate()
       };
     });
   }
@@ -48,6 +52,7 @@ export default function Home() {
   const [submitForm, setSubmitForm] = useState(false);
   const [lga, setLga] = useState(['select a state']);
   const [formCol, setFormCol] = useState('col-lg-6 col-md-12')
+  const [displayMediaLink, setDisplayLink] = useState(false)
   const [formValues, setFormValues] = useState({
     ...formFields,
     errors: formFields,
@@ -67,53 +72,33 @@ export default function Home() {
   };
 
   const handleStateData = (data) => {
-    const { value } = data
+    const {localGovt, state } = formValues
+    const { label, value } = data
     const errors = formValues.errors;
     setLga(value.lgas)
     setFormValues((prevState) => {
       return {
         ...prevState,
         errors,
-        state: value.state,
+        state: label === 'State' ? value : state,
+        localGovt: label === 'LGA' ? value : localGovt,
       };
     });
   };
-
-  const handleLgaData = (data) => {
-    const { value } = data
-    const errors = formValues.errors;
-    setLga(value.lgas)
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        errors,
-        localGOvt: value,
-      };
-    });
-  };
-
-
-  const AgencyDropDown = (data) => {
-    const { value } = data
-    const errors = formValues.errors;
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        errors,
-        agency: value
-      };
-    });
-  }
 
   const handleDropDownData = (data) => {
     const { label, value } = data
+    const {reoccurence, intervention, agency, resolved, informationSource } = formValues
     const errors = formValues.errors;
     setFormValues((prevState) => {
       return {
         ...prevState,
         errors,
-        reoccurence: label === 'Re-Occurence' ? value : value,
-        intervention: label === 'Intervention' ? value : value,
+        reoccurence: label === 'Re-Occurence' ? value : reoccurence,
+        intervention: label === 'Intervention' ? value : intervention,
+        agency: label === 'Agency' ? value : agency,
+        resolved: label === 'Resolved' ? value : resolved,
+        informationSource: label === 'Source of Information' ? value : informationSource,
       };
     });
   };
@@ -172,16 +157,6 @@ export default function Home() {
         }
       return errors.description;
 
-      case "landMark":
-        errors.landMark = "";
-        if (value.length && value.length <= 10) {
-          errors.landMark = "land mark must be more than 10 characters long!";
-          setSubmitForm(false);
-        } else {
-          setSubmitForm(true);
-        }
-      return errors.landMark; 
-
       default:
         setSubmitForm(false);
         break;
@@ -203,13 +178,18 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log('Intervention ', formValues.intervention)
-    if (formValues.intervention === true) {
+    if (formValues.intervention === 'Yes') {
       setFormCol('col-lg-4 col-md-12')
     } else {
       setFormCol('col-lg-6 col-md-12')
     }
-  }, [formValues.intervention])
+
+    if (formValues.informationSource === 'Website Link') {
+      setDisplayLink(true)
+    } else {
+      setDisplayLink(false)
+    }
+  }, [formValues.intervention, formValues.informationSource])
 
   const onFileChange = (e) => {
     const errors = formValues.errors;
@@ -222,6 +202,17 @@ export default function Home() {
     });
   };
 
+  const handleTimeInput = (time) => {
+    const errors = formValues.errors;
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        timeOfIncidence: moment(time, "ddd MMM DD YYYY HH:mm:ss [GMT]ZZ").toDate()
+      };
+    });
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -230,41 +221,35 @@ export default function Home() {
       reportTypeId,
       description,
       rawDate,
+      timeOfIncidence,
+      informationSource,
+      mediaLinks,
       intervention,
       agency,
       fileUpload,
       state,
-      localGOvt,
-      landMark,
-      reoccurence
+      localGovt,
+      reoccurence,
+      resolved
     } = formValues;
 
-    if (!agency) {
-      agency = '64ebdc6d73479f64f18966f8'
-    }
-
-  
-    // const address = {
-    //   state,
-    //   localGOvt,
-    //   landMark
-    // }
-
-    const address = await prepareAddresss(state + " " +localGOvt + " " + landMark)
-    address.state = state
-    address.localGovt = localGOvt
-    console.log("Address ===================> ", address)
+    mapAddress.state = state.state
+    mapAddress.localGovt = localGovt
 
     const form = new FormData();
     form.append('title', title);
     form.append("reoccurence", reoccurence);
+    form.append("resolved", resolved);
     form.append("dateOfIncidence", rawDate);
+    form.append("timeOfIncidence", timeOfIncidence);
+    form.append("informationSource", informationSource);
+    form.append("mediaLinks", mediaLinks);
     form.append("reporterId", 'anonymous');
     form.append("reportTypeId", reportTypeId); 
     form.append("description", description);
     form.append("intervention", intervention);
     form.append("agencyId", agency);
-    form.append("address", JSON.stringify(address));
+    form.append("address", JSON.stringify(mapAddress));
     form.append("fileUpload", fileUpload);
 
     const response = await reportService.createReports(form)
@@ -281,11 +266,9 @@ export default function Home() {
     }
   };
 
-
   return (
     <>
       <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
-    
       <main className="main">
         <section className="section-box">
           <div className="breacrumb-cover bg-img-about">
@@ -329,11 +312,11 @@ export default function Home() {
 
                     <div className="col-lg-12 col-md-12">
                       <div className="textarea-style mb-30">
-                      <label className="form-label" htmlFor="input-2">Describe the Incidence *</label>
+                      <label className="form-label" htmlFor="input-2">Describe the incident and number of casualty *</label>
                         <textarea
                           className="font-sm color-text-paragraph-2"
                           name="description"
-                          placeholder="Describe the Incidence With Detailed Number of casualities "
+                          placeholder="Describe the incident and number of casualty"
                           value={formValues.description}
                           onChange={handleChange}
                         />
@@ -343,7 +326,7 @@ export default function Home() {
                     <div className="col-lg-12 col-md-12">
                       <div className="form-group mb-30">
                         <div class="box-upload">
-                        <label className="form-label" htmlFor="input-2">File Upload Max file size 15MB </label>
+                        <label className="form-label" htmlFor="input-2">Upload photo/video </label>
                           <div className="add-file-upload">
                             <input className="fileupload" type="file" name="fileUpload" multiple="multiple" onChange={onFileChange}/>
                           </div>
@@ -352,24 +335,6 @@ export default function Home() {
                         </div>
                     </div>
 
-
-                    
-
-                    <div className="col-lg-4 col-md-4">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Title of Incident *</label>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="title"
-                          value={formValues.title}
-                          placeholder="Title of incidence"
-                          type="text"
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-
-                    
 
                     <div className="col-lg-4 col-md-4">
                       <div className="input-style mb-20">
@@ -380,18 +345,24 @@ export default function Home() {
                           value={formValues.date}
                           placeholder="Date of incidence"
                           type="text"
-                          onClick={(handleClick)}
+                          onClick={handleClick}
                         />
                       </div>
                     </div>
 
                     <div className="col-lg-4 col-md-4">
                       <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Incident Type *</label>
-                        <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
+                      <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
+                      <TimeDropDown timeChange={handleTimeInput}/>
                       </div>
                     </div>
 
+                    <div className="col-lg-4 col-md-3">
+                      <div className="input-style mb-20">
+                      <label className="form-label" htmlFor="input-2">Type of Incident *</label>
+                        <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
+                      </div>
+                    </div>
                   
                     <div className="col-lg-4 col-md-4">
                       <div className="input-style mb-20">
@@ -406,113 +377,90 @@ export default function Home() {
                       <div className="input-style mb-20">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Local Government*</label>
-                          <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleLgaData } />
+                          <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleStateData } />
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-4 col-md-4">
-                      <div className="input-style mb-20">
-                        <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Land mark *</label>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="landMark"
-                          value={formValues.landMark}
-                          placeholder="Land Mark"
-                          type="text"
-                          onChange={(handleChange)}
-                        />
-                      </div>
-                      </div>
+
+                  <div className="col-lg-4 col-md-4">
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="input-2">Address *</label>
+                      <Places />
                     </div>
+                  </div>
+                    
+
                     <div className={formCol}>
                       <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Security Agency Intervention Done? </label>
+                      <label className="form-label" htmlFor="input-2">Has there been any response yet? </label>
                       <BooleanDropDown label={'Intervention'} dataToComponent={ handleDropDownData }/>
                       </div>
                     </div>
 
                     {
-                      formValues.intervention === true ? 
+                      formValues.intervention === 'Yes' ? 
+                      <>
                         <div className={formCol}>
-                          <div className="input-style mb-20">
-                          <label className="form-label" htmlFor="input-2">Agency </label>
-                          <DropDown label={'Agency'} dataToComponent={ AgencyDropDown } />
+                            <div className="input-style mb-20">
+                            <label className="form-label" htmlFor="input-2">Security Agency intervention </label>
+                            <DropDown label={'Agency'} dataToComponent={ handleDropDownData } />
+                          </div>
+                        </div> 
+
+                      <div className={formCol}>
+                        <div className="">
+                        <label className="form-label" htmlFor="input-2">Has it been Resolved?</label>
+                          <BooleanDropDown label={'Resolved'} dataToComponent={ handleDropDownData }/>
                         </div>
-                      </div> : ""
+                      </div>
+                      </>
+                      : ""
                     }
-
-                   {/*  <div className="col-lg-3 col-md-6">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Number killed</label>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="killed"
-                          placeholder="Number Killed"
-                          type="text"
-                          value={formValues.killed}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div> */}
-
-                    {/* <div className="col-lg-3 col-md-6">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Number Injured</label>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="injured"
-                          placeholder="Number Injured"
-                          type="text"
-                          value={formValues.injured}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div> */}
-
-                    {/* <div className="col-lg-3 col-md-6">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Number Displaced</label>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="displaced"
-                          placeholder="Number Displaced"
-                          type="text"
-                          value={formValues.displaced}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div> */}
 
                     <div className={formCol}>
                       <div className="">
-                      <label className="form-label" htmlFor="input-2">Re Occurence</label>
+                      <label className="form-label" htmlFor="input-2">Has it happened before?</label>
                         <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
                       </div>
                     </div>
 
-                  
+                    <div className={formCol}>
+                      <div className="">
+                      <label className="form-label" htmlFor="input-2">Source of Information</label>
+                        <InformationSource label={'Source of Information'} dataToComponent={ handleDropDownData }/>
+                      </div>
+                    </div>
 
-                    {/* <div className="col-lg-6 col-md-6">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Media Links</label>
-                        <input
+                    {
+                      displayMediaLink ?
+                      <div className={formCol}>
+                      <div className="">
+                      <label className="form-label" htmlFor="input-2">Website Link</label>
+                      <input
                           className="font-sm color-text-paragraph-2"
                           name="mediaLinks"
                           value={formValues.mediaLinks}
-                          onChange={handleChange}
-                          placeholder="Media links"
+                          placeholder="Website Link"
                           type="text"
+                          onChange={handleChange}
                         />
                       </div>
-                    </div> */}
+                    </div> : ""
+                    }
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+
 
                     {
-                       /*  disableForm() ? (
+                      /*  disableForm() ? (
                           <DisabledButton title={'Submit Report '} className={'submit btn btn-send-message'}/>
                         ) : !loading ? ( */
+                        
                           <SubmitButton onClick={ handleSubmit } title={'Submit Report'} className={'submit btn btn-send-message'}/>
-                       /*  ) : (
+                      /*  ) : (
                           <LoadingButton />
                         ) */
                     }

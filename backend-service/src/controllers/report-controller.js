@@ -9,11 +9,13 @@ import { Reporter } from '../models/ReportModel/ReporterModel.js';
 import { Paginator } from '../helpers/paginator-helper.js';
 import { AdminReportType } from '../models/ReportTypeModel/AdminReportTypeModel.js';
 import { manageFileUpload } from '../helpers/file-upload-helper.js';
-import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
 import { ReportHistory } from '../models/ReportHistoryModel/ReportHistoryModel.js';
 import { User } from '../models/UserModel/UserModel.js';
+import { Agency } from '../models/AgencyModel/AgencyModel.js';
 import { Department } from '../models/DepartmentModel/DepartmentModel.js';
 import { sendCPSnotification } from '../helpers/notification-helpers.js';
+import { sendSMS } from '../helpers/sms-helper.js';
+import {advancedResults} from "../helpers/advanced-results.js";
 
 
 export const createReporter = async (req, res) => {
@@ -243,14 +245,14 @@ export const getReports = async (req, res) => {
 
 export const getOneReport = async (req, res) => {
   try {
-    const _id = req.query._id
-    const report = await Report.findOne({ _id })
+    const reportSlug = req.query.reportSlug
+    const report = await Report.findOne({ reportSlug })
     .populate('attachments')
     .populate('agencyId')
     .populate('reportTypeId')
     .populate('userId');
 
-    const reportHistory = await ReportHistory.find({reportId: _id})
+    const reportHistory = await ReportHistory.find({reportId: report?._id})
     res.status(200).json({
       status: "success",
       data: { report, reportHistory }
@@ -328,6 +330,15 @@ export const verifyReport = async (req, res) => {
       const department = await Department.findOne({ _id: req.user.department })
       const { acronym } = department
       await createNotification(report, acronym)
+      if (responder?.length) {
+        const agency = await Agency.findOne({ _id: responder })
+        if (agency.name) {
+          const body = 'An SMS is sent your way kindly read it '
+          await sendSMS(body, agency?.phoneNumbers)
+        }
+        
+      }
+     
       res.status(201).json({
         status: "success",
         message: 'report was succsfuly verified '
@@ -337,6 +348,15 @@ export const verifyReport = async (req, res) => {
     console.log('Error ', error)
   }
 }
+
+export const getAdvanced = async (req, res) => {
+  const { populate, select } = req.query;
+  const transactions = await advancedResults(req, Report, populate, select);
+  return res.status(200).json({
+    status: "success",
+    data: transactions
+  });
+};
 
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   const reporter = await Reporter.findOne({
@@ -349,6 +369,7 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   }
   return reporter;
 };
+
 
 const createNotification = async (report, departmentAcronym) => {
   switch (departmentAcronym) {

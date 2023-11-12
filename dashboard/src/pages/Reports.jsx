@@ -1,51 +1,133 @@
-import { useEffect, useState } from "react";
-import { crudService } from "../services/crudService";
-import moment from 'moment';
-import { Link } from 'react-router-dom'
-import { PageLoader } from "../components/elements/spinners";
+import { useEffect, useState } from "react"
+import React from "react"
+import { crudService } from "../services/crudService"
+import moment from "moment"
+import { Link } from "react-router-dom"
+import { PageLoader } from "../components/elements/spinners"
+import StateDropDown from "../components/elements/NigerianStates"
+import LGADropDown from "../components/elements/LGADropDown"
+import { IncidentType } from "../components/elements/IncidentTypes"
+import { states } from "naija-state-local-government"
+import { CalendarModal } from "../modals/CalendarModal"
 
-export const Reports = (props) => {
-  const [loading, setLoading] = useState(true);
-  const [data, setdata] = useState([]);
+export const Reports = () => {
 
-
-  const fetchData = () => {
-    crudService.getReports().then((res) => {
-      const {
-        data: { data },
-      } = res;
-      setdata(data);
-      setTimeout(() => setLoading(false), 500)
-    });
+  const formFields = {
+    state: undefined,
+    localGovt: undefined,
+    incidentType: undefined,
+    date: '',
+    rawDate: '',
   }
 
-   useEffect(() => {
+  const [formValues, setFormValues] = useState({
+    ...formFields,
+    errors: formFields,
+  })
+
+  const { state, localGovt,incidentType, rawDate } = formValues
+  const [loading, setLoading] = useState(true)
+  const [data, setdata] = useState([])
+  const [lga, setLga] = useState(["select a state"])
+  const [showModal, setShowModal] = useState(false);
+
+  const fetchData = () => {
+    const { state, localGovt,incidentType, rawDate } = formValues
+    setLoading(true)
+    crudService.getReports({state, localGovt, incidentType, rawDate}).then((res) => {
+      const {
+        data: { data },
+      } = res
+      setdata(data)
+      setTimeout(() => setLoading(false), 500)
+    })
+  }
+
+  useEffect(() => {
     fetchData()
-  }, []);
+  }, [state, localGovt, incidentType, rawDate])
+
+  const handleStateData = (data) => {
+    const { value } = data || {}
+    const errors = formValues.errors
+    setLga(value?.lgas)
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        state: value?.state,
+      }
+    })
+  }
+
+  const handleLgaData = (data) => {
+    const { value } = data || {}
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        localGovt: value,
+      }
+    })
+  }
+
+  const handleDataFromDropDown = (data) => {
+    const { value } = data || {}
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        incidentType: value,
+      }
+    })
+  }
 
   const listItems = data.map((report, key) => {
-    let number = key + 1;
+    let number = key + 1
     return (
       <tr key={key}>
         <td>{number++}</td>
-        <td>{report.title}</td>
-        <td>{report.reportTypeId.name}</td>
+        <td>
+          <Link to={`/report/${report.reportSlug}`}> {report.reportSlug} </Link>{" "}
+        </td>
+        <td>
+          <Link to={`/report/${report.reportSlug}`}>
+            {report.reportTypeId.name}{" "}
+          </Link>{" "}
+        </td>
         <td>{report.address.state}</td>
         <td>{report.address.localGovt}</td>
-        <td>{moment(report.createdAt).format('MMM D, YYYY')}</td>
-        
+        <td>{moment(report.createdAt).format("MMM D, YYYY")}</td>
       </tr>
-    );
-  });
+    )
+  })
 
-  const filterData = (localGOvt) => {
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const calendarData = (calData = []) => {
+    if (Array.isArray(calData)) {
+      const formatedDates = calData?.map((date) =>moment(date).format('YYYY-MM-DD'))
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          date: moment(calData[1]).format('LL'),
+          rawDate: formatedDates
+        };
+      });
+    }
   }
+
 
   return (
     <>
-   { 
-        loading? <PageLoader /> :
+    <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
+      {loading ? (
+        <PageLoader />
+      ) : (
         <div className="box-content">
           <div className="box-heading">
             <div className="box-title">
@@ -57,8 +139,8 @@ export const Reports = (props) => {
                   <li>
                     {" "}
                     <a className="icon-home" href="index.html">
-                    Reports 
-                    </a> 
+                      Reports
+                    </a>
                   </li>
                   <li>
                     <span>Dashboard</span>
@@ -74,59 +156,96 @@ export const Reports = (props) => {
                 <div className="container">
                   <div className="panel-white">
                     <div className="panel-head">
-                      <h5>Reports</h5>
-                      <a className="menudrop" id="dropdownMenu2" type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      data-bs-display="static"
-                      />
-                      <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2" >
-                        FILTER BY
-                        <li>
-                          <a className="dropdown-item active" href="#/" onClick={filterData('localGOvt')} style={{fontSize: '12px'}}>
-                           LOCAL GOVT
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item active" href="#/" style={{fontSize: '12px'}}>
-                            STATE
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item active" href="#/" style={{fontSize: '12px'}}>
-                            REPORT TYPE
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                      <div className="panel-body">
-                        <table class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Title</th>
-                              <th scope="col">Type</th>
-                              <th scope="col">State</th>
-                              <th scope="col">Local Govt</th>
-                              <th scope="col">Date</th>
+                      <div className="">
+                        <div className="row">
+                          <div className="col-xl-6 col-lg-5">
+                            <span className="font-sm text-showing color-text-paragraph">
+                              Search Bar here 
+                            </span>
+                          </div>
+                          <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
+                            <div className="display-flex2">
+                              <div
+                                className="box-border mr-10"
+                                style={{ padding: "0px 0px" }}
+                              >
+                                <StateDropDown
+                                  label={"State"}
+                                  dataToComponent={handleStateData}
+                                />
+                              </div>
+
+                              <div
+                                className="box-border mr-10"
+                                style={{ padding: "0px 0px" }}
+                              >
+                                <LGADropDown
+                                  label={"LGA"}
+                                  lgaData={lga}
+                                  dataToComponent={handleLgaData}
+                                />
+                              </div>
+
+                              <div
+                                className="box-border mr-10"
+                                style={{ padding: "0px 0px" }}
+                              >
+                                <IncidentType
+                                  label={"Incident Type"}
+                                  dataToComponent={handleDataFromDropDown}
+                                />
+                              </div>
+
                               
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {listItems}
-                          </tbody>
-                        </table>
+                              <div className="box-border mr-10"
+                                style={{ padding: "0px 0px" }}>
+                                  {/* <button onClick={() => handleShowModal()}  className={'btn btn-brand-1'} type="submit" >{'Date' }</button> */}
+                                  <input
+                                    className="font-sm color-text-paragraph-2"
+                                    name="date"
+                                    style={{height: '39px'}}
+                                    placeholder="Date"
+                                    type="text"
+                                    value={formValues.date}
+                                    onClick={() => handleShowModal()}
+                                  />
+                              </div>
+            
+                              
+                              {/* <a
+                                href="#/"
+                                onClick={fetchData}
+                                style={{ marginRight: "10px" }}
+                              >
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                              </a> */}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="panel-body">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Local Govt</th>
+                            <th scope="col">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>{listItems}</tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          
-
         </div>
-      }
+      )}
     </>
-  );
+  )
 }
