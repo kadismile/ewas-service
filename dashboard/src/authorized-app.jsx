@@ -20,7 +20,7 @@ export const AuthorizedApp = () => {
     { path: "/reporters", element: <Reporters /> },
     { path: "*", element: <Home /> },
     { path: "/reports", element: <Reports /> },
-    { path: "/report/:details", element: <ReportDetails /> }
+    { path: "/report/:reportSlug", element: <ReportDetails /> }
   ]);
 
   return (

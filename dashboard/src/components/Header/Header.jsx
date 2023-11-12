@@ -64,15 +64,15 @@ export const Header = () => {
             <div className="header-right">
               <div className="block-signin">
 
-                <div class="dropdown d-inline-block">
-                  <a class="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
-                  <ul class="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
+                <div className="dropdown d-inline-block">
+                  <a className="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
+                  <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
                     {
-                      data.map((not)=> {
+                      data.map((not, key)=> {
                         return (
-                          <li>
-                            <a class="dropdown-item active" >{ parse(not.message) }</a>
-                         </li>
+                          <li key={key}>
+                            <a className="dropdown-item active">{ parse(not.message) }</a>
+                        </li>
                         )
                       })
                     }
@@ -86,7 +86,8 @@ export const Header = () => {
                     <li><a className="dropdown-item" href="#">20 replies</a></li>
                   </ul>
                 </div>
-                <div className="member-login"><img alt="" src="/images/profile.png" />
+                <div className="member-login">
+                  <img alt="" src="/images/profile.png" />
                   <div className="info-member"> <strong className="color-brand-1">{fullName}</strong>
                     <div className="dropdown"><a className="font-xs color-text-paragraph-2 icon-down" id="dropdownProfile" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">Super Admin</a>
                       <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownProfile">

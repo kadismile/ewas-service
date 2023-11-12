@@ -1,4 +1,5 @@
 import { client} from '../utils/api-client'
+import moment from 'moment'
 
 const serverUrl = process.env.REACT_APP_API_BASE_URL ;
 
@@ -82,9 +83,19 @@ export const crudService =  {
     }
   },
 
-  getReports: async () => {
+  getReports: async (data) => {
+    const { state, localGovt, incidentType, rawDate } = data || {}
+    const baseUrl = `${serverUrl}/report/get-advanced`;
+    const queryParams = {
+      "address.localGovt": localGovt,
+      "address.state": state,
+      reportTypeId: incidentType,
+      ...transformDate(rawDate),
+    };
+    
     try {
-      const url = `${serverUrl}/report`
+      const url = buildUrl(baseUrl, queryParams);
+      console.log('URL ===================>>>>>> ', url)
       const method = 'GET'
       const response = await client(url, method);
       if (!response)
@@ -95,7 +106,7 @@ export const crudService =  {
     }
   },
 
-    getNotifications:async () => {
+  getNotifications:async () => {
     try {
       const url = `${serverUrl}/notification`
       const method = 'GET'
@@ -106,14 +117,14 @@ export const crudService =  {
     }
   },
 
-  getOneReport:async (reportID) => {
-    if (!reportID ) 
+  getOneReport:async (reportSlug) => {
+    if (!reportSlug ) 
     return {
       status: 'failed',
       message: '',
     }
     try {
-      const url = `${serverUrl}/report/one?_id=${reportID}`
+      const url = `${serverUrl}/report/one?reportSlug=${reportSlug}`
       const method = 'GET'
       const response = await client(url, method);
       return response
@@ -137,4 +148,49 @@ export const crudService =  {
       throw e
     }
   },
+
+  searchGoogleNews: async (searchParams) => {
+    try {
+      const url = `https://news.google.com/search?q=${searchParams}&hl=en-NG&gl=NG&ceid=NG%3Aen`
+      const method = 'GET'
+      const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+}
+
+const buildUrl = (baseUrl, queryParams) => {
+  const url = new URL(baseUrl);
+  Object.keys(queryParams).forEach((key) => {
+    if (queryParams[key] === undefined) {
+      url.searchParams.delete(key);
+    } else {
+      url.searchParams.set(key, queryParams[key]);
+    }
+  });
+
+  return url.toString();
+}
+
+const transformDate = (rawDate) => {
+  const today = moment().format('YYYY-MM-DD')
+  if (!rawDate?.length)  return undefined
+  if (Array.isArray(rawDate)) {
+    if ( JSON.stringify(rawDate[0]) === JSON.stringify(today) 
+        && JSON.stringify(rawDate[1]) === JSON.stringify(today)) {
+      return undefined
+    } else if (JSON.stringify(rawDate[0]) === JSON.stringify(rawDate[1])) {
+      return {
+        gte: rawDate[0],
+      }
+    } else {
+      return {
+        gte: rawDate[0],
+        lt: rawDate[1]
+      }
+    }
+  }
+
 }

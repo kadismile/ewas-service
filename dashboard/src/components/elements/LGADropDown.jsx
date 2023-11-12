@@ -1,27 +1,31 @@
-'use client'
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import Select from 'react-select';
 
 
-export default function BooleanDropDown ({ label, dataToComponent }) {
-  const [selectedOption, setSelectedOption] = useState('No');
-
+export default function LGADropDown ({ label, lgaData, dataToComponent }) {
+  const [selectedOption, setSelectedOption] = useState('other');
   const handleClick = async (data) => {
-    const { value } = data
+    const { value } = data || {}
     setSelectedOption(value)
     dataToComponent({label, value})
   }
 
-  const options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
-  ];
+
+  const options = () => {
+    return lgaData?.map((lga) => {
+      return {
+        value: lga,
+        label: lga
+      }
+    })
+  }
 
   const customStyles = {
     input: (provided) => ({
       ...provided,
       width: 100,
-      height: 38,
+      height: 15,
       display: 'flex',
       alignItems: 'center',
     }),
@@ -36,8 +40,9 @@ export default function BooleanDropDown ({ label, dataToComponent }) {
         styles={customStyles}
         defaultValue={{ label, value: selectedOption }}
         onChange={ handleClick }
-        options={ options }
-        
+        options={ options() }
+        className={'select-react'}
+        isClearable={true}
     />
   );
 };

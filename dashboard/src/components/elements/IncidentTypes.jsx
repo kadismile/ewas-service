@@ -2,22 +2,31 @@
 import { useEffect, useState } from "react";
 import Select from 'react-select';
 
+import { reportService } from '../../services/reportsService'
 
-export default function LGADropDown ({ label, lgaData, dataToComponent }) {
-  console.log('first')
+
+export const IncidentType =  ({ label, dataToComponent }) => {
   const [selectedOption, setSelectedOption] = useState('other');
+  const [reportTypes, setReportTypes] = useState([])
+
   const handleClick = async (data) => {
-    const { value } = data
+    const { value } = data || {}
     setSelectedOption(value)
     dataToComponent({label, value})
   }
 
+  useEffect(() => {
+    (async () => {
+      const res = await reportService.getReportTypes()
+      setReportTypes(res.data)
+    })();
+  }, []);
 
   const options = () => {
-    return lgaData?.map((lga) => {
+    return reportTypes.map((report) => {
       return {
-        value: lga,
-        label: lga
+        value: report._id,
+        label: report.name
       }
     })
   }
@@ -26,7 +35,7 @@ export default function LGADropDown ({ label, lgaData, dataToComponent }) {
     input: (provided) => ({
       ...provided,
       width: 100,
-      height: 38,
+      height: 15,
       display: 'flex',
       alignItems: 'center',
     }),
@@ -43,6 +52,7 @@ export default function LGADropDown ({ label, lgaData, dataToComponent }) {
         onChange={ handleClick }
         options={ options() }
         className={'select-react'}
+        isClearable={true}
     />
   );
 };

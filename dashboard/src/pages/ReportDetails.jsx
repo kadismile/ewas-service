@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { store } from '../redux/store';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import moment from 'moment'
 import { MediaDisplay } from '../components/elements/MediaDisplay';
 import { DisplayFileModal } from "../modals/DisplayFileModal";
@@ -9,6 +9,7 @@ import { AssignmentModal } from "../modals/AssignmentModel";
 import { VerifyReportModal } from "../modals/VerifyReportModal";
 
 export const ReportDetails = () => {
+  const { reportSlug } = useParams();
   let user = store?.getState()?.user?.user
     if (user) {
       user = user.user
@@ -25,16 +26,15 @@ export const ReportDetails = () => {
 
   useEffect(() => {
     const match = pathname.match(/\/report\/([^/]+)/);
-    if (match && match[1]) {
-      const reportId = match[1];
-      crudService.getOneReport(reportId)
+    if (reportSlug) {
+      crudService.getOneReport(reportSlug)
       .then((res) => {
         const { status, data: { report, reportHistory} } = res
         if (status === 'success') {
           setReport(report)
           setreportHistory(reportHistory)
           setLoading(false)
-          updateNotification(reportId)
+          // updateNotification(reportId) visit this later 
           setDisplayButton()
         }
       })
@@ -158,8 +158,8 @@ export const ReportDetails = () => {
                       }
                       
                     </ul>
-                    <p> Submitted By: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{capitalize(report.reporterId)}</b> </p>
-                    <p> Date: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{moment(report.createdAt).format('DD MMM, YYYY')}</b> </p>
+                    <p> Submitted By: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{capitalize(report?.reporterId)}</b> </p>
+                    <p> Date: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{moment(report?.createdAt).format('DD MMM, YYYY')}</b> </p>
                   </div>
                     <div className="row mt-30">
                       <div className="col-lg-12">

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Schema, model } from 'mongoose';
 import { reportsAfterSave } from '../ReportModel/reports_after-save.js';
 
@@ -36,6 +37,10 @@ const addressSchema = new Schema({
     type: String,
     required: [true, 'state is missing']
   },
+  userTypedAddress: {
+    type: String,
+    required: [true, 'user typed address is missing']
+  },
 },
 {timestamps: true, versionKey: false }
 );
@@ -70,9 +75,11 @@ const reportSchema = new Schema({
   dateOfIncidence: {
     type: Date
   },
+  timeOfIncidence: {
+    type: Date
+  },
   intervention: {
-    // if intevention is True Agency should be provided
-    type: Boolean,
+    type: String,
     default: false
   },
   agencyId: {
@@ -80,7 +87,10 @@ const reportSchema = new Schema({
     type: Schema.Types.ObjectId
   },
   reoccurence: {
-    type: Boolean,
+    type: String,
+  },
+  resolved: {
+    type: String,
   },
   status: {
     type: String,
@@ -108,6 +118,9 @@ const reportSchema = new Schema({
     ref: 'User',
   },
   mediaLinks: {
+    type: String,
+  },
+  informationSource: {
     type: String,
   },
   attachments: [{
@@ -140,6 +153,7 @@ const reportSchema = new Schema({
 {timestamps: true, versionKey: false }
 );
 
+
 reportSchema.pre('findOne', async function() {
   this.where({ isActive: true })
 });
@@ -152,6 +166,15 @@ reportSchema.post('save', async function (doc) {
   doc.isNew
   await reportsAfterSave(doc)
   console.log(`Notification sent to user ${doc.title}`);
+});
+
+reportSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    if (this.title) {
+      this.password = await bcrypt.hash(this.password, await bcrypt.genSalt(10));
+    }
+  }
+  next();
 });
 
 export const Report = model('Report', reportSchema);
