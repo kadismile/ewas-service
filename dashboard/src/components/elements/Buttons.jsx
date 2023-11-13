@@ -25,3 +25,9 @@ export const LoadingButton = () => {
 )
 }
 
+export const SuspendUserButton = (props) => {
+  return (
+    <a className={props.class} onClick={props.onClick} style={{padding: '6px 9px'}}>{ props.title }</a>
+)
+}
+

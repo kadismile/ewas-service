@@ -6,7 +6,8 @@ import { reportService } from "../services/reportsService.js"
 import ReactMapGL, { Marker, Popup, NavigationControl } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-export const Home = () => {
+export const Home = (props) => {
+  console.log('Props ===============> ', props)
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
   const [coordinates, setCoordinates] = useState([])
@@ -65,10 +66,11 @@ export const Home = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-xxl-8 col-xl-7 col-lg-7">
+            <div className="col-xxl-12 col-xl-7 col-lg-7">
+
               <div className="section-box">
                 <div className="row">
-                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image">
                         {" "}
@@ -87,7 +89,7 @@ export const Home = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image">
                         {" "}
@@ -108,7 +110,7 @@ export const Home = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image"> <img src="/images/lamp.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
@@ -120,7 +122,31 @@ export const Home = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                    <div className="card-style-1 hover-up">
+                      <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
+                      <div className="card-info"> 
+                        <div className="card-title">
+                          <h3>0<span className="font-sm status up"><span></span></span>
+                          </h3>
+                        </div>
+                        <p className="color-text-paragraph-2">Total Resolved</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                    <div className="card-style-1 hover-up">
+                      <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
+                      <div className="card-info"> 
+                        <div className="card-title">
+                          <h3>0<span className="font-sm status up"><span></span></span>
+                          </h3>
+                        </div>
+                        <p className="color-text-paragraph-2">Total Resolved</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
@@ -134,7 +160,10 @@ export const Home = () => {
                   </div>
                 </div>
               </div>
-              <div className="section-box">
+            </div>
+
+            <div className="col-xxl-6 col-xl-5 col-lg-5">
+            <div className="section-box">
                 <div className="container">
                   <div className="panel-white">
                     <div className="panel-head">
@@ -155,7 +184,7 @@ export const Home = () => {
                         latitude: 8.6753,
                         zoom: 5.5
                       }}
-                      style={{ width: '101%', height: '700px' }}
+                      style={{ width: '100%', height: '670px' }}
                       mapStyle="mapbox://styles/mapbox/light-v11"
                     >
                     {reports.map((report, index) => (
@@ -197,9 +226,10 @@ export const Home = () => {
                   </div>
                 </div>
               </div>
-            
             </div>
-            <div className="col-xxl-4 col-xl-5 col-lg-5">
+
+
+            <div className="col-xxl-6 col-xl-5 col-lg-5">
               <div className="section-box">
                 <div className="container"> 
                   <div className="panel-white">
@@ -224,6 +254,7 @@ export const Home = () => {
                 </div>
               </div>
             </div>
+
           </div>
           <Footer />
         </div>

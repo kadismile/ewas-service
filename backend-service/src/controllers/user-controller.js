@@ -58,7 +58,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email, suspended: false });
     if (!user) {
       return res.status(401).json(
         { 
@@ -168,6 +168,54 @@ export const getUsers = async (req, res) => {
   }
 }
 
+export const getOneUser = async (req, res) => {
+  try {
+    const { userId } = req.query
+    const user = await User.findOne({ _id:  userId }).populate('department');
+    const permissions = await Permission.find({}, 'action')
+    res.status(200).json({
+      status: "success",
+      data: { user, permissions }
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const suspendUser = async (req, res) => {
+  try {
+    const adminUser = req.user
+    const { userId } = req.body;
+    const commonUser = await User.findOne({ _id: userId })
+    if (adminUser.role === 'superAdmin' || commonUser.department === adminUser.department) {
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { suspended: !commonUser.suspended }, //changing it herewith the bang sign !!
+        {new: true}
+      );
+      return res.status(200).json({
+        status: "success",
+        message: !updatedUser.suspended ? 'User has been Un-suspended' : 'User has been Suspended Indefinitely'
+      });
+    } else {
+      return res.status(401).json({
+        status: "failed",
+        message: 'No permissions to Suspended This User'
+      });
+    }
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
 export const sendResetPassEmail = async (req, res) => {
   try {
     const { email } = req.body;
@@ -238,16 +286,12 @@ export const resetPassword = async (req, res) => {
 export const addUserPermissions = async (req, res) => {
   try {
     const adminUser = req.user
-    const { permissionIds, userId } = req.body;
+    const { permissions, userId } = req.body;
     const commonUser = await User.findOne({ _id: userId })
     if (adminUser.role === 'superAdmin' || commonUser.department === adminUser.department) {
-      const allowedPermissions = await Permission.find({ _id: { $in: permissionIds }})
-      const actions = allowedPermissions.map((perm) => perm.action)
-      const userActions = commonUser.permissions
-      const uniqueActions = new Set([...userActions, ...actions]);
       await User.findOneAndUpdate(
         { _id: userId },
-        { permissions: [...uniqueActions] },
+        { permissions },
       );
       
       return res.status(200).json({

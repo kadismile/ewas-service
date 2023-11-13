@@ -6,6 +6,8 @@ import {
   changePassword, 
   authorizeUser,
   getUsers,
+  getOneUser,
+  suspendUser,
   resetPassword,
   verifyPassToken,
   sendResetPassEmail,
@@ -20,11 +22,13 @@ router.post('/login', loginUser)
 router.post('/change-password', protectedRoute, changePassword)
 router.post('/authorized', protectedRoute, authorizeUser)
 router.get('/users', protectedRoute, authorize(['superAdmin']), getUsers)
+router.get('/user/one', protectedRoute, authorize(['superAdmin']), getOneUser)
+router.post('/user/suspend', protectedRoute, authorize(['superAdmin']), suspendUser)
 router.post('/send-reset-password-email', sendResetPassEmail)
 router.post('/verify-passwordToken', verifyPassToken)
 router.post('/reset-password', resetPassword)
 
-router.post('/add-user-permissions', protectedRoute, authorize(['superAdmin']), addUserPermissions)
-router.post('/add-system-permissions', protectedRoute, authorize(['superAdmin']), addPermissions)
+router.post('/add-user-permissions', protectedRoute, authorize(['superAdmin', 'admin']), addUserPermissions)
+router.post('/add-system-permissions', protectedRoute, authorize(['superAdmin', 'admin']), addPermissions)
 
 export default router;

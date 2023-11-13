@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { userService } from "../services/userService";
 import { MiniSpinner } from "../components/elements/spinners";
 import { PageLoader } from "../components/elements/spinners";
 
 export const Users = (props) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setdata] = useState([]);
 
@@ -30,7 +32,10 @@ export const Users = (props) => {
         <td>{user.phoneNumber}</td>
         <td>{user.email}</td>
         <td>{user.department?.acronym}</td>
-        
+        <td> <a href="#/" onClick={() => navigate(`/user/${user._id}`)} className="paint-red" title="edit" >
+          <i class="fa fa-edit" aria-hidden="true"></i> 
+          </a> 
+        </td>
       </tr>
     );
   });
@@ -103,6 +108,7 @@ export const Users = (props) => {
                             <th scope="col">Phone Number</th>
                             <th scope="col">Email</th>
                             <th scope="col">Department</th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                         <tbody>
