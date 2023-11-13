@@ -9,12 +9,14 @@ import { Agency } from "./pages/Agency";
 import { Reporters } from "./pages/Reporters";
 import { Reports } from "./pages/Reports";
 import { ReportDetails } from "./pages/ReportDetails";
+import { UserProfile } from "./pages/UserProfile";
 
 
 export const AuthorizedApp = () => {
   const routes = useRoutes([
-    { path: "/", element: <Home /> },
+    { path: "/", element: <Home roles={'salim'}/> },
     { path: "/users", element: <Users /> },
+    { path: "/user/:userId", element: <UserProfile /> },
     { path: "/department", element: <Department /> },
     { path: "/agency", element: <Agency /> },
     { path: "/reporters", element: <Reporters /> },

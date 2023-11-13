@@ -50,6 +50,45 @@ export const userService =  {
     }
   },
 
+  getOneUser:async (userId) => {
+    try {
+      const url = `${serverUrl}/auth/user/one?userId=${userId}`
+      const method = 'GET'
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Not Authorized");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  suspendUser:async (userId) => {
+    try {
+      const url = `${serverUrl}/auth/user/suspend`
+      const method = 'POST'
+      const response = await client(url, method, { ...userId });
+      if (!response)
+        throw new Error("Not Authorized");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  addPermissions:async ({ userId, permissions }) => {
+    try {
+      const url = `${serverUrl}/auth/add-user-permissions`
+      const method = 'POST'
+      const response = await client(url, method, { userId, permissions});
+      if (!response)
+        throw new Error("Not Authorized");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   fetchUserFromStore: () => {
     let user = store?.getState()?.user?.user
     let token;

@@ -42,6 +42,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: true
   },
+  suspended : {
+    type: Boolean,
+    default: true
+  },
   permissions: [{
     type: String,
     required: [true, 'Please Add permissions'],
