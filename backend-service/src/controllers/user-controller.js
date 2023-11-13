@@ -4,6 +4,7 @@ import { Paginator } from '../helpers/paginator-helper.js';
 import { sendResetPasswordToken } from '../helpers/user-helper.js';
 import { User } from '../models/UserModel//UserModel.js';
 import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
+import { Permission } from '../models/PermissionModel/PermissionModel.js';
 
 
 export const createUser = async (req, res) => {
@@ -212,7 +213,7 @@ export const resetPassword = async (req, res) => {
   const body = req.body
   const { newPassword, email } = body;
   try {
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({  status: "failed", error: "invalid credentials"});
     }
@@ -231,6 +232,64 @@ export const resetPassword = async (req, res) => {
         status: "error",
         message: error
     });
+  }
+}
+
+export const addUserPermissions = async (req, res) => {
+  try {
+    const adminUser = req.user
+    const { permissionIds, userId } = req.body;
+    const commonUser = await User.findOne({ _id: userId })
+    if (adminUser.role === 'superAdmin' || commonUser.department === adminUser.department) {
+      const allowedPermissions = await Permission.find({ _id: { $in: permissionIds }})
+      const actions = allowedPermissions.map((perm) => perm.action)
+      const userActions = commonUser.permissions
+      const uniqueActions = new Set([...userActions, ...actions]);
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { permissions: [...uniqueActions] },
+      );
+      
+      return res.status(200).json({
+        status: "success",
+        message: 'Permissions Added successfully'
+      });
+    } else {
+      return res.status(401).json({
+        status: "failed", 
+        error: "Error Adding Permissions for this User"
+      });
+    }
+  } catch (error) {
+    console.error('Error', error)
+      return res.status(500).json({
+        status: "error",
+        message: error
+    });
+  }
+}
+
+export const addPermissions = async (req, res) => {
+  try {
+    const { action } = req.body
+    const permission = new Permission({ action });
+    await permission.save();
+    if (permission) {
+      return res.status(201).json({
+        status: 'success',
+      });
+    } else {
+      return res.status(401).json({
+        status: "failed", 
+        error: "Error Adding Permissions"
+      });
+    }
+  } catch (error) {
+    console.error('Error', error)
+    return res.status(500).json({
+      status: "error",
+      message: error
+  });
   }
 }
 
