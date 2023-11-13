@@ -32,13 +32,20 @@ const userSchema = new Schema({
   role: {
     type: String,
     enum: ['user', 'admin', 'superAdmin'],
-    required: [true, 'Please Add Phone'],
+    // user ====> normal user
+    // admin ===> Department Head
+    // superAdmin ===> Controls All *
+    required: [true, 'Please Add Role'],
     default: 'user'
   },
   isActive : {
     type: Boolean,
     default: true
-  }
+  },
+  permissions: [{
+    type: String,
+    required: [true, 'Please Add permissions'],
+  }],
 },{ timestamps: true, versionKey: false });
 
 

@@ -8,7 +8,9 @@ import {
   getUsers,
   resetPassword,
   verifyPassToken,
-  sendResetPassEmail
+  sendResetPassEmail,
+  addPermissions,
+  addUserPermissions,
 } from '../controllers/user-controller.js'
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js'
 
@@ -21,5 +23,8 @@ router.get('/users', protectedRoute, authorize(['superAdmin']), getUsers)
 router.post('/send-reset-password-email', sendResetPassEmail)
 router.post('/verify-passwordToken', verifyPassToken)
 router.post('/reset-password', resetPassword)
+
+router.post('/add-user-permissions', protectedRoute, authorize(['superAdmin']), addUserPermissions)
+router.post('/add-system-permissions', protectedRoute, authorize(['superAdmin']), addPermissions)
 
 export default router;
