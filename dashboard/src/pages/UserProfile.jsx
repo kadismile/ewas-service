@@ -5,6 +5,8 @@ import { PageLoader } from "../components/elements/spinners";
 import AWN from "awesome-notifications";
 import toastr from 'toastr'
 import { SuspendUserButton } from "../components/elements/Buttons";
+import { WithPermissions } from "../components/elements/WithPermissions";
+import { SUSPEND_USER_PERMISSIONS } from "../utils/permissions.js"
 
 
 export const UserProfile = () => {
@@ -117,9 +119,14 @@ export const UserProfile = () => {
                       <img src="/images/profile-photo.webp" alt="jobBox" />
                       </div>
                       <div className="info-profile"> 
-                        <SuspendUserButton onClick={ () => suspendUser(user) } title={buttonTitle()} class={suspendButtonClass()}/>
+                        <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
+                          <SuspendUserButton onClick={ () => suspendUser(user) } title={buttonTitle()} class={suspendButtonClass()}/>
+                        </WithPermissions>
                       </div>
                     </div>
+
+                    <>
+                    </>
                     <div className="row"> 
                       <div className="col-lg-6 col-md-6">
                         <div className="form-group mb-30"> 
@@ -151,64 +158,69 @@ export const UserProfile = () => {
                       <br/>
                       <br/>
                       
-                      <h6 class="color-text-paragraph-2">User Permissions</h6>
-                      <div class="row mt-5"> </div>
-                      <div class="col-lg-12"> 
-                        <div class="mb-20">
-                          {
-                            checkboxes.map((box, index) => {
-                              return (
-                                <>
-                                <span className="btn btn-tag tags-link" key={index}>
-                                  <input
-                                      type="checkbox"
-                                      value={box.action}
-                                      key={index}
-                                      checked={checkedPermissions.includes(box.action)}
-                                      onChange={() => handleCheckboxChange(box.action)}
-                                      style={{width: '15px', height: '15px'}}
-                                    />
-                                    &nbsp; &nbsp;{box.action}
-                                </span>
-                                </>
-                                
-                              )
-                            })
-                          }
-                          
-                        </div>
-                        
-                      </div>
-                  {/* {
-                        checkboxes.map((box, index)=> {
-                          return (
-                            <div className="col-lg-2 col-md-6" key={index}>
-                              <div className="form-group mb-30"> 
-                                <label className="font-sm color-text-mutted mb-10"></label>
-                                <div key={index}>
-                                <span className="btn btn-tag tags-link" key={index}>
-                                  <label>
-                                    <input
-                                      type="checkbox"
-                                      value={box.action}
-                                      checked={checkedPermissions.includes(box.action)}
-                                      onChange={() => handleCheckboxChange(box.action)}
-                                      style={{width: '15px', height: '15px'}}
-                                    />
-                                    <span className="font-sm color-text-mutted mb-10"> &nbsp;{box.action} </span>
-                                  </label>
-                                  </span>
-                                </div>
+                      <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
+                        <div className="none">
+                          <h6 class="color-text-paragraph-2">User Permissions</h6>
+                          <div class="row mt-5"> </div>
+                          <div class="col-lg-12"> 
+                            <div class="mb-20">
+                              {
+                                checkboxes.map((box, index) => {
+                                  return (
+                                    <>
+                                    <span className="btn btn-tag tags-link" key={index}>
+                                      <input
+                                          type="checkbox"
+                                          value={box.action}
+                                          key={index}
+                                          checked={checkedPermissions.includes(box.action)}
+                                          onChange={() => handleCheckboxChange(box.action)}
+                                          style={{width: '15px', height: '15px'}}
+                                        />
+                                        &nbsp; &nbsp;{box.action}
+                                    </span>
+                                    </>
+                                    
+                                  )
+                                })
+                              }
+                              
                             </div>
-                      </div>
-                          )
-                        })
-                      } */}
-                      <div className="col-lg-12"> 
-                        <div className="form-group mt-10">
-                          <button className="btn btn-default btn-brand" onClick={savePermissions}>Save Permissions</button>
+                            
+                          </div>
+                            {/* {
+                              checkboxes.map((box, index)=> {
+                                return (
+                                  <div className="col-lg-2 col-md-6" key={index}>
+                                    <div className="form-group mb-30"> 
+                                      <label className="font-sm color-text-mutted mb-10"></label>
+                                      <div key={index}>
+                                      <span className="btn btn-tag tags-link" key={index}>
+                                        <label>
+                                          <input
+                                            type="checkbox"
+                                            value={box.action}
+                                            checked={checkedPermissions.includes(box.action)}
+                                            onChange={() => handleCheckboxChange(box.action)}
+                                            style={{width: '15px', height: '15px'}}
+                                          />
+                                          <span className="font-sm color-text-mutted mb-10"> &nbsp;{box.action} </span>
+                                        </label>
+                                        </span>
+                                      </div>
+                                  </div>
+                            </div>
+                                )
+                              })
+                            } */}
+                          <div className="col-lg-12"> 
+                            <div className="form-group mt-10">
+                              <button className="btn btn-default btn-brand" onClick={savePermissions}>Save Permissions</button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      </WithPermissions>
+
                     </div>
                   </div>
                 </div>

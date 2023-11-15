@@ -90,7 +90,7 @@ export const Header = () => {
                 <div className="member-login">
                   <img src="/images/profile-photo.webp" alt="jobBox" />
                   <div className="info-member"> <strong className="color-brand-1">{fullName}</strong>
-                    <div className="dropdown"><a className="font-xs color-text-paragraph-2 icon-down" id="dropdownProfile" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">Super Admin</a>
+                    <div className="dropdown"><a className="font-xs color-text-paragraph-2 icon-down" id="dropdownProfile" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">{user.role}</a>
                       <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownProfile">
                         <li><a className="dropdown-item" href="/#">Profiles</a></li>
                         <li><a className="dropdown-item" href="#" onClick={() => handleShowModal()}>Change Password</a></li>

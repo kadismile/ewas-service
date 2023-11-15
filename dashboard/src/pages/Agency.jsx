@@ -6,6 +6,9 @@ import toastr from 'toastr'
 import { EditAgencyModal } from "../modals/EditAgencyModal";
 import { AddAgencyModal } from "../modals/AddAgencyModal";
 import { PageLoader } from "../components/elements/spinners";
+import moment from "moment";
+import { WithPermissions } from "../components/elements/WithPermissions";
+import { AGENCY_PERMISSIONS } from "../utils/permissions.js"
 
 export const Agency = (props) => {
   const [loading, setLoading] = useState(true);
@@ -69,9 +72,12 @@ export const Agency = (props) => {
       <tr key={key}>
         <td>{number++}</td>
         <td>{dep.name}</td>
-        <td> <a href="#/" className="paint-red" title="delete" onClick={() => deleteBundle(dep)}> <i class="fa fa-trash" aria-hidden="true"></i> </a> </td>
-        <td> <a href="#/" className="paint-red" title="edit" onClick={() => handleShowModal(dep)}> <i class="fa fa-edit" aria-hidden="true"></i> </a> </td>
-      </tr>
+        <td>{moment(dep.createdAt).format('LL')}</td>
+        <WithPermissions permitedPermissions={AGENCY_PERMISSIONS}>
+          <td> <a href="#/" className="paint-red" title="delete" onClick={() => deleteBundle(dep)}> <i class="fa fa-trash" aria-hidden="true"></i> </a> </td>
+          <td> <a href="#/" className="paint-red" title="edit" onClick={() => handleShowModal(dep)}> <i class="fa fa-edit" aria-hidden="true"></i> </a> </td>
+        </WithPermissions>
+        </tr>
     );
   });
 
@@ -133,8 +139,11 @@ export const Agency = (props) => {
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th scope="col">Created</th>
+                            <WithPermissions permitedPermissions={AGENCY_PERMISSIONS}>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
+                            </WithPermissions>
                           </tr>
                         </thead>
                         <tbody>

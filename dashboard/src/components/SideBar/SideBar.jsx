@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { GoogleSearchModal } from "../../modals/GoogleSearchModal";
+import { WithPermissions } from "../../components/elements/WithPermissions";
+import { DEPARTMENT_PERMISSIONS, SUSPEND_USER_PERMISSIONS } from "../../utils/permissions.js"
 
 export const SideBar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -49,12 +51,16 @@ export const SideBar = () => {
                 </Link> 
               </li>
 
-              <li>
-                <Link className={`dashboard2 ${getActiveLink(["/department"])}`} to="/department">
-                  <img src="/images/jobs.svg" alt="jobBox" />
-                  <span className="name">Department</span>
-                </Link> 
-              </li>
+              
+              <WithPermissions permitedPermissions={ DEPARTMENT_PERMISSIONS }>
+                <li>
+                  <Link className={`dashboard2 ${getActiveLink(["/department"])}`} to="/department">
+                    <img src="/images/jobs.svg" alt="jobBox" />
+                    <span className="name">Department</span>
+                  </Link>
+                </li>
+              </WithPermissions>
+              
 
               <li>
                 <Link className={`dashboard2 ${getActiveLink(["/agency"])}`} to="/agency">
@@ -62,13 +68,15 @@ export const SideBar = () => {
                   <span className="name">Agency</span>
                 </Link> 
               </li>
-
-              <li>
-                <Link className={`dashboard2 ${getActiveLink(["/users"])}`} to="/users">
-                  <img src="/images/candidates.svg" alt="jobBox" />
-                  <span className="name">Users</span>
-                </Link> 
-              </li>
+              
+              <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
+                <li>
+                  <Link className={`dashboard2 ${getActiveLink(["/users"])}`} to="/users">
+                    <img src="/images/candidates.svg" alt="jobBox" />
+                    <span className="name">Users</span>
+                  </Link> 
+                </li>
+              </WithPermissions>  
 
 
             
