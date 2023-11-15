@@ -40,14 +40,36 @@ export const protectedRoute = async (req, res, next) => {
   }
 };
 
-export const authorize = (roles) => async (req, res, next) => {
-  const hasPermission = roles.includes(req?.user?.role);
-
-  if (!hasPermission) {
-    return res.status(401).json({
-      status: 'failed', 
-      error: "No permissons to access this route"
-    });
+export const authorize = (permitedPermissions) => async (req, res, next) => {
+  try {
+    const { permissions } = req.user || {}
+    let permitted = false
+    if (req.user?.role === 'superAdmin') {
+      return next();
+    }
+    
+    if (permitedPermissions.length) {
+      for (let perm of permissions) {
+        if (permitedPermissions.includes(perm)) {
+          permitted = true
+        }
+      }
+      if (permitted === true) {
+        next();
+      } else {
+        return res.status(401).json({
+            status: 'failed', 
+            error: "No permissons to access this route"
+        });
+      }
+    } else {
+      return res.status(401).json({
+        status: 'failed', 
+        error: "No permissons to access this route"
+      });
+    }
+  } catch (error) {
+    console.log('Error ', error)
   }
-  next();
+  
 };

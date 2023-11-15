@@ -58,7 +58,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const user = await User.findOne({ email: email, suspended: false });
+    const user = await User.findOne({ email, suspended: false });
     if (!user) {
       return res.status(401).json(
         { 
@@ -76,7 +76,6 @@ export const loginUser = async (req, res) => {
     } else {
       const token = user.getSignedJwtToken();
       delete user._doc.password;
-      delete user._doc.role;
 
       res.status(200).json({
         status: "success",

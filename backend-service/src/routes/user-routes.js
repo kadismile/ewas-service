@@ -29,6 +29,6 @@ router.post('/verify-passwordToken', verifyPassToken)
 router.post('/reset-password', resetPassword)
 
 router.post('/add-user-permissions', protectedRoute, authorize(['superAdmin', 'admin']), addUserPermissions)
-router.post('/add-system-permissions', protectedRoute, authorize(['superAdmin', 'admin']), addPermissions)
+router.post('/add-system-permissions', protectedRoute, authorize(['superAdmin']), addPermissions)
 
 export default router;
