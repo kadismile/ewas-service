@@ -2,16 +2,27 @@
 import { useEffect, useState } from "react";
 import Select from 'react-select';
 import NaijaStates from 'naija-state-local-government';
+import { useDispatch } from "react-redux";
+import { setSearchParams } from "../../redux/user-slice";
+import { store } from '../../redux/store';
 
 
 export default function StateDropDown ({ label, dataToComponent }) {
+  let user = store?.getState()?.user?.user
+  let userState
+  if (user) {
+    userState = user.searchParams?.state
+  }
+
+  const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState('other');
   const [state, setState] = useState([])
 
   const handleClick = async (data) => {
-    const { value } = data || {};
+    const { value, label } = data || {};
     setSelectedOption(value)
-    dataToComponent({label, value})
+    dispatch(setSearchParams({ state: label }));
+    dataToComponent({ label, value })
   }
 
   useEffect(() => {
@@ -42,11 +53,15 @@ export default function StateDropDown ({ label, dataToComponent }) {
       marginTop: 2,
     }),
   };
+
   
   return (
     <Select
         styles={customStyles}
-        defaultValue={{ label, value: selectedOption }}
+        defaultValue={{ 
+          label: userState ? userState : label, 
+          value: selectedOption 
+        }}
         onChange={ handleClick }
         options={ options() }
         className={'select-react'}
