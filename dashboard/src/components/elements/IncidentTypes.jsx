@@ -1,18 +1,29 @@
 'use client'
 import { useEffect, useState } from "react";
 import Select from 'react-select';
-
 import { reportService } from '../../services/reportsService'
+import { useDispatch } from "react-redux";
+import { setSearchParams } from "../../redux/user-slice";
+import { store } from '../../redux/store';
 
 
 export const IncidentType =  ({ label, dataToComponent }) => {
+  let user = store?.getState()?.user?.user
+  let searchParams
+  if (user) {
+    searchParams = user.searchParams?.incidentType
+  }
+  const dispatch = useDispatch();
+
   const [selectedOption, setSelectedOption] = useState('other');
   const [reportTypes, setReportTypes] = useState([])
 
+
   const handleClick = async (data) => {
-    const { value } = data || {}
+    const { value, label } = data || {}
     setSelectedOption(value)
-    dataToComponent({label, value})
+    dispatch(setSearchParams({ incidentType: label }));
+    dataToComponent({ label, value})
   }
 
   useEffect(() => {
@@ -48,7 +59,10 @@ export const IncidentType =  ({ label, dataToComponent }) => {
   return (
     <Select
         styles={customStyles}
-        defaultValue={{ label, value: selectedOption }}
+        defaultValue={{ 
+          label: searchParams ? searchParams : label, 
+          value: selectedOption 
+      }}
         onChange={ handleClick }
         options={ options() }
         className={'select-react'}

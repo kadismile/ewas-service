@@ -2,20 +2,44 @@ import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer/Footer"
 import { PageLoader } from "../components/elements/spinners"
+import StateDropDown from "../components/elements/NigerianStates"
+import LGADropDown from "../components/elements/LGADropDown"
+import { IncidentType } from "../components/elements/IncidentTypes"
+import moment from "moment"
+import { CalendarModal } from "../modals/CalendarModal"
 import { reportService } from "../services/reportsService.js"
+import { crudService } from "../services/crudService"
 import ReactMapGL, { Marker, Popup, NavigationControl } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { LineChart } from "../components/charts/LineChart.jsx";
+import { VerticalBarChart } from "../components/charts/VerticalBarChat.jsx";
 
 export const Home = (props) => {
-  console.log('Props ===============> ', props)
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
   const [coordinates, setCoordinates] = useState([])
   const [selectedMarker, setSelectedMarker] = useState(false);
+  const formFields = {
+    state: undefined,
+    localGovt: undefined,
+    incidentType: undefined,
+    date: '',
+    rawDate: '',
+  }
 
-  setTimeout(() => setLoading(false), 1000)
+  const [formValues, setFormValues] = useState({
+    ...formFields,
+    errors: formFields,
+  })
+  const { state, localGovt,incidentType, rawDate } = formValues
+  const [lga, setLga] = useState(["select a state"])
+  const [showModal, setShowModal] = useState(false);
+
+
   const fetchData = () => {
-    reportService.getReports().then((res) => {
+    const { state, localGovt,incidentType, rawDate } = formValues
+    setLoading(true)
+    crudService.getReports({state, localGovt,incidentType, rawDate}).then((res) => {
       const {
         data: { data },
       } = res
@@ -27,7 +51,7 @@ export const Home = (props) => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [state, localGovt, incidentType, rawDate])
 
   const prepareCoordinates = (reports) => {
     let coordinates = []
@@ -39,29 +63,130 @@ export const Home = (props) => {
     setCoordinates(coordinates)
   }
 
+  const handleStateData = (data) => {
+    const { value } = data || {}
+    const errors = formValues.errors
+    setLga(value?.lgas)
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        errors,
+        state: value?.state,
+      }
+    })
+  }
+
+  const handleLgaData = (data) => {
+    const { value } = data || {}
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        localGovt: value,
+      }
+    })
+  }
+
+  const handleDataFromDropDown = (data) => {
+    const { value } = data || {}
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        incidentType: value,
+      }
+    })
+  }
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const calendarData = (calData = []) => {
+    if (Array.isArray(calData)) {
+      const formatedDates = calData?.map((date) =>moment(date).format('YYYY-MM-DD'))
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          date: moment(calData[1]).format('LL'),
+          rawDate: formatedDates
+        };
+      });
+    }
+  }
+
+
   return (
     <>
+      <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
       {loading ? (
         <PageLoader />
       ) : (
         <div className="box-content">
-          <div className="box-heading">
-            <div className="box-title">
-              <h3 className="mb-35">Dashboard</h3>
-            </div>
-            <div className="box-breadcrumb">
-              <div className="breadcrumbs">
-                <ul>
-                  <li>
-                    {" "}
-                    <a className="icon-home" href="index.html">
-                      Admin
-                    </a>
-                  </li>
-                  <li>
-                    <span>Dashboard</span>
-                  </li>
-                </ul>
+          <div className="panel-head">
+            <div className="">
+              <div className="row">
+                <div className="col-xl-6 col-lg-5">
+                  <span className="font-sm text-showing color-text-paragraph">
+                    Search Bar here 
+                  </span>
+                </div>
+                <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
+                  <div className="display-flex2">
+                    <div
+                      className="box-border mr-10"
+                      style={{ padding: "0px 0px" }}
+                    >
+                      <StateDropDown label={"State"} dataToComponent={handleStateData}/>
+                    </div>
+
+                    <div
+                      className="box-border mr-10"
+                      style={{ padding: "0px 0px" }}
+                    >
+                      <LGADropDown
+                        label={"LGA"}
+                        lgaData={lga}
+                        dataToComponent={handleLgaData}
+                      />
+                    </div>
+
+                    <div
+                      className="box-border mr-10"
+                      style={{ padding: "0px 0px" }}
+                    >
+                      <IncidentType
+                        label={"Incident Type"}
+                        dataToComponent={handleDataFromDropDown}
+                      />
+                    </div>
+
+                    
+                    <div className="box-border mr-10"
+                      style={{ padding: "0px 0px" }}>
+                        <input
+                          className="font-sm color-text-paragraph-2"
+                          name="date"
+                          style={{height: '39px'}}
+                          placeholder="Date"
+                          type="text"
+                          value={formValues.date}
+                          onClick={() => handleShowModal()}
+                        />
+                    </div>
+  
+                    
+                    {/* <a
+                      href="#/"
+                      onClick={fetchData}
+                      style={{ marginRight: "10px" }}
+                    >
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                    </a> */}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -136,25 +261,25 @@ export const Home = (props) => {
                   </div>
                   <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
-                      <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
+                      <div className="card-image"> <img src="/images/look.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
                         <div className="card-title">
                           <h3>0<span className="font-sm status up"><span></span></span>
                           </h3>
                         </div>
-                        <p className="color-text-paragraph-2">Total Resolved</p>
+                        <p className="color-text-paragraph-2">Total Un Resolved</p>
                       </div>
                     </div>
                   </div>
                   <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
-                      <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
+                      <div className="card-image"> <img src="/images/doc.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
                         <div className="card-title">
                           <h3>0<span className="font-sm status up"><span></span></span>
                           </h3>
                         </div>
-                        <p className="color-text-paragraph-2">Total Resolved</p>
+                        <p className="color-text-paragraph-2">Total False Report</p>
                       </div>
                     </div>
                   </div>
@@ -184,7 +309,7 @@ export const Home = (props) => {
                         latitude: 8.6753,
                         zoom: 5.5
                       }}
-                      style={{ width: '100%', height: '670px' }}
+                      style={{ width: '100%', height: '700px' }}
                       mapStyle="mapbox://styles/mapbox/light-v11"
                     >
                     {reports.map((report, index) => (
@@ -234,21 +359,30 @@ export const Home = (props) => {
                 <div className="container"> 
                   <div className="panel-white">
                     <div className="panel-head"> 
-                      <h5>Most Recent  Reports</h5>
+                      <h5>Reports</h5>
                     </div>
-                    <div className="panel-body">
-                    {
-                      reports.map((report, key) => {
-                        let number = key + 1;
-                        return (
-                        <div className="card-style-3 hover-up" key={key}>
-                            <div className="card-title" style={{width: '100%'}}> 
-                              <span>{number++}. </span> <h6>{report.reportSlug}</h6>
-                            </div>
-                        </div>
-                        )
-                      })
-                    }
+                    <div className="panel-body" style={{height: '725px'}}>
+                      <LineChart />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+
+          <div className="row">
+            <div className="col-xxl-12 col-xl-5 col-lg-5">
+              <div className="section-box">
+                <div className="container"> 
+                  <div className="panel-white">
+                    <div className="panel-head"> 
+                      <h5>Reports</h5>
+                    </div>
+                    <div className="panel-body" style={{height: '725px'}}>
+                      <VerticalBarChart />
                     </div>
                   </div>
                 </div>

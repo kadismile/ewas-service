@@ -1,13 +1,24 @@
 
 import { useEffect, useState } from "react";
 import Select from 'react-select';
+import { useDispatch } from "react-redux";
+import { setSearchParams } from "../../redux/user-slice";
+import { store } from '../../redux/store';
 
 
 export default function LGADropDown ({ label, lgaData, dataToComponent }) {
+  let user = store?.getState()?.user?.user
+  let lga
+  if (user) {
+    lga = user.searchParams?.lga
+  }
+
+  const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState('other');
   const handleClick = async (data) => {
-    const { value } = data || {}
+    const { value, label } = data || {}
     setSelectedOption(value)
+    dispatch(setSearchParams({ lga: label }));
     dataToComponent({label, value})
   }
 
@@ -38,7 +49,10 @@ export default function LGADropDown ({ label, lgaData, dataToComponent }) {
   return (
     <Select
         styles={customStyles}
-        defaultValue={{ label, value: selectedOption }}
+        defaultValue={{ 
+          label: lga ? lga : label, 
+          value: selectedOption 
+        }}
         onChange={ handleClick }
         options={ options() }
         className={'select-react'}

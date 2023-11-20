@@ -7,7 +7,6 @@ import { PageLoader } from "../components/elements/spinners"
 import StateDropDown from "../components/elements/NigerianStates"
 import LGADropDown from "../components/elements/LGADropDown"
 import { IncidentType } from "../components/elements/IncidentTypes"
-import { states } from "naija-state-local-government"
 import { CalendarModal } from "../modals/CalendarModal"
 
 export const Reports = () => {
@@ -38,6 +37,7 @@ export const Reports = () => {
       const {
         data: { data },
       } = res
+      console.log('Data ============================> ', data )
       setdata(data)
       setTimeout(() => setLoading(false), 500)
     })
@@ -124,7 +124,7 @@ export const Reports = () => {
 
   return (
     <>
-    <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
+      <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
       {loading ? (
         <PageLoader />
       ) : (
@@ -169,10 +169,7 @@ export const Reports = () => {
                                 className="box-border mr-10"
                                 style={{ padding: "0px 0px" }}
                               >
-                                <StateDropDown
-                                  label={"State"}
-                                  dataToComponent={handleStateData}
-                                />
+                                <StateDropDown label={"State"} dataToComponent={handleStateData}/>
                               </div>
 
                               <div
@@ -199,7 +196,6 @@ export const Reports = () => {
                               
                               <div className="box-border mr-10"
                                 style={{ padding: "0px 0px" }}>
-                                  {/* <button onClick={() => handleShowModal()}  className={'btn btn-brand-1'} type="submit" >{'Date' }</button> */}
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="date"
@@ -229,7 +225,7 @@ export const Reports = () => {
                         <thead>
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Slug</th>
+                            <th scope="col">Report ID</th>
                             <th scope="col">Type</th>
                             <th scope="col">State</th>
                             <th scope="col">Local Govt</th>
