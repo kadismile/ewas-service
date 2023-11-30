@@ -19,6 +19,12 @@ export const userSlice = createSlice({
         ...action.payload
       };
     },
+    setAddress(state, action) {
+      state.user.mapAddress = {
+        ...state?.user.mapAddress,
+        ...action.payload
+      };
+    }, 
     clearToken: (state) => {
       state = null;
       return state;
@@ -31,7 +37,14 @@ export const userSlice = createSlice({
 });
 
 
-export const { resetUser, clearToken, setUser, setToken, setSearchParams } = userSlice.actions;
+export const { 
+  resetUser, 
+  clearToken, 
+  setUser, 
+  setToken,
+  setSearchParams,
+  setAddress
+} = userSlice.actions;
 export const selectUser = (state) => state.user;
 
 

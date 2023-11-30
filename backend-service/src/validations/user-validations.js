@@ -9,6 +9,7 @@ export const user_create_validation = Joi.object({
   password: Joi.string().required(),
   phoneNumber: Joi.string().required(),
   role: Joi.string().required(),
+  responder: Joi.string(),
 });
 
 export const user_login_validation = Joi.object({

@@ -44,7 +44,11 @@ const userSchema = new Schema({
   },
   suspended : {
     type: Boolean,
-    default: true
+    default: false
+  },
+  responder : {
+    type: String,
+    ref: 'Agency'
   },
   permissions: [{
     type: String,
@@ -80,5 +84,10 @@ userSchema.methods.getSignedJwtToken = function(expires) {
     expiresIn: expires ? expires : process.env.JWT_EXPIRE
   });
 };
+
+userSchema.index({
+  fullName: 'text',
+  email: 'text',
+});
 
 export const User = model('User', userSchema);

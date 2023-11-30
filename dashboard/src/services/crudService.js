@@ -84,18 +84,19 @@ export const crudService =  {
   },
 
   getReports: async (data) => {
-    const { state, localGovt, incidentType, rawDate } = data || {}
+    const { state, localGovt, incidentType, rawDate, filterReport } = data || {}
     const baseUrl = `${serverUrl}/report/get-advanced`;
     const queryParams = {
       "address.localGovt": localGovt,
       "address.state": state,
+      ...transformReportType(filterReport),
       reportTypeId: incidentType,
       ...transformDate(rawDate),
     };
+
     
     try {
       const url = buildUrl(baseUrl, queryParams);
-      console.log('URL ===================>>>>>> ', url)
       const method = 'GET'
       const response = await client(url, method);
       if (!response)
@@ -127,6 +128,19 @@ export const crudService =  {
       const url = `${serverUrl}/report/one?reportSlug=${reportSlug}`
       const method = 'GET'
       const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  editReport: async (data) => {
+    try {
+      const url = `${serverUrl}/report`
+      const method = 'PATCH'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Edit Report");
       return response
     } catch (e) {
       throw e
@@ -172,6 +186,15 @@ const buildUrl = (baseUrl, queryParams) => {
   });
 
   return url.toString();
+}
+
+const transformReportType = (data) => {
+  return {
+    sort: data?.sort === 1 ? 1 : undefined,
+    exists: data?.userId === true ? true : data?.userId === false ? false : undefined,
+    verified: data?.verified ? 'verified' : undefined,
+  };
+
 }
 
 const transformDate = (rawDate) => {

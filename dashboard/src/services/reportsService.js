@@ -85,5 +85,38 @@ export const reportService =  {
     }
   },
 
+  getReportComments:async (reportId) => {
+    if (!reportId ) 
+    return {
+      status: 'failed',
+      message: '',
+    }
+    try {
+      const url = `${serverUrl}/report/verification?reportId=${reportId}`
+      const method = 'GET'
+      const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  getDraftReport:async (reportId) => {
+    console.log('we got here sha ========>>>>', reportId)
+    if (!reportId ) 
+    return {
+      status: 'failed',
+      message: '',
+    }
+    try {
+      const url = `${serverUrl}/report/draft?reportId=${reportId}`
+      const method = 'GET'
+      const response = await client(url, method);
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   
 }

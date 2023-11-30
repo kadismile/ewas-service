@@ -1922,7 +1922,7 @@ option {
 }
 
 .modal-lg, .modal-xl {
-  max-width: 600px;
+  max-width: 1300px;
 }
 
 .modal-content .btn-close {

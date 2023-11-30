@@ -37,6 +37,7 @@ export default function LGADropDown ({ label, lgaData, dataToComponent }) {
       ...provided,
       width: 100,
       height: 15,
+      lineHeight: '35',
       display: 'flex',
       alignItems: 'center',
     }),

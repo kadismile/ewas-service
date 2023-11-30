@@ -16,6 +16,8 @@ import { Department } from '../models/DepartmentModel/DepartmentModel.js';
 import { sendCPSnotification } from '../helpers/notification-helpers.js';
 import { sendSMS } from '../helpers/sms-helper.js';
 import {advancedResults} from "../helpers/advanced-results.js";
+import { DraftReport } from '../models/ReportModel/DraftReport.js';
+import { Verification } from '../models/VerificationModel/VerificationModel.js';
 
 
 export const createReporter = async (req, res) => {
@@ -250,12 +252,15 @@ export const getOneReport = async (req, res) => {
     .populate('attachments')
     .populate('agencyId')
     .populate('reportTypeId')
-    .populate('userId');
+    .populate('userId')
+    .populate('actionableUsers.currentUser')
+    .populate('actionableUsers.currentDepartment');
 
-    const reportHistory = await ReportHistory.find({reportId: report?._id})
+    const reportHistory = await ReportHistory.find({reportId: report?._id}).sort({ createdAt: -1 })
+    const draftReport = await DraftReport.findOne({reportId: report?._id})
     res.status(200).json({
       status: "success",
-      data: { report, reportHistory }
+      data: { report, reportHistory, draftReport }
     });
   } catch (error) {
     console.log('Error ------', error)
@@ -269,10 +274,11 @@ export const getOneReport = async (req, res) => {
 export const acceptReport = async (req, res) => {
   try {
     const{ reportId, userId } = req.body;
-    const report = await Report.findOne({ _id: reportId });
-    if (report.userId) {
-      const alreadyAssignedUser = await User.findOne({ _id: report.userId}).populate('department')
-      if (alreadyAssignedUser?.department._id == req.user.department) {
+    const user = req.user
+    const report = await Report.findOne({ _id: reportId }).lean();
+    if (report?.actionableUsers?.curentUser?.length) {
+      const alreadyAssignedUser = await User.findOne({ _id: report.actionableUsers.currentUser }).populate('department');
+      if (alreadyAssignedUser) {
         return res.status(200).json({
           status: "success",
           message: `
@@ -281,16 +287,11 @@ export const acceptReport = async (req, res) => {
         });
       }
     } else {
-      await Report.findOneAndUpdate({_id: reportId}, {
-        userId,
-      })
-      const historyData = {
-        user: userId,
-        reportId,
-        comment: `report assigned to ${req.user.fullName}`
-      }
-      const history = new ReportHistory(historyData)
-      await history.save()
+      await updateActonableUser(userId, user.department, report, user.department)
+
+      const comment =  `report assigned to ${user.fullName}`
+      await addHistory(user, report, comment)
+
       res.status(201).json({
         status: "success",
         message: 'report assigned successfully'
@@ -305,31 +306,66 @@ export const acceptReport = async (req, res) => {
   }
 }
 
-export const verifyReport = async (req, res) => {
+export const editReport = async (req, res) => {
   try {
-    const { comments, verified, reportId, userId, verificationMethod, responder } = req.body
-    const report = await Report.findOne({ _id: reportId })
-
-    if (report && report.userId === userId) {
-      const CPS_DEPARTMENT = process.env.CPS_DEPARTMENT
-      await Report.findOneAndUpdate({_id: reportId}, {
-        verified,
-        userId: null, // making it null so the report will be un-assigned to the current user
-        departmentId: CPS_DEPARTMENT,
-        verificationMethod,
-        responder
-      })
+    const{ 
+      reportId, userId, resolved, numberDisplaced,finalAddress,
+      numberInjured, numberKilled, description 
+    } = req.body;
+    
+    let report = await Report.findOne({ _id: reportId }).lean() ;
+    if (report) {
+      await Report.findOneAndUpdate({ _id: reportId},
+        { $set:
+          { address: finalAddress, 
+            userId, numberKilled,
+            resolved, numberInjured,
+            numberDisplaced, description,
+          } 
+        })
       const historyData = {
         user: userId,
         reportId,
-        comment: `${req.user.fullName} added a comment <br/>
-        ${comments}`
+        comment: `report updated by ${req.user.fullName}`
       }
       const history = new ReportHistory(historyData)
       await history.save()
+      res.status(200).json({
+        status: "success",
+      });
+    } else {
+      res.status(404).json({
+        status: "failed",
+        message: 'report not found'
+      });
+    }
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const verifyReport = async (req, res) => {
+  try {
+    const { comments,reportId,verificationMethod, responder, userId } = req.body
+    const report = await Report.findOne({ _id: reportId }).lean()
+    const user = req.user;
+    
+    if (report && report?.actionableUsers?.currentUser === userId) {
       const department = await Department.findOne({ _id: req.user.department })
       const { acronym } = department
+
+      const nextActionableDept = await getNextActionableDept(acronym, responder)
+      await updateActonableUser(userId, department._id, report, nextActionableDept, true)
+      const comment =  `report verified by ${user.fullName} of ${acronym} Department`
+      await addHistory(user, report, comment)
+
+      await createVerification(user, reportId, verificationMethod, comments)
       await createNotification(report, acronym)
+
       if (responder?.length) {
         const agency = await Agency.findOne({ _id: responder })
         if (agency.name) {
@@ -338,8 +374,7 @@ export const verifyReport = async (req, res) => {
         }
         
       }
-     
-      res.status(201).json({
+      res.status(200).json({
         status: "success",
         message: 'report was succsfuly verified '
       });
@@ -358,6 +393,50 @@ export const getAdvanced = async (req, res) => {
   });
 };
 
+export const getVerifications = async (req, res) => {
+  try {
+    const reportId = req.query.reportId
+    const verifications = await Verification.find({ reportId }).populate('userId');
+    res.status(200).json({
+      status: "success",
+      data: verifications
+    });
+  } catch (error) {
+    console.log('Error ------>>', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+};
+
+export const getDraftReport = async (req, res) => {
+  try {
+    const reportId = req.query.reportId
+    const draftReport = await DraftReport.findOne({ reportId })
+    .populate('attachments')
+    .populate('agencyId')
+    .populate('reportTypeId')
+    .populate('userId')
+    .populate('actionableUsers.currentUser')
+    .populate('actionableUsers.currentDepartment');
+
+    console.log('draftReport ==========>>>>>', reportId)
+
+    res.status(200).json({
+      status: "success",
+      data: draftReport 
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   const reporter = await Reporter.findOne({
     $or: [
@@ -369,8 +448,6 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   }
   return reporter;
 };
-
-
 const createNotification = async (report, departmentAcronym) => {
   switch (departmentAcronym) {
     case "CIDS": // this should be CAMS though ..pls change it ibro tomorrow 
@@ -381,4 +458,55 @@ const createNotification = async (report, departmentAcronym) => {
       break;
   }
   return true
+}
+
+const addHistory = async (user, report, comment) => {
+  const historyData = {
+    user: user._id,
+    reportId: report._id,
+    comment
+  }
+  const history = new ReportHistory(historyData)
+  await history.save()
+  return 
+}
+
+const updateActonableUser = async (userId, department, report, nextActionableDept, unassign) => {
+  const actionableUsers = {
+    currentUser: unassign ? null : userId,
+    currentDepartment: unassign ? null : department,
+    reportUserHistory: report.reportUserHistory?.length ? 
+      report.actionableUsers?.reportUserHistory?.push(userId) : [userId],
+    nextActionableDept: nextActionableDept, 
+  };
+  await Report.findOneAndUpdate({ _id: report._id }, {
+    actionableUsers
+  })
+  return 
+}
+
+const createVerification = async (user, reportId, verificationMethod, comments) => {
+  const verificationData = {
+    departmentId: user.department,
+    userId: user._id,
+    reportId,
+    verificationMethod,
+    comments
+  }
+  const verification = new Verification(verificationData)
+  await verification.save()
+  return 
+}
+
+const getNextActionableDept = async (acronym, responder) => {
+  if (acronym === 'CAMS') {
+    const dept = await Department.findOne({acronym: 'SSS'}) 
+    if (dept) {
+      return dept._id
+    }
+  }
+
+  if (responder && acronym === 'SSS') {
+    return responder
+  }
 }

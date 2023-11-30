@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { store } from '../redux/store';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import moment from 'moment'
 import { MediaDisplay } from '../components/elements/MediaDisplay';
 import { DisplayFileModal } from "../modals/DisplayFileModal";
+import { reportService } from "../services/reportsService";
 import { crudService } from "../services/crudService";
 import { AssignmentModal } from "../modals/AssignmentModel";
 import { VerifyReportModal } from "../modals/VerifyReportModal";
+import { SubmitButton } from "../components/elements/Buttons";
+import { EditReportModal } from "../modals/EditReportModal";
+import { ReviewModal } from "../modals/ReviewModal";
+import { DraftModal } from "../modals/DraftModal";
+
 
 export const ReportDetails = () => {
   const { reportSlug } = useParams();
@@ -21,27 +27,34 @@ export const ReportDetails = () => {
   const [report, setReport] = useState(undefined);
   const [reportHistory, setreportHistory] = useState(undefined);
   const [loading, setLoading] = useState(true);
-  const [displayAssignmentButton, setAssignmentButton] = useState(false)
-  const { pathname } = useLocation()
+  const [showEditModal, setEditModal] = useState(false);
+  const [showCommentModal, setCommentModal] = useState(false);
+  const [showDraftModal, setDraftModal] = useState(false);
+  const [draftReport, setDraftReport] = useState(false);
+
 
   useEffect(() => {
-    const match = pathname.match(/\/report\/([^/]+)/);
+    fetchData();
+  }, [])
+
+  const fetchData = () => {
     if (reportSlug) {
       crudService.getOneReport(reportSlug)
       .then((res) => {
-        const { status, data: { report, reportHistory} } = res
+        const { status, data: { report, reportHistory, draftReport} } = res
         if (status === 'success') {
+          setLoading(false)
           setReport(report)
           setreportHistory(reportHistory)
-          setLoading(false)
+          setDraftReport(draftReport)
           // updateNotification(reportId) visit this later 
-          setDisplayButton()
         }
       })
     } else {
       console.log('No match found');
     }
-  }, [])
+  }
+
 
   const updateNotification = async (reportId) => {
     await crudService.updateNotification(reportId)
@@ -74,22 +87,58 @@ export const ReportDetails = () => {
     // setUrl(file)
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (data) => {
+    if (data?.updated) {
+      fetchData()
+      setVerifyModal(true)
+    }
+    if (data?.closeVerifyModal) {
+      fetchData()
+      setVerifyModal(false)
+    }
+    if (data?.closeAssModal) {
+      setShowAssModal(false);
+      fetchData()
+    }
     setShowModal(false);
-    setShowAssModal(false);
-    setVerifyModal(false)
+    setEditModal(false);
+    setCommentModal(false);
+    setDraftModal(false);
   };
 
-  const setDisplayButton = () => {
-    if (report?.departmentId === user?.departmentId) {
-      setAssignmentButton(true)
+
+  const displayVerifyAssButton = () => {
+    const actionableUser = report?.actionableUsers
+    if (actionableUser?.currentUser?._id === user?._id &&
+        actionableUser?.nextActionableDept === user?.department?._id
+      ) {
+      return true
     }
   }
 
-  const displayVerifyButton = () => {
-    if (report?.userId?._id === user._id) {
+  const displayEditButton = () => {
+    const actionableUser = report?.actionableUsers
+    if (actionableUser?.currentUser?._id === user?._id
+      ) {
       return true
     }
+    return false
+  }
+
+  const displayWorkOnReport = () => {
+    const actionableUser = report?.actionableUsers
+    if (displayEditButton() === true || actionableUser?.currentUser) return false
+    if (
+        actionableUser?.currentDepartment === user?.department._id
+      ) {
+      return true
+    }
+    return true
+  }
+
+  const displayActionButtons = () => {
+    const actionableUser = report?.actionableUsers;
+    return actionableUser?.nextActionableDept === user.department._id
   }
 
   const handleVerifyModal = (data) => {
@@ -102,25 +151,61 @@ export const ReportDetails = () => {
     setAssData(data)
   }
 
+  const getByTitle = () => {
+    if (user?.department?.acronym === 'SSS') {
+      return 'Assign to Responders'
+    }
+
+    if (user?.department?.acronym === 'CAMS') {
+      return 'Verify Report'
+    }
+  }
+
   return (
     <>
-    {/* <DisplayFileModal show={showModal} onHide={handleCloseModal} data={url} /> */}
-    <AssignmentModal show={showAssModal} onHide={handleCloseModal} data={assData} />
-    <VerifyReportModal show={showVerifyModal} onHide={handleCloseModal} data={assData} />
     {
       loading ? '......Loading ' : 
 
       <div className="box-content">
+        <ReviewModal show={showCommentModal} onHide={handleCloseModal} report={report} user={user}/>
+        <EditReportModal show={showEditModal} onHide={handleCloseModal} data={report} user={ user } />
+        {/* <DisplayFileModal show={showModal} onHide={handleCloseModal} data={url} /> */}
+        <AssignmentModal show={showAssModal} onHide={handleCloseModal} data={assData} />
+        <VerifyReportModal show={showVerifyModal} onHide={handleCloseModal} data={assData} depAcronym={user.department.acronym} title={getByTitle()}/>
+        <DraftModal show={showDraftModal} onHide={handleCloseModal} draftReport={draftReport}/>
         <div className="box-heading">
           <div className="box-title"> 
-            <h3 className="mb-35">{report?.title}</h3>
+            <h3 className="mb-35">{report?.reportSlug}</h3>
           </div>
           <div className="box-breadcrumb"> 
-            <div className="breadcrumbs">
               <ul> 
-                <li><span style={{color: colorStatus(report?.status), fontSize: '12px'}}>{capitalize(report?.status)}</span></li>
+                <li> 
+                  { displayActionButtons() &&
+                      <>
+                      { 
+                        displayWorkOnReport() ?
+                          <li>
+                            <a className={'btn btn-success btn-xm'}
+                              onClick={() => handleAssingmentModal(report._id)}
+                              style={{ padding: '6px 9px'}}> Work on Report ?
+                            </a>
+                          </li> : ""
+                      }
+
+                        { displayEditButton() ?
+                          <li>
+                            <div className="form-group mt-10">
+                                <button 
+                                  onClick={() => setEditModal(true)} 
+                                  style={{lineHeight: '5px'}}
+                                  className="btn btn-default btn-brand">Edit Report</button>
+                            </div>
+                          </li> : ''
+                        }
+                      </>
+                  }
+                  </li>
               </ul>
-            </div>
           </div>
         </div>
         <div className="row"> 
@@ -131,35 +216,20 @@ export const ReportDetails = () => {
                   <div className="box-padding">
                   <div className="panel-head">
                     <h5>Details</h5>
-                    {
-                      displayAssignmentButton ?
-                      <a className="menudrop" id="dropdownMenu2" type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                        data-bs-display="static"
-                    ></a> : ''
-                    }
-                    
-                    <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2" >
-                    {
-                      displayAssignmentButton && !report?.userId ? 
-                      <li>
-                        <a onClick={() => handleAssingmentModal(report._id)} className="dropdown-item active" href="#">
-                          Assign to self
-                        </a>
-                      </li> : <li> </li>
-                    } 
-                      {
-                        displayVerifyButton() ? <li>
-                        <a onClick={() => handleVerifyModal(report._id)  } className="dropdown-item" href="#">
-                          verify report
-                        </a>
-                      </li> : ''
-                      }
-                      
-                    </ul>
                     <p> Submitted By: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{capitalize(report?.reporterId)}</b> </p>
                     <p> Date: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{moment(report?.createdAt).format('DD MMM, YYYY')}</b> </p>
+                    <p> Status: <span style={{color: colorStatus(report?.status), fontSize: '12px'}}>{capitalize(report?.status)}</span> </p>
+                    <p> Reviews: <a href="#/" onClick={() => setCommentModal(true)}> <span style={{color: 'green', fontSize: '12px', fontWeight: 'bolder'}}>View All Reviews</span>  </a></p>
+                    <p> Draft: <a href="#/" onClick={() => setDraftModal(true)}> <span style={{color: 'purple', fontSize: '12px', fontWeight: 'bolder'}}>View Draft</span>  </a></p>
+                    
+                    {displayActionButtons() &&
+                      displayVerifyAssButton() ?
+                      <p> <button style={{lineHeight: '0px'}} 
+                            onClick={() => handleVerifyModal(report._id)  }  
+                            className="btn btn-warning">Verify Report</button>
+                      </p> : ""
+                    }
+                    
                   </div>
                     <div className="row mt-30">
                       <div className="col-lg-12">
@@ -179,7 +249,7 @@ export const ReportDetails = () => {
 
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
-                              <label className="font-sm color-text-mutted mb-10">Srcurity Agency Intervention</label>
+                              <label className="font-sm color-text-mutted mb-10">Response From Security Agency</label>
                               <input className="form-control" type="text" readOnly value={capitalize(report?.intervention)} />
                             </div>
                           </div>
@@ -214,7 +284,7 @@ export const ReportDetails = () => {
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
-                              <label className="font-sm color-text-mutted mb-10">Re Occurence</label>
+                              <label className="font-sm color-text-mutted mb-10">Has it Happened Before ?</label>
                               <input className="form-control" type="text" readOnly value={capitalize(report?.reoccurence)} />
                             </div>
                           </div>
@@ -222,15 +292,25 @@ export const ReportDetails = () => {
 
 
                         <div className="row">
-                          <div className="col-lg-6 col-md-6">
+                          <div className="col-lg-3 col-md-6">
+                            <div className="form-group mb-30"> 
+                              <label className="font-sm color-text-mutted mb-10">State</label>
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.address.state)} />                            </div>
+                          </div>
+                          <div className="col-lg-3 col-md-6">
+                            <div className="form-group mb-30"> 
+                              <label className="font-sm color-text-mutted mb-10">Local Govt</label>
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.address.localGovt)} />                            </div>
+                          </div>
+                          <div className="col-lg-3 col-md-6">
+                            <div className="form-group mb-30"> 
+                              <label className="font-sm color-text-mutted mb-10">User Typed Address</label>
+                              <input className="form-control" type="text" readOnly value={capitalize(report?.address.userTypedAddress)} />                            </div>
+                          </div>
+                          <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
                               <label className="font-sm color-text-mutted mb-10">Address</label>
                               <input className="form-control" type="text" readOnly value={capitalize(report?.address.fullAddress)} />                            </div>
-                          </div>
-                          <div className="col-lg-6 col-md-6">
-                            <div className="form-group mb-30"> 
-                              <label className="font-sm color-text-mutted mb-10">Media Links</label>
-                              <input className="form-control" type="text" readOnly value={capitalize(report?.mediaLinks)} />                            </div>
                           </div>
                           
                         </div> 
@@ -245,26 +325,28 @@ export const ReportDetails = () => {
                                 value={ report?.description }
                                 />
                               </div>
+                              
                           </div>
                           <div className="row">
-                          <label className="font-sm color-text-mutted mb-10">Report Files </label>
-                          {
-                            report.attachments.map((file) => {
-                              return (
-                              <div className="col-xl-3 col-lg-4 col-md-6">
-                                <div className="card-grid-2 hover-up">
-                                  <div className="card-grid-2-image-left">
-                                    <div className="card-profile pt-10">
-                                      <a  onClick={() => handleShowModal(file)}> 
-                                      <MediaDisplay mediaLink={file.url}/></a>
+                            <label className="font-sm color-text-mutted mb-10">Report Files </label>
+                            {
+                              report.attachments.map((file) => {
+                                return (
+                                <div className="col-xl-3 col-lg-4 col-md-6">
+                                  <div className="card-grid-2 hover-up">
+                                    <div className="card-grid-2-image-left">
+                                      <div className="card-profile pt-10">
+                                        <a  onClick={() => handleShowModal(file)}> 
+                                        <MediaDisplay mediaLink={file.url}/></a>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                              )
-                            })
-                          }
-                            </div>
+                                )
+                              })
+                            }
+                          </div>
+
                           <div className="col-lg-12"> 
                             <div className="form-group mt-10">
                               <button className="btn btn-default btn-brand">Report History</button>

@@ -1,8 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import Select from 'react-select';
-
-import { reportService } from '../../services/reportsService'
+import { crudService } from "../../services/crudService";
 
 
 export const RespondersDropDown = ({ dataToComponent }) => {
@@ -17,7 +16,7 @@ export const RespondersDropDown = ({ dataToComponent }) => {
 
   useEffect(() => {
     (async () => {
-      const res = await reportService.getReportTypes()
+      const res = await crudService.getAgency()
       setReportTypes(res.data)
     })();
   }, []);

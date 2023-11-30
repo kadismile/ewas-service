@@ -1,12 +1,5 @@
 // @ts-nocheck
 import { Schema, model } from 'mongoose';
-import { reportsAfterSave } from '../ReportModel/reports_after-save.js';
-
-
-const generateRandomLetters = () => {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  return 'REPORT-' + Array.from({ length: 3 }, () => letters[Math.floor(Math.random() * letters.length)]).join('');
-};
 
 const addressSchema = new Schema({
   country: {
@@ -45,28 +38,8 @@ const addressSchema = new Schema({
 {timestamps: true, versionKey: false }
 );
 
-const actionableSchema = new Schema({
-  currentUser: {
-    type: String,
-    ref: 'User',
-    required: [true, 'current user is missing']
-  },
-  currentDepartment: {
-    type: String,
-    ref: 'Department',
-    required: [true, 'current department is missing']
-  },
-  reportUserHistory: [{
-    type: String,
-  }],
-  nextActionableDept: {
-    type: String,
-  }
-},
-{timestamps: true, versionKey: false }
-);
 
-const reportSchema = new Schema({
+const draftReportSchema = new Schema({
   reportTypeId: {
     type: Schema.Types.ObjectId,
     ref: 'ReportType'
@@ -121,18 +94,7 @@ const reportSchema = new Schema({
     type: addressSchema,
     required: [true, 'Please Add Address']
   },
-  numberKilled: {
-    type: String,
-    default: 0,
-  },
-  numberInjured: {
-    type: String,
-    default: 0,
-  },
-  numberDisplaced: {
-    type: String,
-    default: 0,
-  },
+
   userId: {
     type: String,
     ref: 'User',
@@ -147,49 +109,26 @@ const reportSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Attachment'
   }],
-  verified: {
-    type: String,
-    default: 'not-verified',
-    enum:['not-verified','processing', 'verified', 'returned', 'false-report']
-  },
+  
   reportSlug: {
     type: String,
     unique: true,
     required: true,
-    default: () => generateRandomLetters() + Math.floor(100 + Math.random() * 900)
   },
-  verificationMethod: {
-    type: String,
-  },
+  
   responder: {
     type: Schema.Types.ObjectId,
     ref: 'Agency'
   },
-  actionableUsers: {
-    type: actionableSchema,
+
+  reportId: {
+    type: String,
+    required: true,
   },
-  isActive : {
-    type: Boolean,
-    default: true
-  }
+  
 },
 {timestamps: true, versionKey: false }
 );
 
 
-reportSchema.pre('findOne', async function() {
-  this.where({ isActive: true })
-});
-
-reportSchema.pre('find', async function() {
-  this.where({ isActive: true })
-});
-
-reportSchema.post('save', async function (doc) {
-  doc.isNew
-  await reportsAfterSave(doc)
-  console.log(`Notification sent to user ${doc.title}`);
-});
-
-
-export const Report = model('Report', reportSchema);
+export const DraftReport = model('DraftReport', draftReportSchema);
