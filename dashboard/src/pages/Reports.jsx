@@ -8,6 +8,7 @@ import StateDropDown from "../components/elements/NigerianStates"
 import LGADropDown from "../components/elements/LGADropDown"
 import { IncidentType } from "../components/elements/IncidentTypes"
 import { CalendarModal } from "../modals/CalendarModal"
+import { ReportFilterDropDown } from "../components/elements/ReportFilterDropDown"
 
 export const Reports = () => {
 
@@ -15,6 +16,7 @@ export const Reports = () => {
     state: undefined,
     localGovt: undefined,
     incidentType: undefined,
+    filterReport: undefined,
     date: '',
     rawDate: '',
   }
@@ -24,20 +26,18 @@ export const Reports = () => {
     errors: formFields,
   })
 
-  const { state, localGovt,incidentType, rawDate } = formValues
+  const { state, localGovt,incidentType, rawDate, filterReport } = formValues
   const [loading, setLoading] = useState(true)
   const [data, setdata] = useState([])
   const [lga, setLga] = useState(["select a state"])
   const [showModal, setShowModal] = useState(false);
 
   const fetchData = () => {
-    const { state, localGovt,incidentType, rawDate } = formValues
     setLoading(true)
-    crudService.getReports({state, localGovt, incidentType, rawDate}).then((res) => {
+    crudService.getReports({state, localGovt, incidentType, filterReport, rawDate}).then((res) => {
       const {
         data: { data },
       } = res
-      console.log('Data ============================> ', data )
       setdata(data)
       setTimeout(() => setLoading(false), 500)
     })
@@ -45,7 +45,7 @@ export const Reports = () => {
 
   useEffect(() => {
     fetchData()
-  }, [state, localGovt, incidentType, rawDate])
+  }, [state, localGovt, incidentType, filterReport, rawDate])
 
   const handleStateData = (data) => {
     const { value } = data || {}
@@ -76,6 +76,16 @@ export const Reports = () => {
       return {
         ...prevState,
         incidentType: value,
+      }
+    })
+  }
+
+  const handleFilterData = (data) => {
+    const { value } = data || {}
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        filterReport: value,
       }
     })
   }
@@ -158,13 +168,20 @@ export const Reports = () => {
                     <div className="panel-head">
                       <div className="">
                         <div className="row">
-                          <div className="col-xl-6 col-lg-5">
+                          <div className="col-xl-4 col-lg-5">
                             <span className="font-sm text-showing color-text-paragraph">
                               Search Bar here 
                             </span>
                           </div>
-                          <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
+                          <div className="col-xl-8 col-lg-7 text-lg-end mt-sm-15">
                             <div className="display-flex2">
+                            <div
+                                className="box-border mr-10"
+                                style={{ padding: "0px 0px" }}
+                              >
+                                <ReportFilterDropDown label={"Filter"} dataToComponent={handleFilterData}/>
+                              </div>
+
                               <div
                                 className="box-border mr-10"
                                 style={{ padding: "0px 0px" }}

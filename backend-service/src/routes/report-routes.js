@@ -1,7 +1,8 @@
 import express from 'express';
 import { reportType, createReporter, loginReporter, 
   createReport, getReporters, createAdminReportType, 
-  getReports, getOneReport, acceptReport, verifyReport,getAdvanced
+  getReports, getOneReport, acceptReport, verifyReport, 
+  getAdvanced, editReport, getVerifications, getDraftReport
 } from '../controllers/report-controller.js';
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js';
 import { upload } from '../helpers/file-upload-helper.js';
@@ -17,9 +18,12 @@ router.post('/login', loginReporter);
 
 router.post('/create', upload.array('fileUpload'), createReport);
 router.get('/', protectedRoute, authorize(REPORT_PERMISSIONS), getReports);
-router.get('/one', protectedRoute, authorize(['superAdmin']), getOneReport);
-router.post('/accept', protectedRoute, authorize(['superAdmin']), acceptReport);
-router.post('/verify', protectedRoute, authorize(['superAdmin']), verifyReport);
+router.get('/verification', protectedRoute, getVerifications);
+router.patch('/', protectedRoute, authorize(REPORT_PERMISSIONS), editReport);
+router.get('/one', protectedRoute, authorize(REPORT_PERMISSIONS), getOneReport);
+router.get('/draft', protectedRoute, authorize(REPORT_PERMISSIONS), getDraftReport);
+router.post('/accept', protectedRoute, authorize(REPORT_PERMISSIONS), acceptReport);
+router.post('/verify', protectedRoute, authorize(REPORT_PERMISSIONS), verifyReport);
 router.get('/get-advanced', protectedRoute, authorize(REPORT_PERMISSIONS), getAdvanced);
 
 

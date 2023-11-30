@@ -9,8 +9,9 @@ import { Permission } from '../models/PermissionModel/PermissionModel.js';
 
 export const createUser = async (req, res) => {
   const body = req.body
-  const { 
-    fullName, email, phoneNumber, password, department, role
+  const {
+    fullName, email, phoneNumber, password, 
+    department, role, responder
   } = body
   try {
     const { error } = user_create_validation.validate(body);
@@ -28,7 +29,8 @@ export const createUser = async (req, res) => {
     }
 
     user = new User({
-      fullName, email, phoneNumber, password, department, role
+      fullName, email, phoneNumber, password, 
+      department, role, responder
     });
 
     await user.save();
@@ -58,7 +60,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const user = await User.findOne({ email, suspended: false });
+    const user = await User.findOne({ email, suspended: false }).populate('department');
     if (!user) {
       return res.status(401).json(
         { 

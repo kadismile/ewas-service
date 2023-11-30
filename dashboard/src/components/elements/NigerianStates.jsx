@@ -7,12 +7,16 @@ import { setSearchParams } from "../../redux/user-slice";
 import { store } from '../../redux/store';
 
 
-export default function StateDropDown ({ label, dataToComponent }) {
-  let user = store?.getState()?.user?.user
+export default function StateDropDown ({ label, fetchFromstore, dataToComponent }) {
+
   let userState
-  if (user) {
-    userState = user.searchParams?.state
+  if (fetchFromstore) { // should we fetch from store 
+    let user = store?.getState()?.user?.user
+    if (user) {
+      userState = user.searchParams?.state
+    }
   }
+  
 
   const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState('other');

@@ -4,6 +4,7 @@ import { ReportHistory } from "../ReportHistoryModel/ReportHistoryModel.js"
 import { Notification } from "../NotificationModel/NotificationModel.js"
 import { User } from "../UserModel/UserModel.js"
 import { Report } from "../ReportModel/Report.js"
+import { DraftReport } from "./DraftReport.js"
 
 export const reportsAfterSave = async (report) => {
   const CAMS_DEPARTMENT = process.env.CAMS_DEPARTMENT
@@ -27,6 +28,24 @@ export const reportsAfterSave = async (report) => {
         console.error("Error creating notification:", error)
       }
     }
+  }
+
+  const actionableUsers = {
+    currentUser: null,
+    currentDepartment: CAMS_DEPARTMENT,
+    reportUserHistory: null,
+    nextActionableDept: CAMS_DEPARTMENT
+  };
+  const updatedReport = await Report.findOneAndUpdate({ _id: report._id }, {
+    actionableUsers,
+  },{new: true}).lean()
+
+  const drafReport = await DraftReport.findOne({ reportId: report._id}) 
+  if (!drafReport) {
+    updatedReport.reportId = updatedReport._id;
+    delete updatedReport._id
+    const newDraftReport = new DraftReport(updatedReport)
+    await newDraftReport.save()
   }
 
   // add to report history

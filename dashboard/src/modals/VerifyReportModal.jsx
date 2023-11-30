@@ -162,28 +162,56 @@ export const VerifyReportModal = (props) => {
     const response = await reportService.verifyReport(data)
     const { message } = response
     toastr.success(message, { timeOut: 6000 });
-    props.onHide()
+    props.onHide({closeVerifyModal: true })
   }
 
   const { errors} = formValues
+
+  const closeModal = () => {
+    props.onHide({closeVerifyModal: true })
+  }
 
   return (
     <Modal
       aria-labelledby="contained-modal-title-vcenter"
       centered
       show={props.show}
-      onHide={props.onHide}
-      size="lg"
+      onHide={closeModal}
+      size="md"
     >
       <Modal.Header closeButton>
         
       </Modal.Header>
       <Modal.Body>
         <div className="text-center">
-            <h5 className="mt-10 mb-5 text-brand-1">Verify Report  </h5>
+            <h5 className="mt-10 mb-5 text-brand-1">{props.title} </h5>
           </div>
         <div className="form-group">
         <form className="login-register text-start mt-20" action="#">
+          {
+            props.depAcronym === 'CAMS' &&
+          <>
+              <Select
+                styles={customStyles}
+                defaultValue={{ label: 'Verification Method', value: selectedMethod }}
+                onChange={ handleMethodClick }
+                options={ verificationMethods() }
+                className={'select-react'}
+              />
+              <br/>
+
+              <Select
+                styles={customStyles}
+                defaultValue={{ label: 'Verify Report', value: selectedOption }}
+                onChange={ handleClick }
+                options={ verificationOptions() }
+                className={'select-react'}
+              />
+              <br/>
+              <br/>
+              </>
+            }
+            
             <div className="form-group">
               <label className="form-label" htmlFor="input-1">
                 Comments *
@@ -200,26 +228,10 @@ export const VerifyReportModal = (props) => {
               </div>
             </div>
 
-            <Select
-              styles={customStyles}
-              defaultValue={{ label: 'Verify Report', value: selectedOption }}
-              onChange={ handleClick }
-              options={ verificationOptions() }
-              className={'select-react'}
-            />
-            <br/>
-            <br/>
+            { props.depAcronym === 'SSS' &&
+              <RespondersDropDown dataToComponent={handleData} />
+            }
 
-            <Select
-              styles={customStyles}
-              defaultValue={{ label: 'Verification Method', value: selectedMethod }}
-              onChange={ handleMethodClick }
-              options={ verificationMethods() }
-              className={'select-react'}
-            />
-            <br/>
-            <br/>
-            <RespondersDropDown dataToComponent={handleData} />
             <br/>
             <br/>
             <div className="form-group">

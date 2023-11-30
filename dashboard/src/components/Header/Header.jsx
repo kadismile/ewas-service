@@ -5,10 +5,12 @@ import { useEffect,  useState } from 'react';
 import { crudService } from '../../services/crudService';
 import parse from 'html-react-parser';
 import { ChangePasswordModal } from '../../modals/ChangePasswordModal';
+import { GoogleSearchModal } from "../../modals/GoogleSearchModal";
 
 export const Header = () => {
   const [data, setdata] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showGoogle, setShowGoogle] = useState(false);
   let user = store?.getState()?.user?.user
   if (user) {
     user = user.user
@@ -35,11 +37,15 @@ export const Header = () => {
   };
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowGoogle(false)
   };
+
+  console.log('showGoogle ', showGoogle)
 
   return (
     <>
     <ChangePasswordModal show={showModal} onHide={handleCloseModal} />
+    <GoogleSearchModal show={showGoogle} onHide={handleCloseModal} />
       <header className="header sticky-bar"> 
         <div className="container">
           <div className="main-header">
@@ -65,13 +71,18 @@ export const Header = () => {
               <div className="block-signin">
 
                 <div className="dropdown d-inline-block">
-                  <a className="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
+                <a  onClick={ () => setShowGoogle(true)} class="btn btn-default hover-up" href="#/"><i class="fa-brands fa-google"></i></a> &nbsp;
+                <a class="btn btn-default  hover-up" href="#/"><i class="fa-brands fa-twitter"></i></a>
+
+                <a className="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
                   <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
                     {
                       data.map((not, key)=> {
                         return (
                           <li key={key}>
-                            <a className="dropdown-item active">{ parse(not.message) }</a>
+                            <a className="dropdown-item active">
+                              { parse(not.message) }
+                              </a>
                         </li>
                         )
                       })
@@ -90,13 +101,17 @@ export const Header = () => {
                 <div className="member-login">
                   <img src="/images/profile-photo.webp" alt="jobBox" />
                   <div className="info-member"> <strong className="color-brand-1">{fullName}</strong>
-                    <div className="dropdown"><a className="font-xs color-text-paragraph-2 icon-down" id="dropdownProfile" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">{user.role}</a>
+                    <div className="dropdown"><a className="font-xs color-text-paragraph-2 icon-down" 
+                        id="dropdownProfile" 
+                        type="button" data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        data-bs-display="static"
+                        style={{color: '#3b65f5'}}>{user.department.acronym}</a>
                       <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownProfile">
                         <li><a className="dropdown-item" href="/#">Profiles</a></li>
                         <li><a className="dropdown-item" href="#" onClick={() => handleShowModal()}>Change Password</a></li>
                         <br/>
                         <li><a className="dropdown-item" href="/login" onClick={() => logOut()}>Logout</a></li>
-                        
                       </ul>
                     </div>
                   </div>
