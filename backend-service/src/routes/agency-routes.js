@@ -4,6 +4,6 @@ import { protectedRoute, authorize } from '../middlewares/auth-middleware.js'
 
 const router = express.Router();
 router.get('/', agencyResource)
-router.post('/', protectedRoute, authorize(['superAdmin']), agencyResource)
+router.post('/', protectedRoute, agencyResource)
 
 export default router;
