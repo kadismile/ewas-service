@@ -4,9 +4,9 @@ import { protectedRoute, authorize } from '../middlewares/auth-middleware.js'
 import { DEPARTMENT_PERMISSIONS } from '../lib/permissions.js';
 
 const router = express.Router();
-router.get('/', protectedRoute, authorize(DEPARTMENT_PERMISSIONS), departmentResource)
-router.delete('/', protectedRoute, authorize(['superAdmin']),departmentResource)
-router.patch('/',protectedRoute, authorize(['superAdmin']), departmentResource)
-router.post('/',  protectedRoute, authorize(['superAdmin']), departmentResource)
+router.get('/', protectedRoute, departmentResource)
+router.delete('/', protectedRoute,departmentResource)
+router.patch('/',protectedRoute, departmentResource)
+router.post('/',  protectedRoute, departmentResource)
 
 export default router;
