@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { userService } from "../services/userService";
 import { MiniSpinner } from "../components/elements/spinners";
 import { PageLoader } from "../components/elements/spinners";
+import { Search } from "../components/elements/Search";
 
 export const Users = (props) => {
   const navigate = useNavigate();
@@ -40,6 +41,19 @@ export const Users = (props) => {
     );
   });
 
+  const handleSearchText = () => {
+    setLoading(true)
+    fetchData()
+  };
+
+  const handleLoadingChange = (isLoading) => {
+    setLoading(isLoading)
+  };
+
+  const handleDataChange = (data) => {
+    setdata(data);
+  };
+
   return (
     <>
     { 
@@ -73,7 +87,17 @@ export const Users = (props) => {
               <div className="container">
                 <div className="panel-white">
                   <div className="panel-head">
-                    <h5>Users</h5>
+                    <div className="row"> 
+                    <div className=" col-lg-4"></div>
+                      <Search
+                        loading={loading} 
+                        setLoading={ handleLoadingChange }
+                        setData={ handleDataChange }
+                        searchTextHandler={ handleSearchText }
+                        model={'users'}
+                      />
+                    </div>
+                    
                     <a className="menudrop" id="dropdownMenu2" type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"

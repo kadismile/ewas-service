@@ -1,7 +1,12 @@
 
 export const SubmitButton = (props) => {
   return (
-    <button onClick={props.onClick}  className={ props.className } type="submit" >{ props.title }</button>
+    <button 
+      onClick={props.onClick}  
+      className={ props.className } 
+      type="submit" 
+      style={props.style}
+    >{ props.title }</button>
   )
 }
 
@@ -13,7 +18,8 @@ export const DisabledButton = (props) => {
         filter: "opacity(0.5)",
         color: "#fff",
         fontSize: "15px", pointerEvents: 
-        "none" 
+        "none",
+        ...props.style
       }}>{props.title}
     </button>
   )

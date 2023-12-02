@@ -9,6 +9,7 @@ import LGADropDown from "../components/elements/LGADropDown"
 import { IncidentType } from "../components/elements/IncidentTypes"
 import { CalendarModal } from "../modals/CalendarModal"
 import { ReportFilterDropDown } from "../components/elements/ReportFilterDropDown"
+import { Search } from "../components/elements/Search"
 
 export const Reports = () => {
 
@@ -131,6 +132,19 @@ export const Reports = () => {
     }
   }
 
+  const handleSearchText = () => {
+    setLoading(true)
+    fetchData()
+  };
+
+  const handleLoadingChange = (isLoading) => {
+    setLoading(isLoading)
+  };
+
+  const handleDataChange = (data) => {
+    setdata(data);
+  };
+
 
   return (
     <>
@@ -170,7 +184,13 @@ export const Reports = () => {
                         <div className="row">
                           <div className="col-xl-4 col-lg-5">
                             <span className="font-sm text-showing color-text-paragraph">
-                              Search Bar here 
+                            <Search
+                              loading={loading} 
+                              setLoading={ handleLoadingChange }
+                              setData={ handleDataChange }
+                              searchTextHandler={ handleSearchText }
+                              model={'report'}
+                            />
                             </span>
                           </div>
                           <div className="col-xl-8 col-lg-7 text-lg-end mt-sm-15">
