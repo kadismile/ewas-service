@@ -191,5 +191,9 @@ reportSchema.post('save', async function (doc) {
   console.log(`Notification sent to user ${doc.title}`);
 });
 
+reportSchema.index({
+  reportSlug: 'text',
+});
+
 
 export const Report = model('Report', reportSchema);

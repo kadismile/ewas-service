@@ -1,0 +1,34 @@
+.table thead tr {
+  background-color: #d1daf6;
+}
+
+.paint-red {
+  color: red;
+}
+
+.form-control[readonly] {
+  color: black;
+}
+
+/* .modal-width {
+  width: 170%;
+} */
+
+.form_error {
+  color: red;
+  margin-left: 7px;
+}
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin-left: 20%;
+  margin-top: -100px;
+}
+
+.form-check {
+  margin-top: 6px;
+  font-size: 11px;
+}

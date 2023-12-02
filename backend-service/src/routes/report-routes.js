@@ -4,6 +4,7 @@ import { reportType, createReporter, loginReporter,
   getReports, getOneReport, acceptReport, verifyReport, 
   getAdvanced, editReport, getVerifications, getDraftReport
 } from '../controllers/report-controller.js';
+import {searchRsource} from '../controllers/search-controller.js';
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js';
 import { upload } from '../helpers/file-upload-helper.js';
 import { REPORT_PERMISSIONS, REPORTERS_PERMISSIONS } from '../lib/permissions.js';
@@ -25,6 +26,7 @@ router.get('/draft', protectedRoute, authorize(REPORT_PERMISSIONS), getDraftRepo
 router.post('/accept', protectedRoute, authorize(REPORT_PERMISSIONS), acceptReport);
 router.post('/verify', protectedRoute, authorize(REPORT_PERMISSIONS), verifyReport);
 router.get('/get-advanced', protectedRoute, authorize(REPORT_PERMISSIONS), getAdvanced);
+router.post('/search', protectedRoute, searchRsource);
 
 
 export default router;
