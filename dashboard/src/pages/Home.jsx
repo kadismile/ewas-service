@@ -130,7 +130,7 @@ export const Home = (props) => {
               <div className="row">
                 <div className="col-xl-6 col-lg-5">
                   <span className="font-sm text-showing color-text-paragraph">
-                    Search Bar here 
+                   
                   </span>
                 </div>
                 <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">

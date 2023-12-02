@@ -173,6 +173,20 @@ export const crudService =  {
       throw e
     }
   },
+
+  searchResource:async (data) => {
+    try {
+      const url = `${serverUrl}/report/search`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Create bundle");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
 }
 
 const buildUrl = (baseUrl, queryParams) => {
