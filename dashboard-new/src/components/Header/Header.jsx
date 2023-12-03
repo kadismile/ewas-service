@@ -106,7 +106,7 @@ export const Header = () => {
                         type="button" data-bs-toggle="dropdown" 
                         aria-expanded="false" 
                         data-bs-display="static"
-                        style={{color: '#3b65f5'}}>{user.department.acronym}</a>
+                        style={{color: '#3b65f5'}}>{user?.department?.acronym}</a>
                       <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownProfile">
                         <li><a className="dropdown-item" href="/#">Profiles</a></li>
                         <li><a className="dropdown-item" href="#" onClick={() => handleShowModal()}>Change Password</a></li>
