@@ -46,6 +46,7 @@ export default function DropDown ({ label, dataToComponent }) {
   
   return (
     <Select
+        isSearchable={ false }
         styles={customStyles}
         defaultValue={{ label, value: selectedOption }}
         onChange={ handleClick }

@@ -9,3 +9,13 @@ export const MiniSpinner = () => {
     </div>
   );
 };
+
+export const PageLoader = () => {
+  return (
+    <>
+      <div className='spinner'>
+        <img src='/images/loader.gif' alt='' width={'20%'} style={{marginTop: '300px'}}/>
+      </div>
+    </>
+  )
+}

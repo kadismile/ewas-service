@@ -1,14 +1,14 @@
 "use client"; 
 import { reportService } from '../services/reporterService.js'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/user-slice.js";
 import toastr from 'toastr'
 import { Link } from "react-router-dom";
 import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
+import { PageLoader } from '../components/elements/spinners.jsx';
 
 export const Login = () => {
-  
   const dispatch = useDispatch();
   const formFields = {
     email: "",
@@ -19,7 +19,10 @@ export const Login = () => {
     ...formFields,
     errors: formFields,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 500)
+  })
 
   const disableForm = () => {
     const newValues = { ...formValues };
@@ -115,11 +118,14 @@ export const Login = () => {
 const { errors} = formValues
 
 return (
-  <main className="main">
+  <>
+  {
+    loading ? <PageLoader /> : 
+    <main className="main">
       <section className="pt-100 login-register">
         <div className="container"> 
           <div className="row login-register-cover">
-            <div className="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <div className="col-lg-6 col-md-6 col-sm-12 mx-auto">
               <div className="text-center">
                 <h2 className="mt-10 mb-5 text-brand-1"> Sign In</h2>
               </div>
@@ -174,5 +180,9 @@ return (
         </div>
       </section>
     </main>
+  }
+    
+  </>
+  
 )
 }

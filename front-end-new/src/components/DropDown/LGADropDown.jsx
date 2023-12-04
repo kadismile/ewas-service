@@ -37,6 +37,7 @@ export default function LGADropDown ({ label, lgaData, dataToComponent }) {
   
   return (
     <Select
+        isSearchable={ false }
         styles={customStyles}
         defaultValue={{ label, value: selectedOption }}
         onChange={ handleClick }
