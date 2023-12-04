@@ -134,6 +134,7 @@ export const Register = () => {
     const response = await reportService.registerReporter({
       email,fullName,password,phoneNumber, address,
     })
+    
     const { status, message, token, data } = response
     if (status === 'failed') {
       toastr.error(message);
