@@ -26,7 +26,9 @@ export default function Places({ dataToComponent }) {
   });
 
   const handleRecievedData = (data) => {
-    dataToComponent(data)
+    if (dataToComponent) {
+      dataToComponent(data)
+    }
   }
 
   if (!isLoaded) return <div>Loading...</div>;

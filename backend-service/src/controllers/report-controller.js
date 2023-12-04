@@ -23,10 +23,10 @@ import { Verification } from '../models/VerificationModel/VerificationModel.js';
 export const createReporter = async (req, res) => {
   try {
   const body = req.body
-  const { error } = create_reporter_validation.validate(body);
+  /* const { error } = create_reporter_validation.validate(body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
-  }
+  } */
   let { fullName, phoneNumber, email, password, address, } = req.body;
   let reporter = await findReporterByEmailOrPhone(phoneNumber, email);
 
