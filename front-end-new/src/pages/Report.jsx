@@ -14,6 +14,7 @@ import StateDropDown from "../components/DropDown/StateDropDown";
 import LGADropDown from "../components/DropDown/LGADropDown";
 import { TimeDropDown, TimePicker } from "../components/elements/TimePicker";
 import InformationSource from "../components/DropDown/InformationSource";
+import { useNavigate } from 'react-router-dom';
 
 
 export const Report = () => {
@@ -22,7 +23,7 @@ export const Report = () => {
   if (user) {
     mapAddress = user.mapAddress
   }
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const formFields = {
@@ -40,6 +41,7 @@ export const Report = () => {
     fileUpload: '',
     state: '',
     localGovt: '',
+    userTypedAddress: ''
   };
 
   const calendarData = (calData) => {
@@ -77,7 +79,7 @@ export const Report = () => {
   };
 
   const handleStateData = (data) => {
-    const {localGovt, state } = formValues
+    const { localGovt, state } = formValues
     const { label, value } = data
     const errors = formValues.errors;
     setLga(value.lgas)
@@ -90,6 +92,15 @@ export const Report = () => {
       };
     });
   };
+
+  const handlePlacesData = (data) => {
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        userTypedAddress: data.userTypedAddress
+      };
+    });
+  }
 
   const handleDropDownData = (data) => {
     const { label, value } = data
@@ -219,6 +230,7 @@ export const Report = () => {
   }
 
   const handleSubmit = async (event) => {
+    setSubmitForm(true)
     event.preventDefault();
     setLoading(true);
     let {
@@ -234,12 +246,31 @@ export const Report = () => {
       fileUpload,
       state,
       localGovt,
+      userTypedAddress,
       reoccurence,
       resolved
     } = formValues;
 
-    mapAddress.state = state.state
-    mapAddress.localGovt = localGovt
+    const address = {
+      state: state.state,
+      localGovt,
+      country: mapAddress?.country,
+      countryCode: mapAddress?.countryCode,
+      fullAddress: mapAddress?.fullAddress,
+      latitude: mapAddress?.latitude,
+      longitude: mapAddress?.longitude,
+      userTypedAddress: mapAddress?.userTypedAddress,
+    }
+
+    const reporterId = user?.user?._id || 'anonymous'
+    agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
+
+    if (!userTypedAddress || !localGovt || !state || !description) {
+      setLoading(false);
+      return 
+    }
+    
+
 
     const form = new FormData();
     form.append('title', title);
@@ -249,12 +280,12 @@ export const Report = () => {
     form.append("timeOfIncidence", timeOfIncidence);
     form.append("informationSource", informationSource);
     form.append("mediaLinks", mediaLinks);
-    form.append("reporterId", 'anonymous');
+    form.append("reporterId", reporterId);
     form.append("reportTypeId", reportTypeId); 
     form.append("description", description);
     form.append("intervention", intervention);
     form.append("agencyId", agency);
-    form.append("address", JSON.stringify(mapAddress));
+    form.append("address", JSON.stringify(address));
     form.append("fileUpload", fileUpload);
 
     const response = await reportService.createReports(form)
@@ -267,9 +298,11 @@ export const Report = () => {
       toastr.success('Report Submitted Successfully');
       setTimeout(() => setLoading(false), 1000)
       dispatch(setUser({ user: data, token }))
-      window.location.replace("/");
+      setTimeout(() => navigate('/'), 1000)
+      
     }
   };
+
 
   return (
     <>
@@ -325,6 +358,7 @@ export const Report = () => {
                           value={formValues.description}
                           onChange={handleChange}
                         />
+                        {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
                       </div>
                     </div>
 
@@ -366,7 +400,9 @@ export const Report = () => {
                       <div className="input-style mb-20">
                       <label className="form-label" htmlFor="input-2">Type of Incident *</label>
                         <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
+                        {submitForm && formValues.reportTypeId.length < 1 ? <span className="form_error"> { 'Type of Incident is Mandatory' }</span> : ""}
                       </div>
+                    
                     </div>
                   
                     <div className="col-lg-4 col-md-4">
@@ -374,6 +410,7 @@ export const Report = () => {
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">State*</label>
                           <StateDropDown label={'State'} dataToComponent={ handleStateData } />
+                          {submitForm && formValues.state.length < 1 ? <span className="form_error"> { 'State is Mandatory' }</span> : ""}
                         </div>
                       </div>
                     </div>
@@ -383,6 +420,7 @@ export const Report = () => {
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Local Government*</label>
                           <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleStateData } />
+                          {submitForm && formValues.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
                         </div>
                       </div>
                     </div>
@@ -390,7 +428,8 @@ export const Report = () => {
                   <div className="col-lg-4 col-md-4">
                     <div className="form-group">
                       <label className="form-label" htmlFor="input-2">Address *</label>
-                      <Places />
+                      <Places dataToComponent={handlePlacesData}/>
+                      {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
                     </div>
                   </div>
                     
@@ -460,14 +499,11 @@ export const Report = () => {
 
 
                     {
-                      /*  disableForm() ? (
-                          <DisabledButton title={'Submit Report '} className={'submit btn btn-send-message'}/>
-                        ) : !loading ? ( */
-                        
+                      !loading ? (
                           <SubmitButton onClick={ handleSubmit } title={'Submit Report'} className={'submit btn btn-send-message'}/>
-                      /*  ) : (
+                      ) : (
                           <LoadingButton />
-                        ) */
+                      ) 
                     }
 
                 
