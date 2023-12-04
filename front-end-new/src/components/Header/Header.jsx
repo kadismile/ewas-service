@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { store } from '../../redux/store';
 import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
@@ -16,6 +17,12 @@ export const Header = () => {
     dispatch( resetUser());
     window.location.replace("/");
   }
+
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuVisible(menuVisible => !menuVisible);
+  };
 
   return (
     <>
@@ -46,11 +53,14 @@ export const Header = () => {
                   </li>
                 </ul>
               </nav>
-              <div className="burger-icon burger-icon-white">
+
+              {/* TOggle Menu Visibilty */}
+              {!menuVisible && <div className="burger-icon burger-icon-white" onClick={toggleMenu}>
                 <span className="burger-icon-top" />
                 <span className="burger-icon-mid" />
                 <span className="burger-icon-bottom" />
-              </div>
+              </div>}
+
             </div>
             <div className="header-right">
               {
@@ -69,16 +79,16 @@ export const Header = () => {
         </div>
       </header>
 
-      <div className="mobile-header-active mobile-header-wrapper-style perfect-scrollbar">
+      <div className={`mobile-header-active mobile-header-wrapper-style perfect-scrollbar ${ menuVisible ? 'sidebar-visible' : ''}`}>
         <div className="mobile-header-wrapper-inner">
           <div className="mobile-header-content-area">
             <div className="perfect-scroll">
-              <div className="mobile-search mobile-header-border mb-30">
-                <form action="#">
-                  <input type="text" placeholder="Search…" />
-                  <i className="fi-rr-search" />
-                </form>
-              </div>
+            { menuVisible &&
+                <div class="burger-icon burger-icon-white burger-close" onClick={toggleMenu}>
+                <span class="burger-icon-top"></span>
+                <span class="burger-icon-mid"></span>
+                <span class="burger-icon-bottom"></span>
+              </div> }
               <div className="mobile-menu-wrap mobile-header-border">
                 {/* mobile menu start*/}
                 <nav>
@@ -90,36 +100,30 @@ export const Header = () => {
                     <Link to="/about">About Us</Link>
                     </li>
                     <li>
-                      <Link to="/articles">Articles</Link>
+                      <Link to="/report">Report</Link>
                     </li>
                     <li>
-                    <Link to="/contact">Contact Us</Link>
+                      <Link to="/login">Login</Link>
                     </li>
                   </ul>
                 </nav>
               </div>
-              <div className="mobile-account">
-                <h6 className="mb-10">Your Account</h6>
+
+              { fullName &&
+                <div className="mobile-account">
+                <h6 className="mb-10">Your Account { fullName }</h6>
                 <ul className="mobile-menu font-heading">
                   <li>
-                    <a href="#">Profile</a>
+                    <Link className="text-link-bd-btom hover-up" to='/' onClick={logOut}> { 'logout' } </Link>
                   </li>
-                  <li>
-                    <a href="#">Work Preferences</a>
-                  </li>
-                  <li>
-                    <a href="#">Account Settings</a>
-                  </li>
-                  <li>
-                    <a href="#">Go Pro</a>
-                  </li>
-                  <li>
-                    <a href="page-signin.html">Sign Out</a>
-                  </li>
+                  
                 </ul>
-              </div>
+                </div>
+              }
+
+          
               <div className="site-copyright">
-                Copyright {new Date().getFullYear()} © JobBox. <br />
+                Copyright {new Date().getFullYear()} © EWERS. <br />
               </div>
             </div>
           </div>
