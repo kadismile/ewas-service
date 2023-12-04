@@ -1,11 +1,10 @@
 import { reportService } from '../services/reporterService.js'
 import { useState } from "react";
-import { useAppSelector } from "../redux/store.js";
 import toastr from 'toastr'
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/user-slice.js";
 import { store } from '../redux/store';
-
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
 import Places from '../components/Map/Places.jsx';
@@ -14,11 +13,9 @@ import Places from '../components/Map/Places.jsx';
 
 export const Register = () => {
   let user = store?.getState()?.user?.user
-  if (user) {
-    user = user.user
-  }
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { address } = user || {}
+  const { mapAddress } = user || {}
 
   const formFields = {
     email: "",
@@ -54,7 +51,7 @@ export const Register = () => {
     if (!isError && !submitForm) {
       return false;
     }
-    if (!address?.fullAddress) {
+    if (!mapAddress?.fullAddress) {
       return true
     }
   };
@@ -133,8 +130,9 @@ export const Register = () => {
     event.preventDefault();
     setLoading(true);
     const { email, password, fullName, phoneNumber } = formValues;
+    const address = mapAddress
     const response = await reportService.registerReporter({
-      email,fullName,password,phoneNumber,address,
+      email,fullName,password,phoneNumber, address,
     })
     const { status, message, token, data } = response
     if (status === 'failed') {
@@ -144,7 +142,7 @@ export const Register = () => {
       toastr.success('Registration Successful');
       setTimeout(() => setLoading(false), 1000)
       dispatch(setUser({ user: data, token }))
-      window.location.replace("/");
+      navigate('/');
     }
   };
 

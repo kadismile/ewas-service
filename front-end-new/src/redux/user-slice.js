@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: undefined,
+    user: {},
   },
   reducers: {
     setUser(state, action) {
@@ -21,7 +21,7 @@ export const userSlice = createSlice({
     },
     setAddress(state, action) {
       state.user.mapAddress = {
-        ...state?.user.mapAddress,
+        ...state?.user?.mapAddress,
         ...action.payload
       };
     }, 

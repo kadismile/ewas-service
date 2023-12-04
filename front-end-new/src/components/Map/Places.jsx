@@ -84,7 +84,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
       countryCode: short_name,
       latitude: lat,
       longitude:lng,
-      userTypedAddress: value
+      //userTypedAddress: value
     };
 
     setSelected(formAddress);
