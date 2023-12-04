@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { store } from '../../redux/store';
 import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
@@ -101,12 +101,27 @@ export const Header = () => {
                   </li>
 
                     <li>
-                    <Link to="/about">About Us</Link>
+                      <Link to="/about">About Us</Link>
                     </li>
-                    
                     <li>
-                      <Link to="/login">Login</Link>
+                      <Link to="/contact">Contact Us</Link>
                     </li>
+                    {
+                      !fullName ? 
+                      <>
+                        <li>
+                          <Link to="/login">Login</Link>
+                        </li> 
+                        <li>
+                          <Link to="/register">Register</Link>
+                        </li>
+                      </>
+                        :
+                    <li>
+                      <Link to="/logout" to='/' onClick={logOut}>logout</Link>
+                    </li> 
+                    }
+                    
                   </ul>
                 </nav>
               </div>

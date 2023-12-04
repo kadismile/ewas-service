@@ -169,8 +169,8 @@ return (
                   }
                 </div>
 
-                <div className="text-muted text-center">Already have an account? 
-                  <Link to="/login">Sign in</Link>
+                <div className="text-muted text-center"> don't have an account? Register?  
+                  <Link to="/register"> Sign Up</Link>
                 </div>
               </form>
             </div>

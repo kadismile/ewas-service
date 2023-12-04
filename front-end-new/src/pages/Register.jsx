@@ -249,7 +249,7 @@ const { errors} = formValues
                   }
                   </div>
                   <div className="text-muted text-center">Already have an account? 
-                    <Link to="/login">Sign in</Link>
+                    <Link to="/login">Login in</Link>
                   </div>
                 </form>
               </div>
