@@ -116,10 +116,7 @@ export const reportType = async (req, res) => {
       data: reportType
     });
   }
-  const { error } = agency_validation.validate(body);
-  if (error) {
-    return res.status(400).json({ error: error.details[0].message });
-  }
+  
   try {
     const reportType = new ReportType(body);
     await reportType.save();
@@ -141,22 +138,13 @@ export const createReport = async (req, res) => {
   const body = req.body
   let newAddress = JSON.parse(body.address)
   delete body.address
-  body.address = newAddress
-  const { reporterId } = body;
+  body.address = newAddress;
 
   try {
-    /* const { error } = create_report_validation.validate(body);
+    const { error } = create_report_validation.validate(body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-    } */
-
-  let reporter
-  if (reporterId && reporterId !== 'anonymous') {
-    reporter = await Reporter.findById(reporterId)
-    if (!reporter) {
-      res.status(401).json({ error: "No reporter found"});
     }
-  }
 
   const report = new Report(body);
   await report.save();
@@ -170,7 +158,7 @@ export const createReport = async (req, res) => {
         await manageFileUpload(path, filename, report)
       }
     }
-    return res.status(201).json({
+    res.status(201).json({
       status: 'success',
       data: report
     });
@@ -420,8 +408,6 @@ export const getDraftReport = async (req, res) => {
     .populate('userId')
     .populate('actionableUsers.currentUser')
     .populate('actionableUsers.currentDepartment');
-
-    console.log('draftReport ==========>>>>>', reportId)
 
     res.status(200).json({
       status: "success",

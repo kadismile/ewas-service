@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { setAddress } from "../../redux/user-slice";
 
 
-export default function Places() {
+export default function Places({ dataToComponent }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
@@ -25,16 +25,21 @@ export default function Places() {
     }
   });
 
+  const handleRecievedData = (data) => {
+    dataToComponent(data)
+  }
+
   if (!isLoaded) return <div>Loading...</div>;
-  return <Map />;
+  return <Map dataToplaces={handleRecievedData}/>;
 }
 
-function Map() {
+function Map({dataToplaces}) {
   const center = useMemo(() => ({ lat: 43.45, lng: -80.49 }), []);
   const [selected, setSelected] = useState(undefined); 
   const dispatch = useDispatch();
   useEffect(() => {
     if (selected) {
+      dataToplaces(selected)
       dispatch(setAddress(selected))
     }
   }, [selected])
@@ -84,7 +89,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
       countryCode: short_name,
       latitude: lat,
       longitude:lng,
-      //userTypedAddress: value
+      userTypedAddress: value
     };
 
     setSelected(formAddress);
