@@ -15,6 +15,7 @@ import LGADropDown from "../components/DropDown/LGADropDown";
 import { TimeDropDown, TimePicker } from "../components/elements/TimePicker";
 import InformationSource from "../components/DropDown/InformationSource";
 import { useNavigate } from 'react-router-dom';
+import { PageLoader } from '../components/elements/spinners';
 
 
 export const Report = () => {
@@ -44,6 +45,10 @@ export const Report = () => {
     userTypedAddress: ''
   };
 
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 500)
+  })
+
   const calendarData = (calData) => {
     const errors = formValues.errors;
     setFormValues((prevState) => {
@@ -64,7 +69,7 @@ export const Report = () => {
     ...formFields,
     errors: formFields,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleDataFromDropDown = (data) => {
     const { value } = data
@@ -306,217 +311,226 @@ export const Report = () => {
 
   return (
     <>
-      <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
-      <main className="main">
-        <section className="section-box">
-          <div className="breacrumb-cover bg-img-about">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-6">
-                  <h2 className="mb-10">Report</h2>
-                  <p className="font-lg color-text-paragraph-2">
-                    Get the latest news, updates and tips
-                  </p>
+    <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
+    {
+        loading ? <PageLoader /> : 
+        <main className="main">
+          <section className="section-box">
+            <div className="breacrumb-cover bg-img-about">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-6">
+                    <h2 className="mb-10">Report</h2>
+                    <p className="font-lg color-text-paragraph-2">
+                      Get the latest news, updates and tips
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      
-        <section className="section-box mt-70">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-12 mb-40">
-                <h2 className="mt-5 mb-10">Report An Incident</h2>
-                <p className="font-md color-text-paragraph-2">
-                  The fields marked as * are important filelds
-                  <br className="d-none d-lg-block" /> kindly fill all as accurate as possible
-                </p>
-                <form
-                  className="contact-form-style mt-30"
-                  id="contact-form"
-                  action="#"
-                  method="post"
-                >
-                  <div
-                    className="row wow animate__ animate__fadeInUp animated"
-                    data-wow-delay=".1s"
-                    style={{
-                      visibility: "visible",
-                      animationDelay: "0.1s",
-                      animationName: "fadeInUp",
-                    }}
+          </section>
+        
+          <section className="section-box mt-70">
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-12 mb-40">
+                  <h2 className="mt-5 mb-10">Report An Incident</h2>
+                  <p className="font-md color-text-paragraph-2">
+                    The fields marked as * are important filelds
+                    <br className="d-none d-lg-block" /> kindly fill all as accurate as possible
+                  </p>
+                  <form
+                    className="contact-form-style mt-30"
+                    id="contact-form"
+                    action="#"
+                    method="post"
                   >
-
-                    <div className="col-lg-12 col-md-12">
-                      <div className="textarea-style mb-30">
-                      <label className="form-label" htmlFor="input-2">Describe the incident and number of casualty *</label>
-                        <textarea
-                          className="font-sm color-text-paragraph-2"
-                          name="description"
-                          placeholder="Describe the incident and number of casualty"
-                          value={formValues.description}
-                          onChange={handleChange}
-                        />
-                        {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
+                    <div
+                      className="row wow animate__ animate__fadeInUp animated"
+                      data-wow-delay=".1s"
+                      style={{
+                        visibility: "visible",
+                        animationDelay: "0.1s",
+                        animationName: "fadeInUp",
+                      }}
+                    >
+  
+                      <div className="col-lg-12 col-md-12">
+                        <div className="textarea-style mb-30">
+                        <label className="form-label" htmlFor="input-2">Describe the incident and number of casualty *</label>
+                          <textarea
+                            className="font-sm color-text-paragraph-2"
+                            name="description"
+                            placeholder="Describe the incident and number of casualty"
+                            value={formValues.description}
+                            onChange={handleChange}
+                          />
+                          {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="col-lg-12 col-md-12">
-                      <div className="form-group mb-30">
-                        <div class="box-upload">
-                        <label className="form-label" htmlFor="input-2">Upload photo/video </label>
-                          <div className="add-file-upload">
-                            <input className="fileupload" type="file" name="fileUpload" multiple="multiple" onChange={onFileChange}/>
+  
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group mb-30">
+                          <div class="box-upload">
+                          <label className="form-label" htmlFor="input-2">Upload photo/video </label>
+                            <div className="add-file-upload">
+                              <input className="fileupload" type="file" name="fileUpload" multiple="multiple" onChange={onFileChange}/>
+                            </div>
+                          </div>
+                      
+                          </div>
+                      </div>
+  
+  
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Date of Incident *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="date"
+                            value={formValues.date}
+                            placeholder="Date of incidence"
+                            type="text"
+                            onClick={handleClick}
+                          />
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
+                        <TimeDropDown timeChange={handleTimeInput}/>
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-4 col-md-3">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Type of Incident *</label>
+                          <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
+                          {submitForm && formValues.reportTypeId.length < 1 ? <span className="form_error"> { 'Type of Incident is Mandatory' }</span> : ""}
+                        </div>
+                      
+                      </div>
+                    
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                          <div className="input-style mb-20">
+                          <label className="form-label" htmlFor="input-2">State*</label>
+                            <StateDropDown label={'State'} dataToComponent={ handleStateData } />
+                            {submitForm && formValues.state.length < 1 ? <span className="form_error"> { 'State is Mandatory' }</span> : ""}
                           </div>
                         </div>
-                    
-                        </div>
-                    </div>
-
-
-                    <div className="col-lg-4 col-md-4">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Date of Incident *</label>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="date"
-                          value={formValues.date}
-                          placeholder="Date of incidence"
-                          type="text"
-                          onClick={handleClick}
-                        />
                       </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-4">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
-                      <TimeDropDown timeChange={handleTimeInput}/>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-3">
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Type of Incident *</label>
-                        <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
-                        {submitForm && formValues.reportTypeId.length < 1 ? <span className="form_error"> { 'Type of Incident is Mandatory' }</span> : ""}
-                      </div>
-                    
-                    </div>
-                  
-                    <div className="col-lg-4 col-md-4">
-                      <div className="input-style mb-20">
+  
+                      <div className="col-lg-4 col-md-4">
                         <div className="input-style mb-20">
-                        <label className="form-label" htmlFor="input-2">State*</label>
-                          <StateDropDown label={'State'} dataToComponent={ handleStateData } />
-                          {submitForm && formValues.state.length < 1 ? <span className="form_error"> { 'State is Mandatory' }</span> : ""}
+                          <div className="input-style mb-20">
+                          <label className="form-label" htmlFor="input-2">Local Government*</label>
+                            <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleStateData } />
+                            {submitForm && formValues.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
+                          </div>
                         </div>
                       </div>
-                    </div>
-
+  
                     <div className="col-lg-4 col-md-4">
-                      <div className="input-style mb-20">
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="input-2">Address *</label>
+                        <Places dataToComponent={handlePlacesData}/>
+                        {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                      </div>
+                    </div>
+                      
+  
+                      <div className={formCol}>
                         <div className="input-style mb-20">
-                        <label className="form-label" htmlFor="input-2">Local Government*</label>
-                          <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleStateData } />
-                          {submitForm && formValues.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
+                        <label className="form-label" htmlFor="input-2">Has there been any response yet? </label>
+                        <BooleanDropDown label={'Intervention'} dataToComponent={ handleDropDownData }/>
                         </div>
                       </div>
-                    </div>
-
-                  <div className="col-lg-4 col-md-4">
-                    <div className="form-group">
-                      <label className="form-label" htmlFor="input-2">Address *</label>
-                      <Places dataToComponent={handlePlacesData}/>
-                      {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
-                    </div>
-                  </div>
-                    
-
-                    <div className={formCol}>
-                      <div className="input-style mb-20">
-                      <label className="form-label" htmlFor="input-2">Has there been any response yet? </label>
-                      <BooleanDropDown label={'Intervention'} dataToComponent={ handleDropDownData }/>
-                      </div>
-                    </div>
-
-                    {
-                      formValues.intervention === 'Yes' ? 
-                      <>
+  
+                      {
+                        formValues.intervention === 'Yes' ? 
+                        <>
+                          <div className={formCol}>
+                              <div className="input-style mb-20">
+                              <label className="form-label" htmlFor="input-2">Security Agency intervention </label>
+                              <DropDown label={'Agency'} dataToComponent={ handleDropDownData } />
+                            </div>
+                          </div> 
+  
                         <div className={formCol}>
-                            <div className="input-style mb-20">
-                            <label className="form-label" htmlFor="input-2">Security Agency intervention </label>
-                            <DropDown label={'Agency'} dataToComponent={ handleDropDownData } />
+                          <div className="">
+                          <label className="form-label" htmlFor="input-2">Has it been Resolved?</label>
+                            <BooleanDropDown label={'Resolved'} dataToComponent={ handleDropDownData }/>
                           </div>
-                        </div> 
-
+                        </div>
+                        </>
+                        : ""
+                      }
+  
                       <div className={formCol}>
                         <div className="">
-                        <label className="form-label" htmlFor="input-2">Has it been Resolved?</label>
-                          <BooleanDropDown label={'Resolved'} dataToComponent={ handleDropDownData }/>
+                        <label className="form-label" htmlFor="input-2">Has it happened before?</label>
+                          <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
                         </div>
                       </div>
-                      </>
-                      : ""
-                    }
-
-                    <div className={formCol}>
-                      <div className="">
-                      <label className="form-label" htmlFor="input-2">Has it happened before?</label>
-                        <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
-                      </div>
-                    </div>
-
-                    <div className={formCol}>
-                      <div className="">
-                      <label className="form-label" htmlFor="input-2">Source of Information</label>
-                        <InformationSource label={'Source of Information'} dataToComponent={ handleDropDownData }/>
-                      </div>
-                    </div>
-
-                    {
-                      displayMediaLink ?
+  
+                      <br/>
+                      <br/>
+                      <br/>
+                      <br/>
+                     
+                    
                       <div className={formCol}>
-                      <div className="">
-                      <label className="form-label" htmlFor="input-2">Website Link</label>
-                      <input
-                          className="font-sm color-text-paragraph-2"
-                          name="mediaLinks"
-                          value={formValues.mediaLinks}
-                          placeholder="Website Link"
-                          type="text"
-                          onChange={handleChange}
-                        />
+                        <div className="">
+                        <label className="form-label" htmlFor="input-2">Source of Information</label>
+                          <InformationSource label={'Source of Information'} dataToComponent={ handleDropDownData }/>
+                        </div>
                       </div>
-                    </div> : ""
-                    }
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-
-
-                    {
-                      !loading ? (
-                          <SubmitButton onClick={ handleSubmit } title={'Submit Report'} className={'submit btn btn-send-message'}/>
-                      ) : (
-                          <LoadingButton />
-                      ) 
-                    }
-
+  
+                      {
+                        displayMediaLink ?
+                        <div className={formCol}>
+                        <div className="">
+                        <label className="form-label" htmlFor="input-2">Website Link</label>
+                        <input
+                            className="font-sm color-text-paragraph-2"
+                            name="mediaLinks"
+                            value={formValues.mediaLinks}
+                            placeholder="Website Link"
+                            type="text"
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </div> : ""
+                      }
+                      <br/>
+                      <br/>
+                      <br/>
+                      <br/>
+                      <br/>
+  
+  
+                      {
+                        !loading ? (
+                            <SubmitButton onClick={ handleSubmit } title={'Submit Report'} className={'submit btn btn-send-message'}/>
+                        ) : (
+                            <LoadingButton />
+                        ) 
+                      }
+  
+                  
+                    </div>
+                  </form>
+                  <p className="form-messege" />
+                </div>
                 
-                  </div>
-                </form>
-                <p className="form-messege" />
               </div>
-              
             </div>
-          </div>
-        </section>
-
-      </main>
+          </section>
+  
+        </main>
+    }
     </>
   );
 }

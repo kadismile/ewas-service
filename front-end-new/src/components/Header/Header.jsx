@@ -40,7 +40,7 @@ export const Header = () => {
               <nav className="nav-main-menu">
                 <ul className="main-menu">
                   <li>
-                    <Link className="active" to="/">Home</Link>
+                    <Link className="" to="/">Home</Link>
                   </li>
                   <li>
                     <Link to="/about">About Us</Link>
@@ -94,14 +94,16 @@ export const Header = () => {
                 <nav>
                   <ul className="mobile-menu font-heading">
                   <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/" onClick={ () => setMenuVisible(false)} >Home</Link>
                   </li>
+                  <li>
+                      <Link to="/report" onClick={ () => setMenuVisible(false)} >Report</Link>
+                  </li>
+
                     <li>
                     <Link to="/about">About Us</Link>
                     </li>
-                    <li>
-                      <Link to="/report">Report</Link>
-                    </li>
+                    
                     <li>
                       <Link to="/login">Login</Link>
                     </li>

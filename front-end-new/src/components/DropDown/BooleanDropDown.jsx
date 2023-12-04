@@ -32,6 +32,7 @@ export default function BooleanDropDown ({ label, dataToComponent }) {
   
   return (
     <Select
+        isSearchable={ false }
         styles={customStyles}
         defaultValue={{ label, value: selectedOption }}
         onChange={ handleClick }

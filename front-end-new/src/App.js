@@ -5,7 +5,7 @@ import { Footer } from "./components/Footer/Footer";
 import { Report } from "./pages/Report";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
-
+import '@fortawesome/fontawesome-free/css/all.min.css'; 
 
 export const App = () => {
   const routes = useRoutes([

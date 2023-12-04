@@ -44,11 +44,12 @@ export default function StateDropDown ({ label, dataToComponent }) {
   
   return (
     <Select
-        styles={customStyles}
-        defaultValue={{ label, value: selectedOption }}
-        onChange={ handleClick }
-        options={ options() }
-        className={'select-react'}
+      isSearchable={ false }
+      styles={customStyles}
+      defaultValue={{ label, value: selectedOption }}
+      onChange={ handleClick }
+      options={ options() }
+      className={'select-react'}
     />
   );
 };

@@ -1,13 +1,13 @@
 import { reportService } from '../services/reporterService.js'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toastr from 'toastr'
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/user-slice.js";
 import { store } from '../redux/store';
-import { useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from 'react-router-dom';
 import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
 import Places from '../components/Map/Places.jsx';
+import { PageLoader } from '../components/elements/spinners.jsx';
 
 
 
@@ -29,7 +29,7 @@ export const Register = () => {
     ...formFields,
     errors: formFields,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const disableForm = () => {
     const newValues = { ...formValues };
@@ -147,10 +147,16 @@ export const Register = () => {
     }
   };
 
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 500)
+  })
+
 const { errors} = formValues
 
   return (
-    <main className="main">
+    <>
+    { loading ? <PageLoader /> :
+      <main className="main">
         <section className="pt-100 login-register">
           <div className="container"> 
             <div className="row login-register-cover">
@@ -253,5 +259,9 @@ const { errors} = formValues
           </div>
         </section>
       </main>
-  )
+    }
+      
+    </>
+
+    )
 }

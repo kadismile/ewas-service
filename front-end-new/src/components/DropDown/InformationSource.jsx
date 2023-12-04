@@ -35,6 +35,7 @@ export default function InformationSource ({ label, dataToComponent }) {
   
   return (
     <Select
+        isSearchable={ false }
         styles={customStyles}
         defaultValue={{ label, value: selectedOption }}
         onChange={ handleClick }
