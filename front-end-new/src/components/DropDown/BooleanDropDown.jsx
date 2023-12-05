@@ -12,8 +12,8 @@ export default function BooleanDropDown ({ label, dataToComponent }) {
   }
 
   const options = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
+    { value: true, label: 'Yes' },
+    { value: false, label: 'No' },
   ];
 
   const customStyles = {

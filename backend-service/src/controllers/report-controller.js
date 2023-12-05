@@ -141,10 +141,10 @@ export const createReport = async (req, res) => {
   body.address = newAddress;
 
   try {
-    const { error } = create_report_validation.validate(body);
+   /*  const { error } = create_report_validation.validate(body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-    }
+    } */
 
   const report = new Report(body);
   await report.save();
