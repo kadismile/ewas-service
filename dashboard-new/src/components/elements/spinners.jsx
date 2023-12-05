@@ -24,7 +24,6 @@ export const PageLoader = () => {
     <div className='spinner'>
       <img src='/images/loader.gif' alt='' width={'20%'}/>
     </div>
-       
     </>
   )
 }

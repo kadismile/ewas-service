@@ -57,6 +57,18 @@ export const crudService =  {
     }
   },
 
+  addAgency: async (data) => {
+    try {
+      const url = `${serverUrl}/agency`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Add Department");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
   getAgency: async () => {
     try {
       const url = `${serverUrl}/agency`

@@ -105,7 +105,7 @@ export const EditDeptModal = (props) => {
   };
 
   const handleSubmit = async (event) => {
-    props.onHide()
+    props.onHide({editDept: true})
     event.preventDefault();
     setLoading(true);
     const { name, acronym } = formValues;
@@ -121,7 +121,7 @@ export const EditDeptModal = (props) => {
     } else {
       toastr.success('Login Successfully');
       setTimeout(() => setLoading(false), 1000)
-      props.onHide()
+      props.onHide({editDept: true})
     }
   };
 
@@ -130,7 +130,7 @@ export const EditDeptModal = (props) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       show={props.show}
-      onHide={props.onHide}
+      onHide={() => props.onHide({editDept: true})}
     >
       <Modal.Header closeButton>
         

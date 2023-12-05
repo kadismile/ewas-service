@@ -94,7 +94,7 @@ export const EditAgencyModal = (props) => {
   };
 
   const handleSubmit = async (event) => {
-    props.onHide()
+    props.onHide({editAgency: true})
     event.preventDefault();
     setLoading(true);
     const { name, acronym } = formValues;
@@ -110,7 +110,7 @@ export const EditAgencyModal = (props) => {
     } else {
       toastr.success('Login Successfully');
       setTimeout(() => setLoading(false), 1000)
-      props.onHide()
+      props.onHide({editAgency: true})
     }
   };
 
@@ -119,7 +119,7 @@ export const EditAgencyModal = (props) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       show={props.show}
-      onHide={props.onHide}
+      onHide={() => props.onHide({editAgency: true})}
     >
       <Modal.Header closeButton>
         

@@ -14,9 +14,10 @@
   width: 170%;
 } */
 
-.form_error {
+.form_errors {
   color: red;
-  margin-left: 7px;
+  font-size: 12px;
+  margin-left: 5px;
 }
 
 .spinner {
