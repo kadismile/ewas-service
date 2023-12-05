@@ -292,9 +292,7 @@ export const Report = () => {
     form.append("fileUpload", fileUpload);
 
     const response = await reportService.createReports(form)
-    const { status, message, token, data } = response
-
-    console.log('Intervention ------------->>>>>> ', intervention)
+    const { status, message} = response
 
     if (status === 'failed') {
       toastr.error(message);
@@ -302,9 +300,7 @@ export const Report = () => {
     } else {
       toastr.success('Report Submitted Successfully');
       setTimeout(() => setLoading(false), 1000)
-      dispatch(setUser({ user: data, token }))
-      setTimeout(() => navigate('/'), 1000)
-      
+      navigate('/')
     }
   };
 
