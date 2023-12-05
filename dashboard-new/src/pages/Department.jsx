@@ -14,9 +14,8 @@ export const Department = (props) => {
   const [newData, setNewData] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  
 
-  let notifier = new AWN();
+  const notifier = new AWN();
 
   const fetchData = () => {
     crudService.getDepts().then((res) => {
@@ -40,9 +39,15 @@ export const Department = (props) => {
     setShowAddModal(true)
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setShowAddModal(false)
+  const handleCloseModal = (data) => {
+    if (data?.addDept) {
+      setShowAddModal(false);
+      fetchData();
+    }
+    if (data?.editDept) {
+      setShowModal(false);
+      fetchData();
+    }
     setNewData(!newData)
   };
 
@@ -52,7 +57,7 @@ export const Department = (props) => {
       const {status, message} = response
       if (status === 'success')
       toastr.success(message);
-      setNewData(true)
+      fetchData();
     };
     let onCancel = () => {
       return;
@@ -80,9 +85,9 @@ export const Department = (props) => {
   return (
     <>
       <EditDeptModal show={showModal} onHide={handleCloseModal} data={editData} />
-      <AddDeptModal show={showAddModal} onHide={handleCloseModal} data={editData} />
+      <AddDeptModal show={showAddModal} onHide={handleCloseModal} />
       
-      { 
+      {
         loading? <PageLoader /> :
         <div className="box-content">
           <div className="box-heading">

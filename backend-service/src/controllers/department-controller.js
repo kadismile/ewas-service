@@ -14,6 +14,7 @@ export const departmentResource = async (req, res) => {
   }
 
   if (req.method == 'POST') {
+    console.log("Body --------->>>>> ", body)
     const { error } = department_validation.validate(body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });

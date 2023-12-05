@@ -42,10 +42,16 @@ export const Agency = (props) => {
     setShowAddModal(true)
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setShowAddModal(false)
-    setNewData(!newData)
+  const handleCloseModal = (data) => {
+    if (data.addAgency) {
+      setShowAddModal(false)
+      fetchData()
+    }
+
+    if (data.editAgency) {
+      setShowModal(false);
+      fetchData()
+    }
   };
 
   const deleteBundle = (data) => {
@@ -54,14 +60,14 @@ export const Agency = (props) => {
       const {status, message} = response
       if (status === 'success')
       toastr.success(message);
-      setNewData(true)
+      fetchData()
     };
     let onCancel = () => {
       return;
     };
     notifier.confirm("Are you sure?", onOk, onCancel, {
       labels: {
-        confirm: `Delete ${data.acronym}`,
+        confirm: `Delete ${data?.name}`,
       },
     });
   }
@@ -84,7 +90,7 @@ export const Agency = (props) => {
   return (
     <>
       <EditAgencyModal show={showModal} onHide={handleCloseModal} data={editData} />
-      <AddAgencyModal show={showAddModal} onHide={handleCloseModal} data={editData} />
+      <AddAgencyModal show={showAddModal} onHide={handleCloseModal} />
       
       { 
         loading? <PageLoader /> :<div className="box-content">
