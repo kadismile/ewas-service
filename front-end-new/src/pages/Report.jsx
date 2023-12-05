@@ -235,8 +235,8 @@ export const Report = () => {
   }
 
   const handleSubmit = async (event) => {
-    setSubmitForm(true)
     event.preventDefault();
+    setSubmitForm(true)
     setLoading(true);
     let {
       title,
@@ -274,8 +274,6 @@ export const Report = () => {
       setLoading(false);
       return 
     }
-    
-
 
     const form = new FormData();
     form.append('title', title);
@@ -295,6 +293,8 @@ export const Report = () => {
 
     const response = await reportService.createReports(form)
     const { status, message, token, data } = response
+
+    console.log('Intervention ------------->>>>>> ', intervention)
 
     if (status === 'failed') {
       toastr.error(message);
@@ -449,7 +449,7 @@ export const Report = () => {
                       </div>
   
                       {
-                        formValues.intervention === 'Yes' ? 
+                        formValues?.intervention === true ? 
                         <>
                           <div className={formCol}>
                               <div className="input-style mb-20">
