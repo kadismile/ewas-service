@@ -1,7 +1,5 @@
 
 import { Modal } from 'react-bootstrap';
-import { useDispatch } from "react-redux";
-import { setReport } from "../../redux/user-slice.js";
 import { store } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,13 +10,6 @@ export default function ReportDialogModal(props) {
   let user = store?.getState()?.user?.user
   if (user) {
     user = user.user
-  }
-
-  const dispatch = useDispatch();
-
-  const report = (type) => {
-    dispatch(setReport(type))
-    return navigate('/report');
   }
 
   const handleClick = () => {
@@ -38,7 +29,7 @@ export default function ReportDialogModal(props) {
       </Modal.Header>
       <Modal.Body>
       <div className={styles.container}>
-        <button className={styles.left_button} onClick={()=> report('anonymously')}>Anonymously</button>
+        <button className={styles.left_button} onClick={()=> navigate('/report')}>Anonymously</button>
         <button className={styles.right_button} onClick={handleClick}>Openly</button>
     </div>
       </Modal.Body>
