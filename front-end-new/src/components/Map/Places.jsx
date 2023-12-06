@@ -82,7 +82,6 @@ const PlacesAutocomplete = ({ setSelected }) => {
     const { long_name, short_name } = countryData;
     const latLng = getLatLng(results[0]);
     const {lat, lng } = latLng;
-    console.log('-------------........>>>', lat , lng)
 
     const formAddress = {
       country: long_name,

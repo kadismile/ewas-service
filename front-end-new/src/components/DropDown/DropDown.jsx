@@ -34,7 +34,7 @@ export default function DropDown ({ label, dataToComponent }) {
     input: (provided) => ({
       ...provided,
       width: 100,
-      height: 38,
+      height: 50,
       display: 'flex',
       alignItems: 'center',
     }),
