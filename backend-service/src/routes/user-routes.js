@@ -13,6 +13,8 @@ import {
   sendResetPassEmail,
   addPermissions,
   addUserPermissions,
+  inviteUser,
+  getInvitation
 } from '../controllers/user-controller.js'
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js'
 
@@ -27,6 +29,8 @@ router.post('/user/suspend', protectedRoute, authorize(['superAdmin']), suspendU
 router.post('/send-reset-password-email', sendResetPassEmail)
 router.post('/verify-passwordToken', verifyPassToken)
 router.post('/reset-password', resetPassword)
+router.post('/invite', inviteUser)
+router.get('/invitationalId', getInvitation)
 
 router.post('/add-user-permissions', protectedRoute, addUserPermissions)
 router.post('/add-system-permissions', protectedRoute, addPermissions)

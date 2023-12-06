@@ -36,7 +36,7 @@ export default function Places({ dataToComponent }) {
 }
 
 function Map({dataToplaces}) {
-  const center = useMemo(() => ({ lat: 43.45, lng: -80.49 }), []);
+  const center = useMemo(() => ({ lat: parseFloat(43.45), lng: parseFloat(-80.49) }), []);
   const [selected, setSelected] = useState(undefined); 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -82,6 +82,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
     const { long_name, short_name } = countryData;
     const latLng = getLatLng(results[0]);
     const {lat, lng } = latLng;
+    console.log('-------------........>>>', lat , lng)
 
     const formAddress = {
       country: long_name,

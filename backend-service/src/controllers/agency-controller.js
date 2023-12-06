@@ -29,6 +29,37 @@ export const agencyResource = async (req, res) => {
     }
   }
 
+  if (req.method == 'PATCH') {
+    const { _id } = req.body
+    delete req.body._id
+    const agency = await Agency.find({_id})
+    if (agency) {
+      await Agency.findByIdAndUpdate({ _id }, req.body);
+      return res.status(200).json({
+        status: 'success',
+        message: 'Agency Updated'
+      });
+    }
+  }
+
+  if (req.method == 'DELETE') {
+    const { _id } = req.body
+    const agency = await Agency.find({_id})
+    if (agency) {
+      await Agency.deleteOne({_id})
+      res.status(200).json({
+        status: 'success',
+        message: 'Agency Deleted'
+      });
+    } else {
+      res.status(401).json({
+        status: 'failed',
+        message: 'Cannot Deleted Department '
+      });
+    }
+    
+  }
+
   } catch (e) {
     return res.status(500).json({
       status: "error",

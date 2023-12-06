@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 export const agency_validation = Joi.object({
   name: Joi.string().required(),
-  phoneNumbers: Joi.array().required(),
+  phoneNumber: Joi.string().required(),
   email: Joi.string().required(),
 });
 

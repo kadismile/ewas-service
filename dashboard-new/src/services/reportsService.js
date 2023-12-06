@@ -1,4 +1,5 @@
 import { client} from '../utils/api-client'
+import moment from 'moment'
 
 const serverUrl = process.env.REACT_APP_API_BASE_URL ;
 
@@ -102,7 +103,6 @@ export const reportService =  {
   },
 
   getDraftReport:async (reportId) => {
-    console.log('we got here sha ========>>>>', reportId)
     if (!reportId ) 
     return {
       status: 'failed',
@@ -117,6 +117,27 @@ export const reportService =  {
       throw e
     }
   },
+
+  prepareCsvData: (data) => {
+    return data.map((csv)=> {
+      return {
+        "_id": csv.reportSlug,
+        "report-type": csv.reportTypeId.name,
+        "reporter": csv.reporterId,
+        "description": csv.description,
+        "intervention": csv.intervention,
+        "number-killed": csv.numberKilled,
+        "number-displaced": csv.numberDisplaced,
+        "informationSource": csv.informationSource,
+        "verified": csv.verified,
+        "reoccurence": csv.reoccurence,
+        "state": csv.address.state,
+        "localGovt": csv.address.localGovt,
+        "fullAddress": csv.address.fullAddress,
+        "date-created": moment(csv.createdAt).format("MMM D, YYYY")
+      }
+    })
+  }
 
   
 }

@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { crudService } from "../services/crudService";
-import { MiniSpinner } from "../components/elements/spinners";
+import { crudService } from "../services/crudService.js";
+import { MiniSpinner } from "../components/elements/spinners.jsx";
 import AWN from "awesome-notifications";
 import toastr from 'toastr'
-import { EditAgencyModal } from "../modals/EditAgencyModal";
-import { AddAgencyModal } from "../modals/AddAgencyModal";
-import { PageLoader } from "../components/elements/spinners";
-import moment from "moment";
-import { WithPermissions } from "../components/elements/WithPermissions";
+import { EditResponderModal } from "../modals/EditResponderModal.jsx";
+import { AddResponderModal } from "../modals/AddResponderModal.jsx";
+import { PageLoader } from "../components/elements/spinners.jsx";
+import { WithPermissions } from "../components/elements/WithPermissions.jsx";
 import { AGENCY_PERMISSIONS } from "../utils/permissions.js"
 
-export const Agency = (props) => {
+export const Responder = (props) => {
   const [loading, setLoading] = useState(true);
   const [data, setdata] = useState([]);
   const [editData, setEditData] = useState({});
@@ -56,7 +55,7 @@ export const Agency = (props) => {
 
   const deleteBundle = (data) => {
     let onOk = async () => {
-      const response = await crudService.getAgency(data);
+      const response = await crudService.delAgency(data);
       const {status, message} = response
       if (status === 'success')
       toastr.success(message);
@@ -78,7 +77,8 @@ export const Agency = (props) => {
       <tr key={key}>
         <td>{number++}</td>
         <td>{dep.name}</td>
-        <td>{moment(dep.createdAt).format('LL')}</td>
+        <td>{dep.email}</td>
+        <td>{dep.phoneNumber}</td>
         <WithPermissions permitedPermissions={AGENCY_PERMISSIONS}>
           <td> <a href="#/" className="paint-red" title="delete" onClick={() => deleteBundle(dep)}> <i class="fa fa-trash" aria-hidden="true"></i> </a> </td>
           <td> <a href="#/" className="paint-red" title="edit" onClick={() => handleShowModal(dep)}> <i class="fa fa-edit" aria-hidden="true"></i> </a> </td>
@@ -89,14 +89,14 @@ export const Agency = (props) => {
 
   return (
     <>
-      <EditAgencyModal show={showModal} onHide={handleCloseModal} data={editData} />
-      <AddAgencyModal show={showAddModal} onHide={handleCloseModal} />
+      <EditResponderModal show={showModal} onHide={handleCloseModal} data={editData} />
+      <AddResponderModal show={showAddModal} onHide={handleCloseModal} />
       
       { 
         loading? <PageLoader /> :<div className="box-content">
         <div className="box-heading">
           <div className="box-title">
-            <h3 className="mb-35">Agency Management</h3>
+            <h3 className="mb-35">Responder Management</h3>
           </div>
           <div className="box-breadcrumb">
             <div className="breadcrumbs">
@@ -104,7 +104,7 @@ export const Agency = (props) => {
                 <li>
                   {" "}
                   <a className="icon-home" href="index.html">
-                  Agency 
+                  Responder 
                   </a> 
                 </li>
                 <li>
@@ -122,7 +122,7 @@ export const Agency = (props) => {
               <div className="container">
                 <div className="panel-white">
                   <div className="panel-head">
-                    <h5>Agency</h5>
+                    <h5>Responder</h5>
                     <a className="menudrop" id="dropdownMenu2" type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -145,7 +145,8 @@ export const Agency = (props) => {
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Created</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
                             <WithPermissions permitedPermissions={AGENCY_PERMISSIONS}>
                               <th scope="col"></th>
                               <th scope="col"></th>

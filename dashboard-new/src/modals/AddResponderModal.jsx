@@ -4,11 +4,11 @@ import toastr from 'toastr';
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons"
 import { crudService } from '../services/crudService';
 import '../styles/custom.css';
-export const AddAgencyModal = (props) => {
+export const AddResponderModal = (props) => {
   const formFields = {
     name: '',
     email: '',
-    phoneNumbers: '',
+    phoneNumber: '',
   };
 
   const [submitForm, setSubmitForm] = useState(false);
@@ -21,14 +21,14 @@ export const AddAgencyModal = (props) => {
   const [loading, setLoading] = useState(false);
 
   const failedValidation = () => {
-    const { email, name, phoneNumbers } = formValues
+    const { email, name, phoneNumber } = formValues
     if (name.length < 3) {
       return true
     }
     if (email.length < 3) {
       return true
     }
-    if (phoneNumbers.length < 10) {
+    if (phoneNumber.length < 10) {
       return true
     }
 
@@ -36,15 +36,15 @@ export const AddAgencyModal = (props) => {
   }
 
   const formErrorMessage = (value) => {
-    const {name, phoneNumbers, email} = formValues
+    const {name, phoneNumber, email} = formValues
     if (value === 'name') {
       if (submitForm && name.length < 3 ) {
         return 'Name is too short'
       }
     }
 
-    if (value === 'phoneNumbers') {
-      if (submitForm && phoneNumbers.length < 10 ) {
+    if (value === 'phoneNumber') {
+      if (submitForm && phoneNumber.length < 10 ) {
         return 'Phone Number is in-correct'
       }
     }
@@ -79,20 +79,18 @@ export const AddAgencyModal = (props) => {
     event.preventDefault();
     if (failedValidation()) return
     setLoading(true);
-    const { name, email, phoneNumbers } = formValues;
-    const response = await crudService.addAgency({ name, email, phoneNumbers })
+    const { name, email, phoneNumber } = formValues;
+    const response = await crudService.addAgency({ name, email, phoneNumber })
     const { status } = response
     if (status === 'failed') {
-      toastr.error('Cannot Create Agency');
+      toastr.error('Cannot Create Responder');
       setTimeout(() => setLoading(false), 1000)
     } else {
-      toastr.success('Agency Creation was  Successful');
+      toastr.success('Responder Creation was  Successful');
       setTimeout(() => setLoading(false), 1000)
       props.onHide({addAgency: true})
     }
   };
-
-  console.log('formErrorMessage------->>>> ', formErrorMessage('name'))
 
   return (
     <Modal
@@ -106,19 +104,19 @@ export const AddAgencyModal = (props) => {
       </Modal.Header>
       <Modal.Body>
           <div className="text-center">
-            <h4 className="mt-10 mb-5 text-brand-1">Add Agency</h4>
+            <h4 className="mt-10 mb-5 text-brand-1">Add Responder</h4>
           </div>
           <form className="login-register text-start mt-20" action="#">
             <div className="form-group">
               <label className="form-label" htmlFor="input-1">
-                Name of Agency 
+                Name of Responder 
               </label>
               <input
                 className="form-control"
                 id="input-1"
                 type="text"
                 name="name"
-                placeholder="name of department"
+                placeholder="name of responder"
                 onChange={handleChange}
                 value={formValues.name}
               />
@@ -127,14 +125,14 @@ export const AddAgencyModal = (props) => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="input-1">
-                Email of Agency
+                Email of Responder
               </label>
               <input
                 className="form-control"
                 id="input-1"
                 type="text"
                 name="email"
-                placeholder="email of agency"
+                placeholder="email of responder"
                 onChange={handleChange}
                 value={formValues.email}
               />
@@ -149,12 +147,12 @@ export const AddAgencyModal = (props) => {
                 className="form-control"
                 id="input-1"
                 type="text"
-                name="phoneNumbers"
-                placeholder="phone-numbers of agency seperated by comma"
+                name="phoneNumber"
+                placeholder="phone-number of responder"
                 onChange={handleChange}
-                value={formValues.phoneNumbers}
+                value={formValues.phoneNumber}
               />
-              { <span className="form_errors"> { formErrorMessage('phoneNumbers') } </span>}
+              { <span className="form_errors"> { formErrorMessage('phoneNumber') } </span>}
             </div>
             
             <div className="form-group">

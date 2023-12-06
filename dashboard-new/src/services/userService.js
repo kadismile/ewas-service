@@ -159,4 +159,43 @@ export const userService =  {
       throw e
     }
   },
+
+  inviteUser:async (data) => {
+    try {
+      const url = `${serverUrl}/auth/invite`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Invite user");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  getInvitation:async (invitationalId) => {
+    try {
+      const url = `${serverUrl}/auth/invitationalId?invitationalId=${invitationalId}`
+      const method = 'GET'
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Not Authorized");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  registerUser: async (data) => {
+    try {
+      const url = `${serverUrl}/auth/create`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot login");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 }

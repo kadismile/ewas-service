@@ -2,6 +2,23 @@ import { Schema, model } from 'mongoose';
 import  bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+
+const invitationSchema = new Schema({
+  email: {
+    type: String,
+    unique: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
+    required: [true, 'Please Add Email'],
+  },
+  department: {
+    type: String,
+    ref: 'Department',
+    required: [true, 'department is missing']
+  }
+},
+{timestamps: true, versionKey: false }
+);
+
 const userSchema = new Schema({
   email: {
     type: String,
@@ -91,3 +108,4 @@ userSchema.index({
 });
 
 export const User = model('User', userSchema);
+export const Invitation = model('Invitation', invitationSchema);
