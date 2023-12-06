@@ -6,10 +6,12 @@ import { Report } from "./pages/Report";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
+import { About } from "./pages/About";
 
 export const App = () => {
   const routes = useRoutes([
     { path: "/", element: <Home /> },
+    { path: "/about", element: <About /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/report", element: <Report /> },
