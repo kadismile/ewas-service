@@ -69,6 +69,7 @@ export const crudService =  {
       throw e
     }
   },
+
   getAgency: async () => {
     try {
       const url = `${serverUrl}/agency`
@@ -76,6 +77,32 @@ export const crudService =  {
       const response = await client(url, method);
       if (!response)
         throw new Error("Cannot fetch Agency");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  delAgency: async (data) => {
+    try {
+      const url = `${serverUrl}/agency`
+      const method = 'DELETE'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Delete Agency");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+  
+  editAgency: async (data) => {
+    try {
+      const url = `${serverUrl}/agency`
+      const method = 'PATCH'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Edit Agency");
       return response
     } catch (e) {
       throw e

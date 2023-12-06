@@ -51,9 +51,9 @@ export const SideBar = () => {
               
 
               <li>
-                <Link className={`dashboard2 ${getActiveLink(["/agency"])}`} to="/agency">
+                <Link className={`dashboard2 ${getActiveLink(["/responder"])}`} to="/responder">
                   <img src="/images/profiles.svg" alt="jobBox" />
-                  <span className="name">Agency</span>
+                  <span className="name">Responder</span>
                 </Link> 
               </li>
               

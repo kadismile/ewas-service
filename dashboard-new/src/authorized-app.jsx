@@ -5,7 +5,7 @@ import { Header } from "./components/Header/Header";
 import { SideBar } from "./components/SideBar/SideBar";
 import { Users } from "./pages/Users";
 import { Department } from "./pages/Department";
-import { Agency } from "./pages/Agency";
+import { Responder } from "./pages/Responder";
 import { Reporters } from "./pages/Reporters";
 import { Reports } from "./pages/Reports";
 import { ReportDetails } from "./pages/ReportDetails";
@@ -18,7 +18,7 @@ export const AuthorizedApp = () => {
     { path: "/users", element: <Users /> },
     { path: "/user/:userId", element: <UserProfile /> },
     { path: "/department", element: <Department /> },
-    { path: "/agency", element: <Agency /> },
+    { path: "/responder", element: <Responder /> },
     { path: "/reporters", element: <Reporters /> },
     { path: "*", element: <Home /> },
     { path: "/reports", element: <Reports /> },

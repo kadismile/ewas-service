@@ -55,6 +55,19 @@ routerConfig.forEach((rou) => {
   app.use(route, router)
 })
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods", "*",
+    "GET, HEAD, OPTIONS, POST, PUT, DELETE, PATCH"
+  );
+  res.header(
+    "Access-Control-Allow-Header",
+    "Origin, X-Requested-with, Content-Type, Accept, Authorization"
+  );
+  next()
+})
+
 DBconnection()
 
 // catch 404 and forward to error handler

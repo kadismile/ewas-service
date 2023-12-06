@@ -1,8 +1,8 @@
 
 import { manageFileUpload } from '../helpers/file-upload-helper.js'
 import { Paginator } from '../helpers/paginator-helper.js';
-import { sendResetPasswordToken } from '../helpers/user-helper.js';
-import { User } from '../models/UserModel//UserModel.js';
+import { sendInviteEmail, sendResetPasswordToken } from '../helpers/user-helper.js';
+import { User, Invitation } from '../models/UserModel//UserModel.js';
 import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
 import { Permission } from '../models/PermissionModel/PermissionModel.js';
 
@@ -280,6 +280,53 @@ export const resetPassword = async (req, res) => {
       return res.status(500).json({
         status: "error",
         message: error
+    });
+  }
+}
+
+export const inviteUser = async (req, res) => {
+  const body = req.body
+  const { department, email } = body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(200).json({  
+        status: "success", message: "user already exists"
+      });
+    } else {
+      const invite = new Invitation({
+        email, department
+      });
+      await invite.save();
+
+      await sendInviteEmail(email, invite._id)
+      return res.status(200).json({
+        status: "success",
+        message: 'Invitational Email Sent successfully'
+      });
+    }
+  } catch (error) {
+    console.error('Error', error)
+      return res.status(500).json({
+        status: "error",
+        message: error
+    });
+  }
+}
+
+export const getInvitation = async (req, res) => {
+  try {
+    const { invitationalId } = req.query
+    const invitation = await Invitation.findOne({ _id:  invitationalId }).populate('department');
+    res.status(200).json({
+      status: "success",
+      data: invitation
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
     });
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import React from "react"
 import { crudService } from "../services/crudService"
+import { reportService } from "../services/reportsService"
 import moment from "moment"
 import { Link } from "react-router-dom"
 import { PageLoader } from "../components/elements/spinners"
@@ -10,8 +11,19 @@ import { IncidentType } from "../components/elements/IncidentTypes"
 import { CalendarModal } from "../modals/CalendarModal"
 import { ReportFilterDropDown } from "../components/elements/ReportFilterDropDown"
 import { Search } from "../components/elements/Search"
+import { mkConfig, generateCsv, download } from "export-to-csv";
 
 export const Reports = () => {
+
+  const downloadCSV = () => {
+    const csvConfig = mkConfig({ 
+      useKeysAsHeaders: true ,
+      filename: `report-${moment().format("MMM D, YYYY")}`
+    });
+    const csvData = reportService.prepareCsvData(data)
+    const csv = generateCsv(csvConfig)(csvData);
+    download(csvConfig)(csv);
+  }
 
   const formFields = {
     state: undefined,
@@ -245,13 +257,14 @@ export const Reports = () => {
                               </div>
             
                               
-                              {/* <a
+                              <a
                                 href="#/"
-                                onClick={fetchData}
                                 style={{ marginRight: "10px" }}
+                                title="Dowmload CSV"
+                                onClick={downloadCSV}
                               >
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                              </a> */}
+                                <i class="fa-solid fa-cloud-download"></i>
+                              </a>
                             </div>
                           </div>
                         </div>

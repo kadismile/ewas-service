@@ -3,9 +3,9 @@ import { User } from '../models/UserModel/UserModel.js';
 
 export const searchRsource = async (req, res) => {
   const doc = req.body;
-  const { query, type, searchTerm } = doc;
+  const { query, model, searchTerm } = doc;
   let limit = 50;
-  if (query.limit) {
+  if (query?.limit) {
     limit = parseInt(limit, 10);
     delete query.limit;
   }
@@ -24,7 +24,7 @@ export const searchRsource = async (req, res) => {
   if (accountDataStages) {
     pipeline = pipeline.concat(accountDataStages);
   }
-  const data = await Model(type).aggregate(pipeline);
+  const data = await Model(model).aggregate(pipeline);
   return res.status(200).json({
     status: "success",
     data

@@ -34,3 +34,17 @@ export const sendResetPasswordToken = async (user) => {
   await MailHelper.sendMail(type, 'forgot-password-token');
   return true;
 };
+
+export const sendInviteEmail = async (email, invite) => {
+  const invitationUrl = `${process.env.DASHBOARD_URL}invited-user/${invite}`
+  const type = 'user-invitation';
+  const data = {
+    email,
+    subject: 'You have been Invited',
+    invitationUrl,
+    year: new Date().getFullYear(),
+  }
+  queueHelper(type, 'high', data)
+  await MailHelper.sendMail(type, 'user-invitational-email');
+  return true;
+};

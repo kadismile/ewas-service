@@ -72,7 +72,7 @@ export const Header = () => {
 
                 <div className="dropdown d-inline-block">
                 <a  onClick={ () => setShowGoogle(true)} class="btn btn-default hover-up" href="#/"><i class="fa-brands fa-google"></i></a> &nbsp;
-                <a class="btn btn-default  hover-up" href="#/"><i class="fa-brands fa-twitter"></i></a>
+               {/*  <a class="btn btn-default  hover-up" href="#/"><i class="fa-brands fa-twitter"></i></a> */}
 
                 <a className="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
                   <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">

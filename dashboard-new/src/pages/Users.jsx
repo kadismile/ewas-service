@@ -4,11 +4,13 @@ import { userService } from "../services/userService";
 import { MiniSpinner } from "../components/elements/spinners";
 import { PageLoader } from "../components/elements/spinners";
 import { Search } from "../components/elements/Search";
+import { InviteUserModal } from "../modals/InviteUserModal"
 
 export const Users = (props) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setdata] = useState([]);
+  const [showInviteModal, setInviteModal] = useState(false);
 
   const fetchData = () => {
     userService.getUsers().then((res) => {
@@ -54,8 +56,13 @@ export const Users = (props) => {
     setdata(data);
   };
 
+  const handleCloseModal = () => {
+    setInviteModal(false)
+  };
+
   return (
     <>
+    <InviteUserModal show={showInviteModal} onHide={handleCloseModal}  />
     { 
       loading? <PageLoader /> :
       <div className="box-content">
@@ -105,18 +112,8 @@ export const Users = (props) => {
                     />
                     <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2" >
                       <li>
-                        <a className="dropdown-item active" href="#">
-                          Add new
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Settings
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Actions
+                        <a className="dropdown-item active" href="#" onClick={() => setInviteModal(true)}>
+                          Invite User
                         </a>
                       </li>
                     </ul>

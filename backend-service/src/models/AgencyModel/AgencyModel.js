@@ -11,9 +11,9 @@ const agencySchema = new Schema({
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email'],
   },
   
-  phoneNumbers: {
-    type: [String],
-    required: [true, 'Please Add Name']
+  phoneNumber: {
+    type: String,
+    required: [true, 'Please Add Phone number']
   },
   isActive : {
     type: Boolean,
@@ -22,13 +22,5 @@ const agencySchema = new Schema({
 },
 { timestamps: true, versionKey: false });
 
-
-agencySchema.pre('findOne', async function() {
-  this.where({ isActive: true })
-});
-
-agencySchema.pre('find', async function() {
-  this.where({ isActive: true })
-});
 
 export const Agency = model('Agency', agencySchema);
