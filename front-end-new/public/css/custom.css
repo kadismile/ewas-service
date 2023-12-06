@@ -8,3 +8,6 @@
   height: 70vh;
   margin-left: 46%;
 }
+.select-react {
+  min-height: 48px;
+}
