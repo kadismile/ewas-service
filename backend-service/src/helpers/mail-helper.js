@@ -41,8 +41,7 @@ class Mailer {
         emailData.year =  new Date().getFullYear()
         const message = {
           from: `${self.FROM_NAME} <${self.FROM_EMAIL}>`,
-          // to: emailData.email,
-          to: 'ikadismile@gmail.com',
+          to: emailData.email,
           subject: emailData.subject,
           html: emailTemplate(emailData)
         };
