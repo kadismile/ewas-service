@@ -1,8 +1,8 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { store } from '../../redux/store';
 import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
-import { Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   let user = store?.getState()?.user?.user
@@ -12,6 +12,13 @@ export const Header = () => {
   const { fullName } = user || {}
 
   const dispatch = useDispatch();
+  const location = useLocation();
+  const getActiveLink = (pathname) => {
+    const path = location.pathname;
+    if (pathname.includes(path)) {
+      return "active";
+    }
+  };
 
   const logOut = () => {
     dispatch( resetUser());
@@ -40,17 +47,38 @@ export const Header = () => {
               <nav className="nav-main-menu">
                 <ul className="main-menu">
                   <li>
-                    <Link className="" to="/">Home</Link>
+                    <Link className={`${getActiveLink(["/"])}`} to="/">
+                      Home
+                    </Link> 
+                  </li>
+
+                  <li>
+                    <Link className={`${getActiveLink(["/about"])}`} to="/about">
+                      About
+                    </Link> 
+                  </li>
+
+                  <li>
+                    <Link className={`${getActiveLink(["/resources"])}`} to="/resources">
+                      Resources
+                    </Link> 
                   </li>
                   <li>
-                    <Link to="/about">About Us</Link>
+                    <Link className={`${getActiveLink(["/contact"])}`} to="/contact">
+                      Contact
+                    </Link> 
                   </li>
-                  <li>
-                    <Link to="/articles">Articles</Link>
-                  </li>
-                  <li>
-                    <Link to="/contact">Contact</Link>
-                  </li>
+
+                  {
+                    user?.fullName &&
+                    <li>
+                      <Link className={`${getActiveLink(["/user-profile"])}`} to="/user-profile">
+                        Profile
+                      </Link> 
+                    </li>
+                  }
+                  
+                  
                 </ul>
               </nav>
 
@@ -66,7 +94,7 @@ export const Header = () => {
               {
                 user ? 
                   <div className="block-signin">
-                    <Link className="text-link-bd-btom hover-up" to="register"> { fullName } </Link> / &nbsp;
+                    <Link className="text-link-bd-btom hover-up" to="register" to="/user-profile"> { fullName } </Link> / &nbsp;
                     <Link className="text-link-bd-btom hover-up" to='/' onClick={logOut}> { 'logout' } </Link>
                   </div> : 
               <div className="block-signin">
@@ -94,32 +122,44 @@ export const Header = () => {
                 <nav>
                   <ul className="mobile-menu font-heading">
                   <li>
-                    <Link to="/" onClick={ () => setMenuVisible(false)} >Home</Link>
-                  </li>
-                  <li>
-                      <Link to="/report" onClick={ () => setMenuVisible(false)} >Report</Link>
+                    <Link className={`${getActiveLink(["/home"])}`}
+                      onClick={ () => setMenuVisible(false)} to="/home">
+                        Home
+                    </Link> 
                   </li>
 
                     <li>
-                      <Link to="/about">About Us</Link>
+                      <Link to="/about" onClick={ () => setMenuVisible(false)} >About Us</Link>
                     </li>
+
                     <li>
-                      <Link to="/contact">Contact Us</Link>
+                      <Link to="/resources" onClick={ () => setMenuVisible(false)} >Resources</Link>
+                    </li>
+
+                    <li>
+                      <Link to="/report" onClick={ () => setMenuVisible(false)} >Report An Incident</Link>
+                    </li>
+
+                    <li>
+                      <Link to="/contact" onClick={ () => setMenuVisible(false)} >Contact Us</Link>
                     </li>
                     {
                       !fullName ? 
                       <>
                         <li>
-                          <Link to="/login">Login</Link>
+                          <Link to="/login" onClick={ () => setMenuVisible(false)} >Login</Link>
                         </li> 
+
                         <li>
-                          <Link to="/register">Register</Link>
+                          <Link to="/register" onClick={ () => setMenuVisible(false)} >Register</Link>
                         </li>
                       </>
                         :
-                    <li>
-                      <Link to="/logout" to='/' onClick={logOut}>logout</Link>
-                    </li> 
+                        <>
+                        <li>
+                          <Link to="/user-profile" onClick={ () => setMenuVisible(false)} >Profile</Link>
+                        </li> 
+                        </>
                     }
                     
                   </ul>
@@ -128,7 +168,7 @@ export const Header = () => {
 
               { fullName &&
                 <div className="mobile-account">
-                <h6 className="mb-10">Your Account { fullName }</h6>
+                <h5 className="mb-10">{ fullName }</h5>
                 <ul className="mobile-menu font-heading">
                   <li>
                     <Link className="text-link-bd-btom hover-up" to='/' onClick={logOut}> { 'logout' } </Link>
@@ -140,6 +180,21 @@ export const Header = () => {
 
           
               <div className="site-copyright">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 Copyright {new Date().getFullYear()} © EWERS. <br />
               </div>
             </div>

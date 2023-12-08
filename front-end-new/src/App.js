@@ -6,16 +6,20 @@ import { Report } from "./pages/Report";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import '@fortawesome/fontawesome-free/css/all.min.css'; 
+import 'react-notifications/lib/notifications.css';
 import { About } from "./pages/About";
+import { Contact } from "./pages/Contact";
+import { UserProfile } from "./pages/User-profile";
 
 export const App = () => {
   const routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/about", element: <About /> },
+    { path: "/contact", element: <Contact /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/report", element: <Report /> },
-    { path: "/report", element: <Report /> },
+    { path: "/user-profile", element: <UserProfile /> },
     { path: "*", element: <Home /> },
   ]);
   

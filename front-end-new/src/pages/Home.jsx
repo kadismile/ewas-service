@@ -92,7 +92,7 @@ export const Home = ()=> {
             <div className="section-box wow animate__animated animate__fadeIn">
               <div className="container">
                 <div className="text-start">
-                  <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">Latest Incidence and Indicators Article</h2>
+                  <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">Our Resources & Materials</h2>
                 </div>
                 <div className="mt-50">
                   <div className="tab-content" id="myTabContent-1">

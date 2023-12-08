@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import { store } from '../redux/store.js';
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/user-slice";
 import DropDown from "../components/DropDown/DropDown"
 import CalendarModal from "../components/Modals/CalendarModal";
 import moment from 'moment'
 import Places from '../components/Map/Places.jsx';
-import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
+import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
 import BooleanDropDown from "../components/DropDown/BooleanDropDown";
 import { reportService } from "../services/reporterService";
 import toastr from 'toastr'
 import StateDropDown from "../components/DropDown/StateDropDown";
 import LGADropDown from "../components/DropDown/LGADropDown";
-import { TimeDropDown, TimePicker } from "../components/elements/TimePicker";
+import { TimeDropDown } from "../components/elements/TimePicker";
 import InformationSource from "../components/DropDown/InformationSource";
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../components/elements/spinners';
@@ -25,25 +23,6 @@ export const Report = () => {
     mapAddress = user.mapAddress
   }
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const formFields = {
-    timeOfIncidence: "",
-    reoccurence: "",
-    intervention: "",
-    informationSource: '',
-    mediaLinks: '',
-    agency:"",
-    resolved: "",
-    description: '',
-    date: '',
-    rawDate: '',
-    reportTypeId: '',
-    fileUpload: '',
-    state: '',
-    localGovt: '',
-    userTypedAddress: ''
-  };
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500)
@@ -66,9 +45,23 @@ export const Report = () => {
   const [formCol, setFormCol] = useState('col-lg-6 col-md-12')
   const [displayMediaLink, setDisplayLink] = useState(false)
   const [formValues, setFormValues] = useState({
-    ...formFields,
-    errors: formFields,
+    timeOfIncidence: "",
+    reoccurence: "",
+    intervention: "",
+    informationSource: '',
+    mediaLinks: '',
+    agency:"",
+    resolved: "",
+    description: '',
+    date: '',
+    rawDate: '',
+    reportTypeId: '',
+    fileUpload: '',
+    state: '',
+    localGovt: '',
+    userTypedAddress: ''
   });
+
   const [loading, setLoading] = useState(true);
 
   const handleDataFromDropDown = (data) => {
@@ -124,64 +117,15 @@ export const Report = () => {
     });
   };
 
-  const disableForm = () => {
-    const newValues = { ...formValues };
-    let isError = false;
-    for (let val of Object.values(newValues)) {
-      if (val === "") {
-        isError = true;
-      }
-    }
-    if (isError && submitForm) {
-      return true;
-    }
-    if (!isError && !submitForm) {
-      return true;
-    }
-    if (isError && !submitForm) {
-      return true;
-    }
-    if (!isError && !submitForm) {
-      return false;
-    }
-    
-  };
-
   const handleChange = (event) => {
     event.preventDefault();
     let { name, value } = event.target;
-    let errors = formValues.errors;
-    validateForm(name, errors, value);
-    setFormValues((prevState) => {
+    setFormValues((prvState) => {
       return {
-        ...prevState,
-        errors,
+        ...prvState,
         [name]: value,
       };
     });
-    for (let val of Object.values(formValues.errors)) {
-      if (val !== "") {
-        setSubmitForm(false);
-      }
-    }
-  };
-
-  const validateForm = (name, errors, value) => {
-    switch (name) {
-      case "description":
-        errors.description = "";
-        if (value.length && value.length <= 20) {
-          errors.description = "incident description must be more than 20 characters long!";
-          setSubmitForm(false);
-        } else {
-          setSubmitForm(true);
-        }
-      return errors.description;
-
-      default:
-        setSubmitForm(false);
-        break;
-    }
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -475,7 +419,6 @@ export const Report = () => {
                       <br/>
                       <br/>
                       <br/>
-                     
                     
                       <div className={formCol}>
                         <div className="">
@@ -506,15 +449,15 @@ export const Report = () => {
                       <br/>
                       <br/>
   
-  
+                      <section className="mt-20">
                       {
                         !loading ? (
-                            <SubmitButton onClick={ handleSubmit } title={'Submit Report'} className={'submit btn btn-send-message'}/>
+                            <SubmitButton onClick={ handleSubmit } title={'Report Incident'} className={'submit btn btn-send-message'}/>
                         ) : (
                             <LoadingButton />
                         ) 
                       }
-  
+                      </section>
                   
                     </div>
                   </form>

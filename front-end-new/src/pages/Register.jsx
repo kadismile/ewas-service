@@ -1,13 +1,14 @@
 import { reportService } from '../services/reporterService.js'
 import { useState, useEffect } from "react";
-import toastr from 'toastr'
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/user-slice.js";
 import { store } from '../redux/store';
 import { useNavigate, Link } from 'react-router-dom';
-import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
+import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
 import Places from '../components/Map/Places.jsx';
 import { PageLoader } from '../components/elements/spinners.jsx';
+import { formErrorMessage } from '../utils/form-error-messages.js';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 
 
@@ -16,119 +17,48 @@ export const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { mapAddress } = user || {}
-
-  const formFields = {
+  const [submitForm, setSubmitForm] = useState(false);
+  const [formValues, setFormValues] = useState({
     email: "",
     fullName: "",
     password: "",
     repeatPassword: "",
     phoneNumber: "",
-  };
-  const [submitForm, setSubmitForm] = useState(false);
-  const [formValues, setFormValues] = useState({
-    ...formFields,
-    errors: formFields,
+    address: "",
   });
   const [loading, setLoading] = useState(true);
-
-  const disableForm = () => {
-    const newValues = { ...formValues };
-    let isError = false;
-    for (let val of Object.values(newValues)) {
-      if (val === "") {
-        isError = true;
-      }
-    }
-    if (isError && submitForm) {
-      return true;
-    }
-    if (!isError && !submitForm) {
-      return true;
-    }
-    if (isError && !submitForm) {
-      return true;
-    }
-    if (!isError && !submitForm) {
-      return false;
-    }
-    if (!mapAddress?.fullAddress) {
-      return true
-    }
-  };
+  const [buttonLoading, setButtonLoading] = useState(true);
 
   const handleChange = (event) => {
     event.preventDefault();
     let { name, value } = event.target;
-    let errors = formValues.errors;
-    validateForm(name, errors, value);
     setFormValues((prevState) => {
       return {
         ...prevState,
-        errors,
         [name]: value,
       };
     });
-    for (let val of Object.values(formValues.errors)) {
-      if (val !== "") {
-        setSubmitForm(false);
-      }
-    }
   };
 
-  const validateForm = (name, errors, value) => {
-    switch (name) {
-      case "fullName":
-        errors.fullName = "";
-        if (value.length && value.length <= 3) {
-          errors.fullName = "fullName must be more than 3 characters long!";
-          setSubmitForm(false);
-        } else {
-          setSubmitForm(true);
-        }
-      return errors.fullName;
-
-      case "password":
-        errors.password = "";
-        if (value.length && value.length <= 3) {
-          errors.password = "password must be more than 3 characters long!";
-          setSubmitForm(false);
-        } else {
-          setSubmitForm(true);
-        }
-      return errors.password;
-
-      case "repeatPassword":
-        errors.repeatPassword = "";
-        if (value.length && value.length <= 3) {
-          errors.repeatPassword = "repeated password must be more than 3 characters long!";
-          setSubmitForm(false);
-        } else if (value !== formValues.password) {
-          errors.repeatPassword = "repeated password must be same with password!";
-          setSubmitForm(false);
-        } else {
-          setSubmitForm(true);
-        }
-      return errors.repeatPassword;
-
-      case "phoneNumber":
-        errors.phoneNumber = "";
-        if (value.length >1 && value.length <= 10) {
-          errors.phoneNumber = "phoneNumber must be more than 11 characters long!";
-          setSubmitForm(true);
-        } else {
-          setSubmitForm(false);
-        }
-      return errors.phoneNumber;
-      default:
-        setSubmitForm(false);
-        break;
+  const failedValidation = () => {
+    const {email, password, address, repeatPassword} = formValues
+    if (!email.length || 
+      !password.length || 
+      !address.fullAddress.length || 
+      !repeatPassword.length) 
+      {
+      return true
     }
-  };
-
+    return undefined
+  }
   
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
+    setSubmitForm(true)
+    if (failedValidation()) {
+      return;
+    }
+    setButtonLoading(true)
     const { email, password, fullName, phoneNumber } = formValues;
     const address = mapAddress
     const response = await reportService.registerReporter({
@@ -137,13 +67,15 @@ export const Register = () => {
     
     const { status, message, token, data } = response
     if (status === 'failed') {
-      toastr.error(message);
+      setButtonLoading(false)
+      setSubmitForm(false)
+      NotificationManager.error(`${message}`, 'Error', 5000);
       setTimeout(() => setLoading(false), 1000)
     } else {
-      toastr.success('Registration Successful');
-      setTimeout(() => setLoading(false), 1000)
+      NotificationManager.success('Registration Successful', '', 7000);
+      setTimeout(() => setButtonLoading(false), 1000)
       dispatch(setUser({ user: data, token }))
-      navigate('/');
+      setTimeout(() => navigate('/'), 2000);
     }
   };
 
@@ -151,12 +83,20 @@ export const Register = () => {
     setTimeout(() => setLoading(false), 500)
   })
 
-const { errors} = formValues
+  const addressData = (data) => {
+    setFormValues((preVal)=> {
+      return {
+        ...preVal,
+        address: data
+      }
+    })
+  }
 
   return (
     <>
     { loading ? <PageLoader /> :
       <main className="main">
+        <NotificationContainer/>
         <section className="pt-100 login-register">
           <div className="container"> 
             <div className="row login-register-cover">
@@ -175,7 +115,7 @@ const { errors} = formValues
                       value={formValues.fullName}
                       required
                     />
-                    { errors.fullName ? <span className='form_error'> {errors.fullName}</span> : ''}
+                    { formErrorMessage('fullName', formValues, submitForm)}
                   </div>
 
                   <div className="form-group">
@@ -189,6 +129,7 @@ const { errors} = formValues
                       value={formValues.email}
                       required
                     />
+                    { formErrorMessage('email', formValues, submitForm)}
                   </div>
 
                   <div className="form-group">
@@ -202,13 +143,13 @@ const { errors} = formValues
                       value={formValues.phoneNumber}
                       required
                     />
-                    { errors.phoneNumber ? <span className="form_error"> {errors.phoneNumber}</span> : ""}
+                  { formErrorMessage('phoneNumber', formValues, submitForm)}
                   </div>
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="input-2">Address *</label>
-                    <Places />
-                    { errors.address ? <span className="form_error"> {errors.address}</span> : ""}
+                    <Places dataToComponent={addressData}/>
+                    { formErrorMessage('address', formValues, submitForm)}
                   </div>
                   
                   <div className="form-group">
@@ -221,7 +162,7 @@ const { errors} = formValues
                       value={formValues.password}
                       placeholder="************"
                     />
-                    { errors.password ? <span className="form_error"> {errors.password}</span> : ""}
+                    { formErrorMessage('password', formValues, submitForm)}
                   </div>
 
                   <div className="form-group">
@@ -234,14 +175,12 @@ const { errors} = formValues
                       value={formValues.repeatPassword}
                       placeholder="************"
                     />
-                    { errors.repeatPassword ? <span className="form_error"> {errors.repeatPassword}</span> : ""}
+                    { formErrorMessage('repeatPassword', formValues, submitForm)}
                   </div>
                   
                   <div className="form-group">
                   {
-                    disableForm() ? (
-                      <DisabledButton title={'Register'} className={'btn btn-brand-1 hover-up w-100'}/>
-                    ) : !loading ? (
+                    buttonLoading ? (
                       <SubmitButton onClick={ handleSubmit } title={'Register'} className={'btn btn-brand-1 hover-up w-100'}/>
                     ) : (
                       <LoadingButton />

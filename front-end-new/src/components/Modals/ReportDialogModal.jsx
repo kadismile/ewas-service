@@ -25,7 +25,7 @@ export default function ReportDialogModal(props) {
       centered 
       show={props.show} onHide={props.onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Report An Incident </Modal.Title>
+        <Modal.Title> Report An Incident </Modal.Title>
       </Modal.Header>
       <Modal.Body>
       <div className={styles.container}>
