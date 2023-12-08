@@ -219,6 +219,7 @@ export const getReports = async (req, res) => {
       ['attachments'],
       ['userId'],
     ]
+
     const reporters = await Paginator({...req.query}, Report, populate);
     res.status(200).json({
       status: "success",
@@ -231,6 +232,10 @@ export const getReports = async (req, res) => {
       error
     });
   }
+}
+
+export const getUserReports = async (req, res) => {
+  return getReports(req, res)
 }
 
 export const getOneReport = async (req, res) => {

@@ -2,7 +2,8 @@ import express from 'express';
 import { reportType, createReporter, loginReporter, 
   createReport, getReporters, createAdminReportType, 
   getReports, getOneReport, acceptReport, verifyReport, 
-  getAdvanced, editReport, getVerifications, getDraftReport
+  getAdvanced, editReport, getVerifications, getDraftReport,
+  getUserReports
 } from '../controllers/report-controller.js';
 import {searchRsource} from '../controllers/search-controller.js';
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js';
@@ -19,6 +20,7 @@ router.post('/login', loginReporter);
 
 router.post('/create', upload.array('fileUpload'), createReport);
 router.get('/', protectedRoute, authorize(REPORT_PERMISSIONS), getReports);
+router.get('/user-reports', getReports);
 router.get('/verification', protectedRoute, getVerifications);
 router.patch('/', protectedRoute, authorize(REPORT_PERMISSIONS), editReport);
 router.get('/one', protectedRoute, authorize(REPORT_PERMISSIONS), getOneReport);

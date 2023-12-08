@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import toastr from 'toastr';
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons"
-import { crudService } from '../services/crudService';
 import '../styles/custom.css';
 import { DepartmentDropDown } from '../components/elements/DepartmentDropDown';
 import { userService } from '../services/userService';

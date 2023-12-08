@@ -11,7 +11,9 @@ export const Footer = () => {
               </span>
               </div>
               <div className="col-md-6 text-md-end text-start">
-                <div className="footer-social"><a className="font-xs color-text-paragraph" href="#">Privacy Policy</a><a className="font-xs color-text-paragraph mr-30 ml-30" href="#">Terms &amp; Conditions</a><a className="font-xs color-text-paragraph" href="#">Security</a></div>
+                <div className="footer-social"><a className="font-xs color-text-paragraph" href="#">Privacy Policy</a>
+                <a className="font-xs color-text-paragraph mr-30 ml-30" href="#">Terms &amp; Conditions</a>
+              </div>
               </div>
             </div>
           </div>

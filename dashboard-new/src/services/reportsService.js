@@ -1,7 +1,7 @@
 import { client} from '../utils/api-client'
 import moment from 'moment'
 
-const serverUrl = process.env.REACT_APP_API_BASE_URL ;
+const serverUrl = process.env.REACT_APP_API_BASE_URL;
 
 export const reportService =  {
 

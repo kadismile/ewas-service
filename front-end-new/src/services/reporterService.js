@@ -69,4 +69,17 @@ export const reportService = {
       token
     }
   },
+
+  getUserReports: async (userId) => {
+    try {
+      const url = `${serverUrl}/report/user-reports?reporterId=${userId}`
+      const method = 'GET'
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Cannot fetch Reports");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 }
