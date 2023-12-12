@@ -14,7 +14,8 @@ export default function ReportDialogModal(props) {
 
   const handleClick = () => {
     if (!user) {
-      return navigate('/login');
+      const state = { from: 'reportDialog' };
+      return navigate('/login', { state: { state } });
     }
     return navigate('/report');
   }

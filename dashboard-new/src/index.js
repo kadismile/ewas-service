@@ -9,15 +9,13 @@ import { store, persistor } from "./redux/store"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Router>
-        <PersistGate persistor={persistor}>
-          <App />
-        </PersistGate>
-      </Router>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <Router>
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Router>
+  </Provider>
 )
 
 reportWebVitals()

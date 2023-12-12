@@ -226,6 +226,44 @@ export const crudService =  {
     }
   },
 
+  createArticle: async (data) => {
+    try {
+      const url = `${serverUrl}/article/create`
+      const method = "POST"
+      const contentType = "true"
+      const response = await client(url, method, data, contentType)
+      if (!response) throw new Error("Cannot Create a reporter")
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  updateArticle: async (data) => {
+    try {
+      const url = `${serverUrl}/article/edit`
+      const method = "PATCH"
+      const contentType = "true"
+      const response = await client(url, method, data, contentType)
+      if (!response) throw new Error("Cannot Create a reporter")
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  getArticles: async () => {
+    try {
+      const url = `${serverUrl}/article`
+      const method = "GET"
+      const response = await client(url, method)
+      if (!response) throw new Error("Cannot Get Resource")
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
+
 }
 
 const buildUrl = (baseUrl, queryParams) => {

@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 import fs from 'fs'
 import {v2 as cloudinary} from 'cloudinary';
 import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
-import { Report } from '../models/ReportModel/Report.js';
 import { queueHelper } from '../helpers/queue-helper.js';
 
 
@@ -48,7 +47,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const manageFileUpload = async (filePath, fileName, report) => {
+export const manageFileUpload = async (filePath, fileName, data, Model) => {
   const type = 'uploadFile'; 
   let queue = queueHelper(type, 'high')
   queue.process(type, async function (job, done) {
@@ -68,16 +67,18 @@ export const manageFileUpload = async (filePath, fileName, report) => {
 
   queue.on('job complete', async function (id, result) {
     const { asset_id, public_id, signature, format, url, secure_url } = result
+
     const attachment = new Attachment({
-      asset_id,public_id,signature,format,url,secure_url,
-      report: report._id
+      asset_id, public_id, signature, format, url, secure_url,
+      report: Model.collection.name === 'reports' ? data._id : undefined,
+      article: Model.collection.name === 'articles' ? data._id : undefined
     })
     await attachment.save();
     console.log(`Job ${id} saving attachment to DB:`, signature);
-    await Report.findOneAndUpdate(
-      { _id: report._id},
-      { $push: { attachments: attachment._id } },
-    );
+      await Model.findOneAndUpdate(
+        { _id: data._id },
+        { $push: { attachments: attachment._id } },
+      );
   });
 }
 
