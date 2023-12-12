@@ -10,6 +10,7 @@ import { Reporters } from "./pages/Reporters";
 import { Reports } from "./pages/Reports";
 import { ReportDetails } from "./pages/ReportDetails";
 import { UserProfile } from "./pages/UserProfile";
+import { Articles } from "./pages/Articles";
 
 
 export const AuthorizedApp = () => {
@@ -22,7 +23,8 @@ export const AuthorizedApp = () => {
     { path: "/reporters", element: <Reporters /> },
     { path: "*", element: <Home /> },
     { path: "/reports", element: <Reports /> },
-    { path: "/report/:reportSlug", element: <ReportDetails /> }
+    { path: "/report/:reportSlug", element: <ReportDetails /> },
+    { path: "/articles", element: <Articles /> }
   ]);
 
   return (

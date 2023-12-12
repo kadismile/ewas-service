@@ -1,15 +1,24 @@
 import { userService } from '../services/userService';
 
-export const  client = async (url, method, reqBody = undefined) => {
+export const  client = async (url, method, reqBody = undefined, contentType) => {
 
   const { token } = userService.fetchUserFromStore()
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${ token }`
+  let headers
+  if (contentType) {
+    headers = {
+      'Authorization': `Bearer ${ token }`,
+    };
+  } else {
+    headers = {
+      'Authorization': `Bearer ${ token }`,
+      'content-type': 'application/json',
+    };
+    reqBody = JSON.stringify(reqBody) 
   }
+
   const config = {
     method,
-    body: reqBody ? JSON.stringify(reqBody) : undefined,
+    body: reqBody,
     headers,
   };
   try {

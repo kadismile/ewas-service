@@ -8,7 +8,7 @@ export const Paginator = async function(data, Model, populate, fields)  {
   const total = await Model.countDocuments(data.query);
   const sort = data.sort;
 
-  const results = await retrieve(data, Model, populate, fields, page, limit , sort);
+  const results = await retrieve(Model, populate, fields, page, limit , sort);
 
   const pagination = {};
   if (endIndex < total) {
@@ -34,12 +34,12 @@ export const Paginator = async function(data, Model, populate, fields)  {
   };
 }
 
-const retrieve = (data, Model, populateFields, page, limit , sort) => {
-  let query = Model.find(data);
+const retrieve = (Model, populateFields, page, limit, sort) => {
+  let query = Model.find({});
   populateFields.forEach((field) => {
     query = query.populate(field[0]);
   });
-  query.sort(sort ? (data.sort === 'desc' ? { createdAt: -1 } : { createdAt: 1 }) : { createdAt: -1 })
+  query.sort(sort ? (sort === 'desc' ? { createdAt: -1 } : { createdAt: 1 }) : { createdAt: -1 })
   query.limit(parseInt(limit, 10) || 10)
   query.skip(parseInt(page * limit, 10) || 0); 
   return query

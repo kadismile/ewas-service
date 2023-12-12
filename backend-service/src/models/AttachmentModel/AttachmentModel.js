@@ -23,6 +23,13 @@ const attachmentSchema = new Schema({
     type: String,
     ref: 'Report'
   },
+  article: {
+    type: String,
+    ref: 'Aricle'
+  },
+  model: {
+    type: String,
+  },
   isActive : {
     type: Boolean,
     default: true

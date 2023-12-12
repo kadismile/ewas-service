@@ -1,7 +1,7 @@
 "use client"; 
 import { reportService } from '../services/reporterService.js'
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/user-slice.js";
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
@@ -13,6 +13,8 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const from = useLocation()?.state?.state?.from || {};
+
   const [submitForm, setSubmitForm] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
@@ -63,6 +65,9 @@ export const Login = () => {
       NotificationManager.success('Login Successful', '', 3000);
       setTimeout(() => setLoading(false), 1000);
       dispatch(setUser({ user: data, token }));
+      if (from) {
+        navigate('/report')
+      } else 
       navigate('/user-profile')
     }
   };

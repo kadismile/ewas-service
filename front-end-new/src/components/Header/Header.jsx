@@ -2,7 +2,7 @@ import { useState } from "react";
 import { store } from '../../redux/store';
 import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 export const Header = () => {
   let user = store?.getState()?.user?.user
@@ -66,6 +66,12 @@ export const Header = () => {
                   <li>
                     <Link className={`${getActiveLink(["/contact"])}`} to="/contact">
                       Contact
+                    </Link> 
+                  </li>
+
+                  <li>
+                    <Link className={`${getActiveLink(["/report"])}`} to="/report">
+                      Report
                     </Link> 
                   </li>
 
