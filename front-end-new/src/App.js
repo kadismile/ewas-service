@@ -10,6 +10,7 @@ import 'react-notifications/lib/notifications.css';
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { UserProfile } from "./pages/User-profile";
+import { Resources } from "./pages/Resources";
 
 export const App = () => {
   const routes = useRoutes([
@@ -20,6 +21,7 @@ export const App = () => {
     { path: "/register", element: <Register /> },
     { path: "/report", element: <Report /> },
     { path: "/user-profile", element: <UserProfile /> },
+    { path: "/resources", element: <Resources /> },
     { path: "*", element: <Home /> },
   ]);
   
