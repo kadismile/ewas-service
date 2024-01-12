@@ -20,10 +20,18 @@ export const userSlice = createSlice({
       };
     },
     setAddress(state, action) {
-      state.user.mapAddress = {
-        ...state?.user?.mapAddress,
-        ...action.payload
-      };
+      if (state.user) {
+        state.user.mapAddress = {
+          ...(state.user.mapAddress || {}),
+          ...action.payload,
+        };
+      } else {
+        state.user = {
+          mapAddress: {
+            ...action.payload,
+          },
+        };
+      }
     }, 
     setReport(state, action) {
       state.user.reportType = action.payload

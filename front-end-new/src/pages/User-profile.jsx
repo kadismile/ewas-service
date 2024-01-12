@@ -31,14 +31,14 @@ export const UserProfile = () => {
         <main className="main">
           <section className="section-box-2">
             <div className="container">
-              <div className="banner-hero banner-image-single"><img src="/images/profile-bg.png" alt="jobbox" /></div>
+              <div className="banner-hero banner-image-single"><img src="/images/about-banner.jpg" alt="jobbox" /></div>
               <div className="box-company-profile">
-                <div className="image-compay"><img src="/images/profile-picture.png" alt="jobbox" style={{width: '9%'}}/></div>
+                <div className="image-compay"><img src="/images/tribal-marks.jpg" alt="jobbox" style={{width: '9%'}}/></div>
                 <div className="row mt-10">
                   <div className="col-lg-8 col-md-12">
                     <h5 className="f-18">
                       {fullName} 
-                      <span className="card-location font-regular ml-20">{address.fullAddress}</span>
+                      <span className="card-location font-regular ml-20">{address?.fullAddress}</span>
                       <span className="card-location font-regular ml-20">{phoneNumber}</span>
                       <span className="card-location font-regular ml-20">{email}</span>
                     </h5>
@@ -67,15 +67,12 @@ export const UserProfile = () => {
                               <div className="row">
                                 <div className="col-lg-6 col-md-6 col-sm-12">
                                   <div className="card-grid-2-image-left">
-                                    <div className="right-info"><a className="name-job" href>{report.reportTypeId.name}</a><span className="location-small">New York, US</span></div>
+                                    <div className="right-info"><a className="name-job" href>{report.reportTypeId.name}</a>
+                                    <span className="location-small">{report.address.fullAddress}</span>
+                                    <span> {moment(report.createdAt).format('ll')} </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="card-block-info">
-                                <div className="mt-5"><span className="card-briefcase">Armed Attack</span><span className="card-time"><span>5</span><span> days ago</span></span></div>
-                                <p className="font-sm color-text-paragraph mt-10">
-                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae architecto eveniet, dolor quo repellendus pariatur.
-                                </p>
                               </div>
                             </div>
                           </div>

@@ -219,10 +219,10 @@ a {
   color: #05264E;
 }
 a:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 a *:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 li.hr span {
@@ -664,7 +664,7 @@ h6 {
 }
 
 .color-brand-2 {
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .op-70 {
@@ -743,7 +743,7 @@ h6 {
   overflow: visible;
   border-radius: 10px;
   position: relative;
-  background-color: #3C65F5 !important;
+  background-color: #D0202d !important;
 }
 .box-progress-bar .progress .bg-brand-2 span {
   position: absolute;
@@ -758,7 +758,7 @@ h6 {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background-color: #3C65F5;
+  background-color: #D0202d;
   position: absolute;
   top: -5px;
   right: -5px;
@@ -891,7 +891,7 @@ h6,
 }
 .btn.btn-default {
   color: #ffffff;
-  background-color: #3C65F5;
+  background-color: #D0202d;
   line-height: 26px;
   padding: 10px 25px;
 }
@@ -906,7 +906,7 @@ h6,
   gap: 10px;
   background: #E0E6F7;
   border-radius: 8px;
-  color: #3C65F5;
+  color: #D0202d;
   font-size: 14px;
   line-height: 14px;
 }
@@ -919,7 +919,7 @@ h6,
   color: #4F5E64 !important;
 }
 .btn-grey-small:hover {
-  color: #3C65F5 !important;
+  color: #D0202d !important;
 }
 
 .btn-grey-big {
@@ -933,12 +933,12 @@ h6,
   font-weight: 600;
 }
 .btn-grey-big:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .btn-apply-now {
   background-color: #E0E6F7;
-  color: #3C65F5;
+  color: #D0202d;
   padding: 12px 10px;
   min-width: 95px;
   border-radius: 4px;
@@ -947,7 +947,7 @@ h6,
 }
 
 .btn-apply {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   color: #ffffff;
   padding: 12px 20px;
   border-radius: 4px;
@@ -965,7 +965,7 @@ h6,
 }
 
 .btn-apply-big {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   color: #ffffff;
   padding: 18px 35px;
   border-radius: 4px;
@@ -1014,7 +1014,7 @@ h6,
   padding: 3px 10px;
   background: #E0E6F7;
   border-radius: 5px;
-  color: #3C65F5;
+  color: #D0202d;
   min-width: 42px;
   font-size: 12px;
   line-height: 18px;
@@ -1024,7 +1024,7 @@ h6,
   padding: 6px 18px;
   color: #66789C;
   border-radius: 5px;
-  color: #3C65F5;
+  color: #D0202d;
   min-width: 42px;
   font-size: 12px;
   line-height: 18px;
@@ -1043,10 +1043,10 @@ h6,
 
 .btn-border-brand-2 {
   padding: 12px 20px;
-  border: 1px solid #3C65F5;
+  border: 1px solid #D0202d;
   background-color: #ffffff;
   border-radius: 8px;
-  color: #3C65F5;
+  color: #D0202d;
   font-size: 14px;
   line-height: 22px;
 }
@@ -1058,7 +1058,7 @@ h6,
   border-radius: 4px;
 }
 .btn-brand-1:hover {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   color: #ffffff;
 }
 
@@ -1080,7 +1080,7 @@ h6,
   padding: 8px 16px;
   background: #66789C;
   border-radius: 5px;
-  color: #3C65F5;
+  color: #D0202d;
   min-width: 42px;
   font-size: 11px;
   color: #ffffff;
@@ -1093,7 +1093,7 @@ h6,
   line-height: 24px;
   color: #ffffff;
   padding: 15px 28px 15px 60px;
-  background: #3C65F5 url(../fonts/icon-email.svg) no-repeat 25px 15px;
+  background: #D0202d url(../fonts/icon-email.svg) no-repeat 25px 15px;
   border-radius: 4px;
 }
 .btn-send-message:hover {
@@ -1170,12 +1170,12 @@ h6,
   text-decoration: underline;
 }
 .btn-link:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .btn-arrow-right {
   background: url(../fonts/arrow-right.svg) no-repeat right 15px top 3px;
-  color: #3C65F5;
+  color: #D0202d;
   padding: 0px 40px 0px 0px;
   font-size: 12px;
   line-height: 12px;
@@ -1261,7 +1261,7 @@ span.btn {
   margin-right: 4px;
 }
 .social-login:hover {
-  color: #3C65F5;
+  color: #D0202d;
   box-shadow: 0px 10px 20px -5px rgba(10, 42, 105, 0.06);
 }
 
@@ -1297,7 +1297,7 @@ span.btn {
 }
 
 .cb-container input:checked ~ .checkmark {
-  border: 2px solid #3C65F5;
+  border: 2px solid #D0202d;
 }
 
 .checkmark:after {
@@ -1316,7 +1316,7 @@ span.btn {
   width: 21px;
   height: 22px;
   border-radius: 5px;
-  background: #3C65F5 url(../fonts/tick.svg) no-repeat center;
+  background: #D0202d url(../fonts/tick.svg) no-repeat center;
 }
 
 /*COMPONENTS -> FORM*/
@@ -1404,7 +1404,7 @@ textarea:focus {
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 .contact-from-area .contact-form-style button:hover {
-  background-color: #3C65F5 !important;
+  background-color: #D0202d !important;
 }
 
 .form-group {
@@ -1555,7 +1555,7 @@ label {
 /*Customize the style representation when pager is activated*/
 .swiper-pagination-customs-active,
 .swiper-pagination-customs:hover {
-  background: #3C65F5;
+  background: #D0202d;
   border-radius: 50%;
   width: 12px;
   height: 12px;
@@ -1576,14 +1576,14 @@ label {
 }
 
 .swiper-pagination .swiper-pagination-bullet {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   width: 10px;
   height: 10px;
   margin: 0 4px;
   opacity: 0.5;
 }
 .swiper-pagination .swiper-pagination-bullet-active, .swiper-pagination .swiper-pagination-bullet-active:hover {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   width: 12px;
   height: 12px;
   margin: -1px 3px 0;
@@ -1740,7 +1740,7 @@ label {
 }
 
 .noUi-background {
-  background: #3C65F5;
+  background: #D0202d;
 }
 
 .noUi-origin {
@@ -1760,7 +1760,7 @@ label {
   top: -30px;
   font-size: 14px;
   line-height: 22px;
-  color: #3C65F5;
+  color: #D0202d;
   font-weight: 500;
 }
 
@@ -1779,7 +1779,7 @@ label {
   left: 5px;
   width: 9px;
   height: 9px;
-  background-color: #3C65F5;
+  background-color: #D0202d;
   border-radius: 50%;
 }
 
@@ -1846,7 +1846,7 @@ label {
   margin-left: 0;
 }
 .card-grid-2 .btn-apply-now {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .card-grid-2:hover {
   border-color: #B4C0E0;
@@ -1854,14 +1854,14 @@ label {
 }
 .card-grid-2:hover .btn-apply-now {
   color: #ffffff;
-  background-color: #3C65F5;
+  background-color: #D0202d;
 }
 .card-grid-2 a {
   text-decoration: none;
   color: #05264E;
 }
 .card-grid-2 a:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .card-grid-2 .card-grid-2-image-rd {
   padding: 0px 15px 0px 0px;
@@ -1903,7 +1903,7 @@ label {
   align-items: center;
   padding: 0px 10px;
   height: 24px;
-  background: #3C65F5;
+  background: #D0202d;
   border-radius: 5px;
   color: #ffffff;
   min-width: 42px;
@@ -1968,7 +1968,7 @@ label {
   max-width: 100%;
 }
 .card-grid-2 .card-block-info .card-text-price {
-  color: #3C65F5;
+  color: #D0202d;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: bold;
   font-size: 22px;
@@ -2064,7 +2064,7 @@ label {
   display: block;
 }
 .card-grid-2 .card-grid-2-image-left .right-info .name-job:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .card-grid-2 .card-grid-2-image-left .right-info .location-small {
   background: url(../fonts/location.svg) no-repeat 0px 5px;
@@ -2108,7 +2108,7 @@ label {
   height: 24px;
   background: #E0E6F7;
   border-radius: 5px;
-  color: #3C65F5;
+  color: #D0202d;
   min-width: 42px;
 }
 .card-image-top .image img {
@@ -2155,7 +2155,7 @@ label {
   color: #05264E;
 }
 .card-grid-3 h5 a:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .card-grid-3 .card-block-info {
   display: inline-block;
@@ -2202,7 +2202,7 @@ label {
   background: url(../fonts/time.svg) no-repeat 0px 3px;
 }
 .card-grid-3 .card-block-info .card-text-price {
-  color: #3C65F5;
+  color: #D0202d;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: bold;
   font-size: 22px;
@@ -2281,7 +2281,7 @@ label {
   text-decoration: none;
 }
 .card-grid-4 .btn-readmore:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .card-grid-5 {
@@ -2381,7 +2381,7 @@ label {
   display: inline-block;
   padding: 0px 35px 0px 0px;
   background: url(../fonts/arrow-right_1.svg) no-repeat right top 2px;
-  color: #3C65F5;
+  color: #D0202d;
   font-size: 14px;
   line-height: 22px;
 }
@@ -2407,7 +2407,7 @@ label {
   line-height: 26px;
   padding-top: 0px;
   display: inline-block;
-  color: #3C65F5;
+  color: #D0202d;
 }
 .card-list-4 .card-price span {
   font-size: 12px;
@@ -2756,7 +2756,7 @@ ul li:last-child .card-list-4 {
 }
 
 .text-brand-2 {
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .w-lg-50 {
@@ -2912,12 +2912,12 @@ ul li:last-child .card-list-4 {
   color: #05264E;
 }
 .banner-hero .color-brand-2 {
-  color: #3C65F5;
+  color: #D0202d;
   position: relative;
 }
 .banner-hero .color-brand-2::after {
   content: "";
-  background-color: #3C65F5;
+  background-color: #D0202d;
   height: 25px;
   position: absolute;
   width: 100%;
@@ -3017,7 +3017,7 @@ ul li:last-child .card-list-4 {
   text-align: left;
 }
 .banner-hero.hero-3 {
-  background: #3C65F5;
+  background: #D0202d;
 }
 .banner-hero.hero-3::before {
   display: none;
@@ -3098,7 +3098,7 @@ ul li:last-child .card-list-4 {
   position: relative;
 }
 .header .main-menu li.dashboard a {
-  border: 1px dashed #3C65F5;
+  border: 1px dashed #D0202d;
   padding: 5px 8px;
   border-radius: 4px;
 }
@@ -3141,13 +3141,13 @@ ul li:last-child .card-list-4 {
   position: relative;
 }
 .header .main-menu li a:hover, .header .main-menu li a.active {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .header .main-menu li a:hover::before, .header .main-menu li a.active::before {
   content: "";
   height: 2px;
   width: 100%;
-  background-color: #3C65F5;
+  background-color: #D0202d;
   position: absolute;
   bottom: -10px;
   left: 0px;
@@ -3232,7 +3232,7 @@ ul li:last-child .card-list-4 {
   text-decoration-line: underline;
 }
 .header .text-link-bd-btom:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .header .block-signin .btn-shadow {
   box-shadow: 0px 18px 40px rgba(25, 15, 9, 0.1);
@@ -3267,10 +3267,10 @@ ul li:last-child .card-list-4 {
 }
 
 .header-brand-2 {
-  background: #3C65F5;
+  background: #D0202d;
 }
 .header-brand-2.sticky-bar.stick {
-  background: #3C65F5;
+  background: #D0202d;
 }
 .header-brand-2 .main-menu > li > a {
   color: #E0E6F6;
@@ -3297,14 +3297,14 @@ ul li:last-child .card-list-4 {
   background-color: #ffffff;
 }
 .header-brand-2 .main-menu li ul li a:hover {
-  color: #3C65F5;
+  color: #D0202d;
 }
 .header-brand-2 .text-link-bd-btom {
   color: #ffffff;
 }
 .header-brand-2 .btn-default {
   background-color: #ffffff;
-  color: #3C65F5;
+  color: #D0202d;
   font-weight: 500;
 }
 
@@ -3883,7 +3883,7 @@ ul li:last-child .card-list-4 {
   border: 0;
   background-color: #fff;
   transition-duration: 0.2s;
-  background-color: #3C65F5;
+  background-color: #D0202d;
   background-image: url(../fonts/go-top.svg);
   background-repeat: no-repeat;
   background-position: center;
@@ -5525,7 +5525,7 @@ ul li:last-child .card-list-4 {
 .text-blue {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 20px;
-  color: #3C65F5;
+  color: #D0202d;
   font-weight: 600;
   line-height: 24px;
 }
@@ -5699,7 +5699,7 @@ ul li:last-child .card-list-4 {
   box-shadow: 0px 10px 20px -5px rgba(10, 42, 105, 0.06);
 }
 .block-pricing .box-pricing-item:hover .btn-border {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   color: #ffffff;
 }
 .block-pricing .box-pricing-item .for-year,
@@ -5713,12 +5713,12 @@ ul li:last-child .card-list-4 {
   display: inline-block;
 }
 .block-pricing .box-pricing-item .btn-border {
-  border: 1px solid #3C65F5;
-  color: #3C65F5;
+  border: 1px solid #D0202d;
+  color: #D0202d;
   width: 100%;
 }
 .block-pricing .box-pricing-item .btn-border:hover {
-  background-color: #3C65F5;
+  background-color: #D0202d;
   color: #ffffff;
 }
 .block-pricing .box-info-price {
@@ -5729,7 +5729,7 @@ ul li:last-child .card-list-4 {
 }
 .block-pricing .box-info-price .text-price {
   font-size: 56px;
-  color: #3C65F5;
+  color: #D0202d;
   font-family: "Plus Jakarta Sans", sans-serif;
   line-height: 56px;
   font-weight: 800;
@@ -6201,7 +6201,7 @@ ul li:last-child .card-list-4 {
   background-image: url(../fonts/editor.svg);
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #3C65F5;
+  background-color: #D0202d;
   position: absolute;
   bottom: 45px;
   right: 20px;
@@ -6910,7 +6910,7 @@ ul li:last-child .card-list-4 {
   line-height: 18px;
   border-radius: 7px;
   background: #E0E6F7;
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .background-primary {
@@ -6955,7 +6955,7 @@ ul li:last-child .card-list-4 {
 
 .input-disabled {
   background-color: #ffffff !important;
-  border: 1px solid #3C65F5;
+  border: 1px solid #D0202d;
   padding: 0px 0px;
   text-align: center;
   height: 35px;
@@ -7042,7 +7042,7 @@ ul li:last-child .card-list-4 {
   background-color: #E0E6F7;
   border-radius: 50%;
   text-align: center;
-  color: #3C65F5;
+  color: #D0202d;
 }
 
 .sidebar-border-bg {
@@ -7220,8 +7220,8 @@ ul li:last-child .card-list-4 {
   margin-bottom: 10px;
 }
 .nav-tabs li a:hover, .nav-tabs li a.active {
-  color: #3C65F5;
-  border-color: #3C65F5;
+  color: #D0202d;
+  border-color: #D0202d;
   box-shadow: 0px 2px 4px -5px rgb(10, 42, 105);
 }
 .nav-tabs li a img {
@@ -7586,7 +7586,7 @@ ul li:last-child .card-list-4 {
 }
 
 .bg-brand-2 {
-  background-color: #3C65F5;
+  background-color: #D0202d;
 }
 
 .bg-border-3 {
@@ -7607,7 +7607,7 @@ ul li:last-child .card-list-4 {
 }
 
 .number-element {
-  color: #3C65F5;
+  color: #D0202d;
   background-color: #EFF2FB;
   width: 110px;
   height: 110px;

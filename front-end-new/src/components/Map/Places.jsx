@@ -42,6 +42,7 @@ function Map({dataToplaces}) {
   useEffect(() => {
     if (selected) {
       dataToplaces(selected)
+      console.log('Selected ------------------------>>>>> ', selected)
       dispatch(setAddress(selected))
     }
   }, [selected])

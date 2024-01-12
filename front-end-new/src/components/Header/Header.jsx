@@ -39,7 +39,7 @@ export const Header = () => {
             <div className="header-left">
               <div className="header-logo">
               <Link className="d-flex" to="/">
-                <img alt="jobBox" src="images/LOGO.png" />
+                <img alt="jobBox" src="images/new-logo.png" />
               </Link>
               </div>
             </div>
@@ -69,18 +69,24 @@ export const Header = () => {
                     </Link> 
                   </li>
 
-                  <li>
-                    <Link className={`${getActiveLink(["/report"])}`} to="/report">
-                      Report
-                    </Link> 
-                  </li>
 
                   {
                     user?.fullName &&
-                    <li>
-                      <Link className={`${getActiveLink(["/user-profile"])}`} to="/user-profile">
-                        Profile
-                      </Link> 
+                    <li className="has-children">
+                      <a>Dashboard</a>
+                      <ul class="sub-menu">
+                        <li>
+                        <Link className={`${getActiveLink(["/report"])}`} to="/user-profile">
+                            Report
+                          </Link> 
+                          <Link className={`${getActiveLink(["/user-profile"])}`} to="/user-profile">
+                            Report History
+                          </Link> 
+                        </li>
+                        <li>
+                          <Link className="text-link-bd-btom hover-up" to='/' onClick={logOut}> { 'logout' } </Link>
+                        </li>
+                      </ul>
                     </li>
                   }
                   
@@ -100,8 +106,7 @@ export const Header = () => {
               {
                 user ? 
                   <div className="block-signin">
-                    <Link className="text-link-bd-btom hover-up" to="register" to="/user-profile"> { fullName } </Link> / &nbsp;
-                    <Link className="text-link-bd-btom hover-up" to='/' onClick={logOut}> { 'logout' } </Link>
+                    <Link className="text-link-bd-btom hover-up" to="register" to="/user-profile"> Welcome! &nbsp; { fullName } </Link>
                   </div> : 
               <div className="block-signin">
               <Link className="text-link-bd-btom hover-up" to="register">Register</Link>
@@ -174,7 +179,7 @@ export const Header = () => {
 
               { fullName &&
                 <div className="mobile-account">
-                <h5 className="mb-10">{ fullName }</h5>
+                <h5 className="mb-10"> Welcome! { fullName }</h5>
                 <ul className="mobile-menu font-heading">
                   <li>
                     <Link className="text-link-bd-btom hover-up" to='/' onClick={logOut}> { 'logout' } </Link>
