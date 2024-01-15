@@ -14,6 +14,8 @@ import { TimeDropDown } from "../components/elements/TimePicker";
 import InformationSource from "../components/DropDown/InformationSource";
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../components/elements/spinners';
+import { kadunaWards, josWards } from "../utils/wards.js";
+import WardDropDown from "../components/DropDown/WardDropdown.jsx";
 
 
 export const Report = () => {
@@ -43,6 +45,9 @@ export const Report = () => {
   const [submitForm, setSubmitForm] = useState(false);
   const [lga, setLga] = useState(['select a state']);
   const [formCol, setFormCol] = useState('col-lg-6 col-md-12')
+  const [WardCol, setWardCol] = useState('col-lg-4 col-md-4')
+  const [displayWard, setDisplayWard] = useState(false)
+  const [wards, setWards] = useState([])
   const [displayMediaLink, setDisplayLink] = useState(false)
   const [formValues, setFormValues] = useState({
     timeOfIncidence: "",
@@ -59,6 +64,10 @@ export const Report = () => {
     fileUpload: '',
     state: '',
     localGovt: '',
+    ward: '',
+    nums_women_children_affected: '',
+    numberKilled: '',
+    numberInjured: '',
     userTypedAddress: ''
   });
 
@@ -77,7 +86,7 @@ export const Report = () => {
   };
 
   const handleStateData = (data) => {
-    const { localGovt, state } = formValues
+    const { localGovt, state, ward } = formValues
     const { label, value } = data
     const errors = formValues.errors;
     setLga(value.lgas)
@@ -87,6 +96,7 @@ export const Report = () => {
         errors,
         state: label === 'State' ? value : state,
         localGovt: label === 'LGA' ? value : localGovt,
+        ward: label === 'ward' ? value : ward,
       };
     });
   };
@@ -156,6 +166,22 @@ export const Report = () => {
     }
   }, [formValues.intervention, formValues.informationSource])
 
+  const getWards = (localGovt) => {
+    const foundWards = [...kadunaWards, ...josWards].filter((ward) => ward.lga == localGovt)
+    setWards(foundWards)
+  }
+
+  useEffect(() => {
+    if (formValues.state.state === 'Kaduna' || formValues.state.state === 'Plateau') {
+      getWards(formValues.localGovt)
+      setDisplayWard(true);
+      setWardCol('col-lg-3 col-md-12');
+    } else {
+      setDisplayWard(false);
+      setWardCol('col-lg-4 col-md-12')
+    }
+  }, [formValues.state, formValues.localGovt])
+
   const onFileChange = (e) => {
     const errors = formValues.errors;
     setFormValues((prevState) => {
@@ -195,6 +221,10 @@ export const Report = () => {
       fileUpload,
       state,
       localGovt,
+      ward,
+      nums_women_children_affected,
+      numberKilled,
+      numberInjured,
       userTypedAddress,
       reoccurence,
       resolved
@@ -203,6 +233,7 @@ export const Report = () => {
     const address = {
       state: state.state,
       localGovt,
+      ward,
       country: mapAddress?.country,
       countryCode: mapAddress?.countryCode,
       fullAddress: mapAddress?.fullAddress,
@@ -232,6 +263,9 @@ export const Report = () => {
     form.append("description", description);
     form.append("intervention", intervention);
     form.append("agencyId", agency);
+    form.append("nums_women_children_affected", nums_women_children_affected);
+    form.append("numberKilled", numberKilled);
+    form.append("numberInjured", numberInjured);
     form.append("address", JSON.stringify(address));
     form.append("fileUpload", fileUpload);
 
@@ -308,6 +342,45 @@ export const Report = () => {
                           {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
                         </div>
                       </div>
+
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="numberKilled"
+                            value={formValues.numberKilled}
+                            placeholder="Numbers Killed"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Numbers Injured *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="numberInjured"
+                            value={formValues.numberInjured}
+                            placeholder="Numbers Injured"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="nums_women_children_affected"
+                            value={formValues.nums_women_children_affected}
+                            placeholder="Numbers Women & Children Affected"
+                            type="text"
+                          />
+                        </div>
+                      </div>
   
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group mb-30">
@@ -352,7 +425,7 @@ export const Report = () => {
                       
                       </div>
                     
-                      <div className="col-lg-4 col-md-4">
+                      <div className={WardCol}>
                         <div className="input-style mb-20">
                           <div className="input-style mb-20">
                           <label className="form-label" htmlFor="input-2">State*</label>
@@ -362,7 +435,7 @@ export const Report = () => {
                         </div>
                       </div>
   
-                      <div className="col-lg-4 col-md-4">
+                      <div className={WardCol}>
                         <div className="input-style mb-20">
                           <div className="input-style mb-20">
                           <label className="form-label" htmlFor="input-2">Local Government*</label>
@@ -371,14 +444,28 @@ export const Report = () => {
                           </div>
                         </div>
                       </div>
+
+                      {
+                        displayWard && 
+                        <div className={WardCol}>
+                          <div className="input-style mb-20">
+                            <div className="input-style mb-20">
+                            <label className="form-label" htmlFor="input-2">Ward*</label>
+                              <WardDropDown label={'wards'} wardData={wards} dataToComponent={ handleStateData } />
+                              {submitForm && formValues.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      
   
-                    <div className="col-lg-4 col-md-4">
-                      <div className="form-group">
-                        <label className="form-label" htmlFor="input-2">Address *</label>
-                        <Places dataToComponent={handlePlacesData}/>
-                        {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                      <div className={WardCol}>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="input-2">Address *</label>
+                          <Places dataToComponent={handlePlacesData}/>
+                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                        </div>
                       </div>
-                    </div>
                       
   
                       <div className={formCol}>

@@ -82,4 +82,31 @@ export const reportService = {
       throw e
     }
   },
+
+  getRosources: async () => {
+    try {
+      const url = `${serverUrl}/article/`
+      const method = 'GET'
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Cannot fetch Articles");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  getOneRosource: async (articleId) => {
+    try {
+      const url = `${serverUrl}/article/one?articleId=${articleId}`
+      console.log('URL ------>>>>>>>>>>> ', url)
+      const method = 'GET'
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Cannot fetch Article");
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
 }

@@ -11,6 +11,7 @@ import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { UserProfile } from "./pages/User-profile";
 import { Resources } from "./pages/Resources";
+import { ResourceDetils } from "./pages/ResourcesDetails";
 
 export const App = () => {
   const routes = useRoutes([
@@ -22,6 +23,7 @@ export const App = () => {
     { path: "/report", element: <Report /> },
     { path: "/user-profile", element: <UserProfile /> },
     { path: "/resources", element: <Resources /> },
+    { path: "/article/:articleId", element: <ResourceDetils /> },
     { path: "*", element: <Home /> },
   ]);
   

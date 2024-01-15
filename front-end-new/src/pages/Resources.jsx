@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
 import { PageLoader } from "../components/elements/spinners"
 import { store } from '../redux/store';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { reportService } from "../services/reporterService";
 import moment from "moment";
 
 export const Resources = () => {
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState(true)
+  const [data, setData] = useState([])
 
   let user = store?.getState()?.user?.user
   if (user) {
@@ -17,7 +17,7 @@ export const Resources = () => {
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500)
-    reportService.getUserReports(user._id)
+    reportService.getRosources()
     .then((data) => {
       setData(data?.data?.data)
     })
@@ -48,78 +48,31 @@ export const Resources = () => {
                   <div className="tab-content" id="myTabContent-1">
                     <div className="tab-pane fade show active" id="tab-job-1" role="tabpanel" aria-labelledby="tab-job-1">
                       <div className="row">
-                        <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                          <div className="card-grid-2 grid-bd-16 hover-up">
-                            <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
-                              <div className="image-box">
-                                <figure><img src="images/img1.png" alt="jobBox" /></figure>
-                              </div>
-                            </div>
-                            <div className="card-block-info">
-                              <h5><a href="job-details.html">Herders and farmers Clashes in Nigeria</a></h5>
-                              <div className="card-2-bottom mt-20">
-                                <div className="row">
-                                  
+                        {
+                          data.map((article) => {
+                            return (
+                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                              <div className="card-grid-2 grid-bd-16 hover-up">
+                                <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
+                                  <div className="image-box">
+                                  <Link to={ `/article/${article._id}` } > <figure><img src={article.attachments[0].url} alt="jobBox" /></figure> </Link>
+                                  </div>
+                                </div>
+                                <div className="card-block-info">
+                                  <h5> <Link to={ `/article/${article._id}` } >{article.title}</Link></h5>
+                                  <div className="card-2-bottom mt-20">
+                                    
+                                  </div>
+                                  <p className="font-sm color-text-paragraph mt-20">
+                                    {moment(article.createdAt).format('ll')}
+                                  </p>
                                 </div>
                               </div>
-                              <p className="font-sm color-text-paragraph mt-20">
-                                The struggle between herders and farmers in Nigeria over farmland and pasture is a serious and escalating 
-                                conflict registering huge casualties and raising tensions particularly in the country’s Middle Belt. 
-                                Drought and desertification in the north have forced pastoralist herdsmen to seek grazing lands further 
-                                south resulting in competition over resources and clashes with settled farmers
-                              </p>
                             </div>
-                          </div>
-                        </div>
-
-                        <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                          <div className="card-grid-2 grid-bd-16 hover-up">
-                            <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
-                              <div className="image-box">
-                                <figure><img src="images/img1.png" alt="jobBox" /></figure>
-                              </div>
-                            </div>
-                            <div className="card-block-info">
-                              <h5><a href="job-details.html">Herders and farmers Clashes in Nigeria</a></h5>
-                              <div className="card-2-bottom mt-20">
-                                <div className="row">
-                                  
-                                </div>
-                              </div>
-                              <p className="font-sm color-text-paragraph mt-20">
-                                The struggle between herders and farmers in Nigeria over farmland and pasture is a serious and escalating 
-                                conflict registering huge casualties and raising tensions particularly in the country’s Middle Belt. 
-                                Drought and desertification in the north have forced pastoralist herdsmen to seek grazing lands further 
-                                south resulting in competition over resources and clashes with settled farmers
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                          <div className="card-grid-2 grid-bd-16 hover-up">
-                            <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
-                              <div className="image-box">
-                                <figure><img src="images/img1.png" alt="jobBox" /></figure>
-                              </div>
-                            </div>
-                            <div className="card-block-info">
-                              <h5><a href="job-details.html">Herders and farmers Clashes in Nigeria</a></h5>
-                              <div className="card-2-bottom mt-20">
-                                <div className="row">
-                                  
-                                </div>
-                              </div>
-                              <p className="font-sm color-text-paragraph mt-20">
-                                The struggle between herders and farmers in Nigeria over farmland and pasture is a serious and escalating 
-                                conflict registering huge casualties and raising tensions particularly in the country’s Middle Belt. 
-                                Drought and desertification in the north have forced pastoralist herdsmen to seek grazing lands further 
-                                south resulting in competition over resources and clashes with settled farmers
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                                          
+                            )
+                          })
+                        }
+                                        
                       </div>
                     </div>
                   </div>
