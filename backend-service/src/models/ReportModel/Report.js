@@ -37,6 +37,9 @@ const addressSchema = new Schema({
     type: String,
     required: [true, 'state is missing']
   },
+  ward: {
+    type: String,
+  },
   userTypedAddress: {
     type: String,
     required: [true, 'user typed address is missing']
@@ -126,6 +129,10 @@ const reportSchema = new Schema({
     default: 0,
   },
   numberInjured: {
+    type: String,
+    default: 0,
+  },
+  nums_women_children_affected: {
     type: String,
     default: 0,
   },

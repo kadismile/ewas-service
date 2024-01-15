@@ -105,3 +105,20 @@ export const editArticle = async (req, res) => {
   }
   
 }
+
+export const getOneArticle = async (req, res) => {
+  try {
+    const { articleId } = req.query
+    const article = await Article.findOne({ _id:  articleId }).populate('attachments');
+    res.status(200).json({
+      status: "success",
+      data: { article }
+    });
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
