@@ -62,7 +62,7 @@ export const Home = ()=> {
                     <ReportDialogModal show={showModal} onHide={handleCloseModal} />
 
                      </div>
-                        <div className="mt-50 mb-20"><span className="font-md color-text-paragraph-2">Partner Agency</span></div> 
+                        <div className="mt-50 mb-20"><span className="font-md color-text-paragraph-2">Supported By</span></div> 
                         <div className="box-logos-485">
                           <div className="box-swiper">
                           <div className="swiper-container swiper-group-4-banner swiper">
@@ -120,7 +120,7 @@ export const Home = ()=> {
                               <div className="card-grid-2 grid-bd-16 hover-up">
                                 <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Article</span></span>
                                   <div className="image-box">
-                                  <Link to={ `/article/${article._id}` } > <figure><img src={article.attachments[0].url} alt="jobBox" /></figure> </Link>
+                                  <Link to={ `/article/${article._id}` } > <figure><img src={article?.attachments[0]?.url} alt="jobBox" /></figure> </Link>
                                   </div>
                                 </div>
                                 <div className="card-block-info">
