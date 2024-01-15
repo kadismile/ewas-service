@@ -39,7 +39,7 @@ export const Header = () => {
             <div className="header-left">
               <div className="header-logo">
               <Link className="d-flex" to="/">
-                <img alt="jobBox" src="images/new-logo.png" />
+                <img alt="jobBox" src="/images/new-logo-black.png" />
               </Link>
               </div>
             </div>
