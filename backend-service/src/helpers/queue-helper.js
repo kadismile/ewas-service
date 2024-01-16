@@ -52,7 +52,7 @@ export const queueHelper = (type, priority, queueData) => {
   const RedisClient = createClient({
     password: process.env.REDIS_PASSWORD,
     socket: {
-        host: 'redis-19612.c274.us-east-1-3.ec2.cloud.redislabs.com',
+        host: 'redis-11491.c274.us-east-1-3.ec2.cloud.redislabs.com',
         port: 19612
     }
   });
