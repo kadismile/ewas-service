@@ -349,6 +349,7 @@ export const Report = () => {
                           <input
                             className="font-sm color-text-paragraph-2"
                             name="numberKilled"
+                            onChange={handleChange}
                             value={formValues.numberKilled}
                             placeholder="Numbers Killed"
                             type="text"
@@ -362,6 +363,7 @@ export const Report = () => {
                           <input
                             className="font-sm color-text-paragraph-2"
                             name="numberInjured"
+                            onChange={handleChange}
                             value={formValues.numberInjured}
                             placeholder="Numbers Injured"
                             type="text"
@@ -375,6 +377,7 @@ export const Report = () => {
                           <input
                             className="font-sm color-text-paragraph-2"
                             name="nums_women_children_affected"
+                            onChange={handleChange}
                             value={formValues.nums_women_children_affected}
                             placeholder="Numbers Women & Children Affected"
                             type="text"
