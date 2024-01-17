@@ -10,3 +10,11 @@ export const DEPARTMENT_PERMISSIONS = [
 export const AGENCY_PERMISSIONS = [
   'can-manage-agencies'
 ]
+
+export const RESPONDER_PERMISSIONS = [
+  'can-manage-responders'
+]
+
+export const ARTICLE_PERMISSIONS = [
+  'can-manage-articles'
+]

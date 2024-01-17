@@ -1,6 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { WithPermissions } from "../../components/elements/WithPermissions";
-import { DEPARTMENT_PERMISSIONS, SUSPEND_USER_PERMISSIONS } from "../../utils/permissions.js"
+import { 
+  DEPARTMENT_PERMISSIONS, 
+  SUSPEND_USER_PERMISSIONS, 
+  ARTICLE_PERMISSIONS } from "../../utils/permissions.js"
 
 export const SideBar = () => {
   const location = useLocation();
@@ -32,12 +35,14 @@ export const SideBar = () => {
               </li>
 
               
-              <li>
-                <Link className={`dashboard2 ${getActiveLink(["/reporters"])}`} to="/reporters">
-                  <img src="/images/profiles.svg" alt="jobBox" />
-                  <span className="name">Reporters</span>
-                </Link> 
-              </li>
+              <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
+                <li>
+                  <Link className={`dashboard2 ${getActiveLink(["/reporters"])}`} to="/reporters">
+                    <img src="/images/profiles.svg" alt="jobBox" />
+                    <span className="name">Reporters</span>
+                  </Link> 
+                </li>
+              </WithPermissions>
 
               
               <WithPermissions permitedPermissions={ DEPARTMENT_PERMISSIONS }>
@@ -50,19 +55,22 @@ export const SideBar = () => {
               </WithPermissions>
               
 
-              <li>
+              <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }><li>
                 <Link className={`dashboard2 ${getActiveLink(["/responder"])}`} to="/responder">
                   <img src="/images/profiles.svg" alt="jobBox" />
                   <span className="name">Responder</span>
                 </Link> 
-              </li>
+                </li>
+              </WithPermissions>
 
-              <li>
-                <Link className={`dashboard2 ${getActiveLink(["/articles"])}`} to="/articles">
-                  <img src="/images/profiles.svg" alt="jobBox" />
-                  <span className="name">Articles</span>
-                </Link> 
-              </li>
+              <WithPermissions permitedPermissions={ ARTICLE_PERMISSIONS }>
+                <li>
+                  <Link className={`dashboard2 ${getActiveLink(["/articles"])}`} to="/articles">
+                    <img src="/images/profiles.svg" alt="jobBox" />
+                    <span className="name">Articles</span>
+                  </Link> 
+                </li>
+              </WithPermissions>
               
               <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
                 <li>
@@ -99,6 +107,30 @@ export const SideBar = () => {
           <div class="footer-social">
             
           </div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <br />
           <br />
           <br />

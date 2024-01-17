@@ -31,7 +31,7 @@ export const Articles = (props) => {
 
   useEffect(() => {
     fetchData()
-  }, [newData]);
+  }, []);
 
   
   const handleShowModal = (data) => {
