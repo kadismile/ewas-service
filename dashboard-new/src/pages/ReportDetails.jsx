@@ -128,10 +128,17 @@ export const ReportDetails = () => {
   const displayWorkOnReport = () => {
     const actionableUser = report?.actionableUsers
     if (displayEditButton() === true || actionableUser?.currentUser) return false
-    if (
+    // this checks for users that are responders e.g police , military
+    if (user?.responder) {
+      if (user?.responder === report?.responder) {
+        return true
+      }
+    } else {
+      if (
         actionableUser?.currentDepartment === user?.department._id
       ) {
-      return true
+        return true
+      }
     }
     return true
   }

@@ -96,6 +96,7 @@ export const Login = () => {
     setLoading(true);
     const { email, password } = formValues;
     const response = await userService.loginUser(email, password)
+    console.log('Response --------------->>>>>>> ', response)
     const { status } = response
     if (status === 'failed') {
       toastr.error('Invalid Login Details');
@@ -105,7 +106,11 @@ export const Login = () => {
       toastr.success('Login Successfully');
       setTimeout(() => setLoading(false), 1000)
       dispatch(setUser({ token, user }));
-      window.location.replace("/");
+      if (user?.responder) {
+        window.location.replace("/reports");
+      } else {
+        window.location.replace("/");
+      }
     }
   };
 
