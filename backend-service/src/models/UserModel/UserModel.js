@@ -48,7 +48,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin', 'superAdmin'],
+    enum: ['user', 'admin', 'responder','superAdmin'],
     // user ====> normal user
     // admin ===> Department Head
     // superAdmin ===> Controls All *

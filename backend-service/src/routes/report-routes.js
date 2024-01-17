@@ -8,7 +8,7 @@ import { reportType, createReporter, loginReporter,
 import {searchRsource} from '../controllers/search-controller.js';
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js';
 import { upload } from '../helpers/file-upload-helper.js';
-import { REPORT_PERMISSIONS, REPORTERS_PERMISSIONS } from '../lib/permissions.js';
+import { REPORT_PERMISSIONS, REPORTERS_PERMISSIONS, RESPONDERS_PERMISSIONS } from '../lib/permissions.js';
 
 const router = express.Router();
 router.post('/type',  reportType);
@@ -27,7 +27,7 @@ router.get('/one', protectedRoute, authorize(REPORT_PERMISSIONS), getOneReport);
 router.get('/draft', protectedRoute, authorize(REPORT_PERMISSIONS), getDraftReport);
 router.post('/accept', protectedRoute, authorize(REPORT_PERMISSIONS), acceptReport);
 router.post('/verify', protectedRoute, authorize(REPORT_PERMISSIONS), verifyReport);
-router.get('/get-advanced', protectedRoute, authorize(REPORT_PERMISSIONS), getAdvanced);
+router.get('/get-advanced', protectedRoute, authorize(REPORT_PERMISSIONS, RESPONDERS_PERMISSIONS), getAdvanced);
 router.post('/search', protectedRoute, searchRsource);
 
 

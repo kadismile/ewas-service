@@ -352,7 +352,7 @@ export const verifyReport = async (req, res) => {
       const { acronym } = department
 
       const nextActionableDept = await getNextActionableDept(acronym, responder)
-      await updateActonableUser(userId, department._id, report, nextActionableDept, true)
+      await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
       const comment =  `report verified by ${user.fullName} of ${acronym} Department`
       await addHistory(user, report, comment)
 
@@ -363,7 +363,7 @@ export const verifyReport = async (req, res) => {
         const agency = await Agency.findOne({ _id: responder })
         if (agency.name) {
           const body = 'An SMS is sent your way kindly read it '
-          await sendSMS(body, agency?.phoneNumbers)
+          // await sendSMS(body, agency?.phoneNumbers)
         }
         
       }
@@ -379,10 +379,10 @@ export const verifyReport = async (req, res) => {
 
 export const getAdvanced = async (req, res) => {
   const { populate, select } = req.query;
-  const transactions = await advancedResults(req, Report, populate, select);
+  const reports = await advancedResults(req, Report, populate, select);
   return res.status(200).json({
     status: "success",
-    data: transactions
+    data: reports
   });
 };
 
@@ -462,13 +462,14 @@ const addHistory = async (user, report, comment) => {
   return 
 }
 
-const updateActonableUser = async (userId, department, report, nextActionableDept, unassign) => {
+const updateActonableUser = async (userId, department, report, nextActionableDept, unassign, responder) => {
   const actionableUsers = {
     currentUser: unassign ? null : userId,
     currentDepartment: unassign ? null : department,
     reportUserHistory: report.reportUserHistory?.length ? 
       report.actionableUsers?.reportUserHistory?.push(userId) : [userId],
     nextActionableDept: nextActionableDept, 
+    agencyId: responder ? responder : undefined,
   };
   await Report.findOneAndUpdate({ _id: report._id }, {
     actionableUsers
@@ -494,6 +495,13 @@ const getNextActionableDept = async (acronym, responder) => {
     const dept = await Department.findOne({acronym: 'SSS'}) 
     if (dept) {
       return dept._id
+    }
+  }
+
+  if (acronym === 'SSS') {
+    const agency = await Agency.findOne({ _id: responder })
+    if (agency) {
+      return agency._id
     }
   }
 
