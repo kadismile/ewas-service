@@ -64,6 +64,9 @@ const actionableSchema = new Schema({
   }],
   nextActionableDept: {
     type: String,
+  },
+  agencyId: {
+    type: String,
   }
 },
 {timestamps: true, versionKey: false }

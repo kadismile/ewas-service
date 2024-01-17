@@ -10,3 +10,8 @@ export const REPORTERS_PERMISSIONS = [
 export const DEPARTMENT_PERMISSIONS = [
   'can-manage-departments'
 ]
+
+export const RESPONDERS_PERMISSIONS = [
+  'can-manage-responders',
+  'can-manage-reports'
+]

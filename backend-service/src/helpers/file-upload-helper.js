@@ -1,4 +1,5 @@
 import multer from 'multer';
+import  Queue from 'bull';
 import { uuid } from 'uuidv4';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -79,6 +80,6 @@ export const manageFileUpload = async (filePath, fileName, data, Model) => {
         { _id: data._id },
         { $push: { attachments: attachment._id } },
       );
-  });
+  }); 
 }
 

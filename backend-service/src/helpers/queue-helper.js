@@ -33,7 +33,6 @@ export const queueHelper = (type, priority, queueData) => {
     }
   });
 
-  return redisQueue
 } */
 
 
