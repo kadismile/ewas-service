@@ -20,17 +20,11 @@ export default function InformationSource ({ label, dataToComponent }) {
   ];
 
   const customStyles = {
-    input: (provided) => ({
-      ...provided,
-      width: 100,
-      height: 38,
-      display: 'flex',
-      alignItems: 'center',
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      marginTop: 2,
-    }),
+    control: base => ({
+      ...base,
+      height: 52,
+      minHeight: 52,
+    })
   };
   
   return (

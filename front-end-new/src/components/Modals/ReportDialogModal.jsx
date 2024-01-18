@@ -15,23 +15,30 @@ export default function ReportDialogModal(props) {
   const handleClick = () => {
     if (!user) {
       const state = { from: 'reportDialog' };
+      props.onHide()
       return navigate('/login', { state: { state } });
     }
+    props.onHide()
     return navigate('/report');
   }
 
+  const redirect = () => {
+    props.onHide()
+    navigate('/report')
+  }
+  
   return (
     <Modal
       aria-labelledby="contained-modal-title-vcenter"
       centered 
       show={props.show} onHide={props.onHide}>
       <Modal.Header closeButton>
-        <Modal.Title> Report An Incident </Modal.Title>
+        <Modal.Title> <h6 style={{textAlign: 'center'}}>Do You Want To Report Anonymously ? </h6></Modal.Title>
       </Modal.Header>
       <Modal.Body>
       <div className={styles.container}>
-        <button className={styles.left_button} onClick={()=> navigate('/report')}>Anonymously</button>
-        <button className={styles.right_button} onClick={handleClick}>Openly</button>
+        <button className={styles.left_button} onClick={redirect}>No</button>
+        <button className={styles.right_button} onClick={handleClick}>Yes</button>
     </div>
       </Modal.Body>
       <Modal.Footer>
