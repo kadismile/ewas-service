@@ -37,7 +37,7 @@ const addressSchema = new Schema({
     type: String,
     required: [true, 'state is missing']
   },
-  ward: {
+  community: {
     type: String,
   },
   userTypedAddress: {
