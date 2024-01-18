@@ -1,4 +1,5 @@
 import { useRoutes } from "react-router-dom";
+import { store } from './redux/store';
 import { Home } from "./pages/Home";
 import { Header } from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
@@ -12,17 +13,23 @@ import { Contact } from "./pages/Contact";
 import { UserProfile } from "./pages/User-profile";
 import { Resources } from "./pages/Resources";
 import { ResourceDetils } from "./pages/ResourcesDetails";
+import { VolunteerReport } from "./pages/VolunteerReport";
 
 export const App = () => {
+  let user = store?.getState()?.user?.user
+  if (user) {
+    user = user.user
+  }
+
   const routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/about", element: <About /> },
     { path: "/contact", element: <Contact /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
-    { path: "/report", element: <Report /> },
+    { path: "/report", element: !user ? <Report /> : <VolunteerReport/> },
     { path: "/user-profile", element: <UserProfile /> },
-    { path: "/resources", element: <Resources /> },
+    { path: "/resources", element:  <Resources /> },
     { path: "/article/:articleId", element: <ResourceDetils /> },
     { path: "*", element: <Home /> },
   ]);

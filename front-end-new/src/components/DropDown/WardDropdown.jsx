@@ -2,7 +2,7 @@ import { useState } from "react";
 import Select from 'react-select';
 
 
-export default function WardDropDown ({ label, wardData, dataToComponent }) {
+export default function WardDropDown ({ label, communityData, dataToComponent }) {
   const [selectedOption, setSelectedOption] = useState('other');
 
   const handleClick = async (data) => {
@@ -13,28 +13,22 @@ export default function WardDropDown ({ label, wardData, dataToComponent }) {
 
 
   const options = () => {
-    return wardData.map((data) => {
+    return communityData.map((data) => {
       return {
-        value: data.ward,
-        label: data.ward
+        value: data.Community,
+        label: data.Community
       }
     })
   }
 
   const customStyles = {
-    input: (provided) => ({
-      ...provided,
-      width: 100,
-      height: 38,
-      display: 'flex',
-      alignItems: 'center',
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      marginTop: 2,
-    }),
+    control: base => ({
+      ...base,
+      height: 52,
+      minHeight: 52,
+    })
   };
-  
+
   return (
     <Select
       isSearchable={ false }

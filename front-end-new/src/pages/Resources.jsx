@@ -27,7 +27,7 @@ export const Resources = () => {
   return (
     <>
       {
-        !fullName ? navigate('/') : loading ? <PageLoader /> :
+        loading ? <PageLoader /> :
         <main className="main">
           <section className="section-box-2">
             <div className="container">

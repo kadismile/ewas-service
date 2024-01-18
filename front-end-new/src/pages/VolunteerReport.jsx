@@ -1,24 +1,24 @@
 import { useState, useEffect } from "react";
 import { store } from '../redux/store.js';
-import DropDown from "../components/DropDown/DropDown"
-import CalendarModal from "../components/Modals/CalendarModal";
+import DropDown from "../components/DropDown/DropDown.jsx"
+import CalendarModal from "../components/Modals/CalendarModal.jsx";
 import moment from 'moment'
 import Places from '../components/Map/Places.jsx';
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
-import BooleanDropDown from "../components/DropDown/BooleanDropDown";
-import { reportService } from "../services/reporterService";
+import BooleanDropDown from "../components/DropDown/BooleanDropDown.jsx";
+import { reportService } from "../services/reporterService.js";
 import toastr from 'toastr'
-import StateDropDown from "../components/DropDown/StateDropDown";
-import LGADropDown from "../components/DropDown/LGADropDown";
-import { TimeDropDown } from "../components/elements/TimePicker";
-import InformationSource from "../components/DropDown/InformationSource";
+import StateDropDown from "../components/DropDown/StateDropDown.jsx";
+import LGADropDown from "../components/DropDown/LGADropDown.jsx";
+import { TimeDropDown } from "../components/elements/TimePicker.jsx";
+import InformationSource from "../components/DropDown/InformationSource.jsx";
 import { useNavigate } from 'react-router-dom';
-import { PageLoader } from '../components/elements/spinners';
-import { kadunaCommunity, PlateauCommunities} from "../utils/wards.js";
+import { PageLoader } from '../components/elements/spinners.jsx';
+import { kadunaCommunity, PlateauCommunities } from "../utils/wards.js";
 import WardDropDown from "../components/DropDown/WardDropdown.jsx";
 
 
-export const Report = () => {
+export const VolunteerReport = () => {
   let user = store?.getState()?.user?.user
   let mapAddress
   if (user) {
@@ -167,7 +167,7 @@ export const Report = () => {
   }, [formValues.intervention, formValues.informationSource])
 
   const getCommuinities = (localGovt) => {
-    const foundCommunities = [...kadunaCommunity, ...PlateauCommunities].filter((ward) => ward.lga == localGovt)
+    const foundCommunities = [...kadunaCommunity, ...PlateauCommunities].filter((comm) => comm.lga == localGovt)
     setCommunities(foundCommunities)
   }
 
@@ -308,7 +308,7 @@ export const Report = () => {
             <div className="container">
               <div className="row">
                 <div className="col-lg-12 mb-40">
-                  <h2 className="mt-5 mb-10">Report An Incident</h2>
+                  <h2 className="mt-5 mb-10">Volunteer To Report An Incident</h2>
                   <p className="font-md color-text-paragraph-2">
                     The fields marked as * are important filelds
                     <br className="d-none d-lg-block" /> kindly fill all as accurate as possible
@@ -343,7 +343,49 @@ export const Report = () => {
                         </div>
                       </div>
 
-                      <div className="col-lg-6 col-md-12">
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="numberKilled"
+                            onChange={handleChange}
+                            value={formValues.numberKilled}
+                            placeholder="Numbers Killed"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Numbers Injured *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="numberInjured"
+                            onChange={handleChange}
+                            value={formValues.numberInjured}
+                            placeholder="Numbers Injured"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="nums_women_children_affected"
+                            onChange={handleChange}
+                            value={formValues.nums_women_children_affected}
+                            placeholder="Numbers Women & Children Affected"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-12 col-md-12">
                         <div className="form-group mb-30">
                           <div class="box-upload">
                           <label className="form-label" htmlFor="input-2">Upload photo/video </label>
@@ -355,7 +397,29 @@ export const Report = () => {
                           </div>
                       </div>
   
-                      <div className="col-lg-6 col-md-3">
+  
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Date of Incident *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="date"
+                            value={formValues.date}
+                            placeholder="Date of incidence"
+                            type="text"
+                            onClick={handleClick}
+                          />
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
+                        <TimeDropDown timeChange={handleTimeInput}/>
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-4 col-md-3">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Type of Incident *</label>
                           <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
@@ -405,12 +469,53 @@ export const Report = () => {
                           {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
                         </div>
                       </div>
+                      
+  
+                      <div className={formCol}>
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Security Intervention? </label>
+                        <BooleanDropDown label={'Intervention'} dataToComponent={ handleDropDownData }/>
+                        </div>
+                      </div>
+  
+                      {
+                        formValues?.intervention === true ? 
+                        <>
+                          <div className={formCol}>
+                              <div className="input-style mb-20">
+                              <label className="form-label" htmlFor="input-2">Security Agency intervention </label>
+                              <DropDown label={'Agency'} dataToComponent={ handleDropDownData } />
+                            </div>
+                          </div> 
+  
+                        <div className={formCol}>
+                          <div className="">
+                          <label className="form-label" htmlFor="input-2">Has it been Resolved?</label>
+                            <BooleanDropDown label={'Resolved'} dataToComponent={ handleDropDownData }/>
+                          </div>
+                        </div>
+                        </>
+                        : ""
+                      }
+  
+                      <div className={formCol}>
+                        <div className="">
+                        <label className="form-label" htmlFor="input-2">Has it happened before?</label>
+                          <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
+                        </div>
+                      </div>
   
                       <br/>
                       <br/>
                       <br/>
                       <br/>
                     
+                      <div className={formCol}>
+                        <div className="">
+                        <label className="form-label" htmlFor="input-2">Source of Information</label>
+                          <InformationSource label={'Source of Information'} dataToComponent={ handleDropDownData }/>
+                        </div>
+                      </div>
   
                       {
                         displayMediaLink ?
@@ -437,7 +542,7 @@ export const Report = () => {
                       <section className="mt-20">
                       {
                         !loading ? (
-                            <SubmitButton onClick={ handleSubmit } title={'Prompt Report'} className={'submit btn btn-danger'}/>
+                            <SubmitButton onClick={ handleSubmit } title={'Report Incident'} className={'submit btn btn-send-message'}/>
                         ) : (
                             <LoadingButton />
                         ) 

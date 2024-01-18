@@ -61,7 +61,7 @@ export const Home = ()=> {
                     <a onClick={handleShowModal} className="btn btn-default mr-15">REPORT INCIDENT</a>
                     <ReportDialogModal show={showModal} onHide={handleCloseModal} />
 
-                     </div>
+                    </div>
                         <div className="mt-50 mb-20"><span className="font-md color-text-paragraph-2">Supported By</span></div> 
                         <div className="box-logos-485">
                           <div className="box-swiper">

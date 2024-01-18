@@ -3,6 +3,7 @@ import { store } from '../../redux/store';
 import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
 import { useLocation, Link } from "react-router-dom";
+import ReportDialogModal from "../Modals/ReportDialogModal";
 
 export const Header = () => {
   let user = store?.getState()?.user?.user
@@ -26,9 +27,17 @@ export const Header = () => {
   }
 
   const [menuVisible, setMenuVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(menuVisible => !menuVisible);
+  };
+
+  const handleShowModal = () => {
+    setShowModal(true);;
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -63,6 +72,14 @@ export const Header = () => {
                       Resources
                     </Link> 
                   </li>
+
+                  <li>
+                    <Link onClick={handleShowModal} className={`${getActiveLink(["/report"])}`} >
+                      Report
+                    </Link> 
+                    <ReportDialogModal show={showModal} onHide={handleCloseModal} />
+                  </li>
+
                   <li>
                     <Link className={`${getActiveLink(["/contact"])}`} to="/contact">
                       Contact
