@@ -12,19 +12,19 @@ export default function ReportDialogModal(props) {
     user = user.user
   }
 
-  const handleClick = () => {
-    if (!user) {
-      const state = { from: 'reportDialog' };
+  const handleClick = (response) => {
+    if (response) {
       props.onHide()
-      return navigate('/login', { state: { state } });
+      return navigate('/report');
+    } else {
+      if (!user) {
+        const state = { from: 'reportDialog' };
+        props.onHide()
+        return navigate('/login', { state: { state } });
+      } else {
+        return navigate('/volunteer-report');
+      }
     }
-    props.onHide()
-    return navigate('/report');
-  }
-
-  const redirect = () => {
-    props.onHide()
-    navigate('/report')
   }
   
   return (
@@ -37,8 +37,8 @@ export default function ReportDialogModal(props) {
       </Modal.Header>
       <Modal.Body>
       <div className={styles.container}>
-        <button className={styles.right_button} onClick={handleClick}>Yes</button>
-        <button className={styles.left_button} onClick={redirect}>No</button>
+        <button className={styles.right_button} onClick={() => handleClick(true)}>Yes</button>
+        <button className={styles.left_button} onClick={() => handleClick(false)}>No</button>
     </div>
       </Modal.Body>
       <Modal.Footer>

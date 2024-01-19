@@ -213,7 +213,7 @@ export const VolunteerReport = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitForm(true)
-    setLoading(true);
+    
     let {
       title,
       reportTypeId,
@@ -268,7 +268,7 @@ export const VolunteerReport = () => {
     } else {
       return 
     }
-
+    setLoading(true);
     const reporterId = user?.user?._id || 'anonymous'
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
