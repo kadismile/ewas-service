@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import { store } from '../redux/store.js';
-import DropDown from "../components/DropDown/DropDown"
-import CalendarModal from "../components/Modals/CalendarModal";
+import DropDown from "../components/DropDown/DropDown.jsx"
+import CalendarModal from "../components/Modals/CalendarModal.jsx";
 import moment from 'moment'
 import Places from '../components/Map/Places.jsx';
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
-import BooleanDropDown from "../components/DropDown/BooleanDropDown";
-import { reportService } from "../services/reporterService";
+import BooleanDropDown from "../components/DropDown/BooleanDropDown.jsx";
+import { reportService } from "../services/reporterService.js";
 import toastr from 'toastr'
-import StateDropDown from "../components/DropDown/StateDropDown";
-import LGADropDown from "../components/DropDown/LGADropDown";
-import { TimeDropDown } from "../components/elements/TimePicker";
-import InformationSource from "../components/DropDown/InformationSource";
+import StateDropDown from "../components/DropDown/StateDropDown.jsx";
+import LGADropDown from "../components/DropDown/LGADropDown.jsx";
+import { TimeDropDown } from "../components/elements/TimePicker.jsx";
+import InformationSource from "../components/DropDown/InformationSource.jsx";
 import { useNavigate } from 'react-router-dom';
-import { PageLoader } from '../components/elements/spinners';
-import { kadunaCommunity, PlateauCommunities} from "../utils/wards.js";
+import { PageLoader } from '../components/elements/spinners.jsx';
+import { kadunaCommunity, PlateauCommunities } from "../utils/wards.js";
 import WardDropDown from "../components/DropDown/WardDropdown.jsx";
+import { prepareAddresss } from "../utils/address-helper.js";
+import { Button, Collapse } from 'react-bootstrap';
 
 
 export const Report = () => {
@@ -70,6 +72,7 @@ export const Report = () => {
     numberInjured: '',
     userTypedAddress: ''
   });
+  const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
@@ -86,11 +89,13 @@ export const Report = () => {
   };
 
   const handleStateData = (data) => {
-    console.log('VALUE ---------->>>>>>>>>>>> >>>>>>', value)
     const { localGovt, state, community } = formValues
     const { label, value } = data
     const errors = formValues.errors;
-    setLga(value.lgas)
+    if (value && Array.isArray(value.lgas)) {
+      setLga(value.lgas)
+    }
+    
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -168,7 +173,7 @@ export const Report = () => {
   }, [formValues.intervention, formValues.informationSource])
 
   const getCommuinities = (localGovt) => {
-    const foundCommunities = [...kadunaCommunity, ...PlateauCommunities].filter((ward) => ward.lga == localGovt)
+    const foundCommunities = [...kadunaCommunity, ...PlateauCommunities].filter((comm) => comm.lga == localGovt)
     setCommunities(foundCommunities)
   }
 
@@ -176,10 +181,10 @@ export const Report = () => {
     if (formValues.state.state === 'Kaduna' || formValues.state.state === 'Plateau') {
       getCommuinities(formValues.localGovt)
       setDisplayCommunity(true);
-      setWardCol('col-lg-3 col-md-12');
+      setWardCol('col-lg-2 col-md-12');
     } else {
       setDisplayCommunity(false);
-      setWardCol('col-lg-4 col-md-12')
+      setWardCol('col-lg-3 col-md-12')
     }
   }, [formValues.state, formValues.localGovt])
 
@@ -208,7 +213,7 @@ export const Report = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitForm(true)
-    setLoading(true);
+    
     let {
       title,
       reportTypeId,
@@ -231,18 +236,39 @@ export const Report = () => {
       resolved
     } = formValues;
 
-    const address = {
-      state: state.state,
-      localGovt,
-      community,
-      country: mapAddress?.country,
-      countryCode: mapAddress?.countryCode,
-      fullAddress: mapAddress?.fullAddress,
-      latitude: mapAddress?.latitude,
-      longitude: mapAddress?.longitude,
-      userTypedAddress: mapAddress?.userTypedAddress,
-    }
 
+    let address
+    if (userTypedAddress?.length > 2) {
+      if (mapAddress?.latitude || mapAddress?.longitude) {
+        const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(userTypedAddress)
+        address = {
+          state: state.state,
+          localGovt,
+          community,
+          country,
+          countryCode,
+          fullAddress,
+          latitude,
+          longitude,
+          userTypedAddress: mapAddress?.userTypedAddress,
+        }   
+      } else {
+        address = {
+          state: state.state,
+          localGovt,
+          community,
+          country: mapAddress?.country,
+          countryCode: mapAddress?.countryCode,
+          fullAddress: mapAddress?.fullAddress,
+          latitude: mapAddress?.latitude,
+          longitude: mapAddress?.longitude,
+          userTypedAddress: mapAddress?.userTypedAddress,
+        }  
+      }
+    } else {
+      return 
+    }
+    setLoading(true);
     const reporterId = user?.user?._id || 'anonymous'
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
@@ -282,8 +308,6 @@ export const Report = () => {
       navigate('/')
     }
   };
-
-  console.log('BONKU ===============>>>>>>>> ', lga)
 
 
   return (
@@ -346,7 +370,8 @@ export const Report = () => {
                         </div>
                       </div>
 
-                      <div className="col-lg-6 col-md-12">
+                  
+                      <div className="col-lg-12 col-md-12">
                         <div className="form-group mb-30">
                           <div class="box-upload">
                           <label className="form-label" htmlFor="input-2">Upload photo/video </label>
@@ -358,7 +383,28 @@ export const Report = () => {
                           </div>
                       </div>
   
-                      <div className="col-lg-6 col-md-3">
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Date of Incident *</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="date"
+                            value={formValues.date}
+                            placeholder="Date of incidence"
+                            type="text"
+                            onClick={handleClick}
+                          />
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-4 col-md-4">
+                        <div className="input-style mb-20">
+                        <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
+                        <TimeDropDown timeChange={handleTimeInput}/>
+                        </div>
+                      </div>
+  
+                      <div className="col-lg-4 col-md-3">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Type of Incident *</label>
                           <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
@@ -367,6 +413,8 @@ export const Report = () => {
                       
                       </div>
                     
+                      { displayCommunity && <div className="col-lg-1"> </div> }
+                        
                       <div className={WardCol}>
                         <div className="input-style mb-20">
                           <div className="input-style mb-20">
@@ -403,56 +451,57 @@ export const Report = () => {
   
                       <div className={WardCol}>
                         <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Address *</label>
+                          <label className="form-label" htmlFor="input-2">Land Mark*</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="userTypedAddress"
+                            onChange={handleChange}
+                            value={formValues.userTypedAddress}
+                            placeholder="Land Mark"
+                            type="text"
+                          />
+                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                        </div>
+                      </div>
+
+                      <div className={WardCol}>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="input-2">Address</label>
                           <Places dataToComponent={handlePlacesData}/>
                           {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
                         </div>
                       </div>
-  
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
-                    
-  
-                      {
-                        displayMediaLink ?
-                        <div className={formCol}>
-                        <div className="">
-                        <label className="form-label" htmlFor="input-2">Website Link</label>
-                        <input
-                            className="font-sm color-text-paragraph-2"
-                            name="mediaLinks"
-                            value={formValues.mediaLinks}
-                            placeholder="Website Link"
-                            type="text"
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div> : ""
-                      }
+
+                      { displayCommunity && <div className="col-lg-1"> </div> }
+                 
                       <br/>
                       <br/>
                       <br/>
                       <br/>
                       <br/>
-  
-                      <section className="mt-20">
-                      {
-                        !loading ? (
-                            <SubmitButton onClick={ handleSubmit } title={'Prompt Report'} className={'submit btn btn-danger'}/>
-                        ) : (
-                            <LoadingButton />
-                        ) 
-                      }
-                      </section>
-                  
                     </div>
                   </form>
                   <p className="form-messege" />
                 </div>
                 
               </div>
+              <div class="container">
+                    <div class="row">
+                      <div class="col-lg-4"></div>
+                      <div class="col-lg-4">{
+                        !loading ?
+                        <button 
+                          onClick={ handleSubmit } 
+                          style={{width: '100%'}}
+                          type="button" 
+                          class="btn btn-block btn-success">Submit Report
+                        </button>
+                        : <LoadingButton />
+                      }
+                      </div>
+                      </div>
+                    <div class="col-lg-4"></div>
+                  </div>
             </div>
           </section>
   

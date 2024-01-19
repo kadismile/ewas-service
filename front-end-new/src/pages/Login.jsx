@@ -66,7 +66,7 @@ export const Login = () => {
       setTimeout(() => setLoading(false), 1000);
       dispatch(setUser({ user: data, token }));
       if (from) {
-        navigate('/report')
+        navigate('/volunteer-report')
       } else 
       navigate('/user-profile')
     }
