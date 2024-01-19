@@ -236,6 +236,7 @@ export const VolunteerReport = () => {
       resolved
     } = formValues;
 
+
     let address
     if (userTypedAddress?.length > 2) {
       if (mapAddress?.latitude || mapAddress?.longitude) {
@@ -265,7 +266,10 @@ export const VolunteerReport = () => {
         }  
       }
     } else {
-      const reporterId = user?.user?._id || 'anonymous'
+      return 
+    }
+
+    const reporterId = user?.user?._id || 'anonymous'
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
     if (!userTypedAddress || !localGovt || !state || !description) {
@@ -303,7 +307,6 @@ export const VolunteerReport = () => {
       setTimeout(() => setLoading(false), 1000)
       navigate('/')
     }
-  } 
   };
 
 
@@ -600,7 +603,7 @@ export const VolunteerReport = () => {
                         !loading ?
                         <button 
                           onClick={ handleSubmit } 
-                         style={{width: '50%'}}
+                          style={{width: '100%'}}
                           type="button" 
                           class="btn btn-block btn-success">Submit Report
                         </button>
