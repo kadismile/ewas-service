@@ -3,7 +3,6 @@ import Select from 'react-select';
 
 
 export default function LGADropDown ({ label, lgaData, dataToComponent }) {
-  console.log('first')
   const [selectedOption, setSelectedOption] = useState('other');
   const handleClick = async (data) => {
     const { value } = data

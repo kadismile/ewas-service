@@ -55,7 +55,9 @@ export const Resources = () => {
                               <div className="card-grid-2 grid-bd-16 hover-up">
                                 <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Freelancer</span></span>
                                   <div className="image-box">
-                                  <Link to={ `/article/${article._id}` } > <figure><img src={article?.attachments[0]?.url} alt="jobBox" /></figure> </Link>
+                                  <Link to={ `/article/${article._id}` } > 
+                                    <figure><img src="/images/resources-place-holder.png" alt="jobBox" /></figure> 
+                                  </Link>
                                   </div>
                                 </div>
                                 <div className="card-block-info">

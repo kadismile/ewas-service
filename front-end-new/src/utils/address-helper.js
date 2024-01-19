@@ -11,14 +11,14 @@ import {
   RequestType,
 } from "react-geocode";
 
-export const prepareAddresss = (address) => {
+export const prepareAddresss = async (address) => {
   setDefaults({
     key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY, // Your API key here.
     language: "en", // Default language for responses.
     region: "es", // Default region for responses.
   });
-  return fromAddress(address)
-  .then(({ results }) => {
+  try {
+    const { results } = await fromAddress(address);
     const { lat, lng } = results[0].geometry.location;
     return {
       longitude: lng,
@@ -26,7 +26,8 @@ export const prepareAddresss = (address) => {
       countryCode: 'NG',
       fullAddress: results[0].formatted_address,
       country: 'Nigeria'
-    }
-  })
-  .catch(console.error)
+    };
+  } catch (message) {
+    return console.error(message);
+  }
 }

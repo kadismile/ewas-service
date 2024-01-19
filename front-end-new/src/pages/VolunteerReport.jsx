@@ -16,6 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../components/elements/spinners.jsx';
 import { kadunaCommunity, PlateauCommunities } from "../utils/wards.js";
 import WardDropDown from "../components/DropDown/WardDropdown.jsx";
+import { prepareAddresss } from "../utils/address-helper.js";
+import { Button, Collapse } from 'react-bootstrap';
 
 
 export const VolunteerReport = () => {
@@ -70,6 +72,7 @@ export const VolunteerReport = () => {
     numberInjured: '',
     userTypedAddress: ''
   });
+  const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
@@ -89,7 +92,10 @@ export const VolunteerReport = () => {
     const { localGovt, state, community } = formValues
     const { label, value } = data
     const errors = formValues.errors;
-    setLga(value.lgas)
+    if (value && Array.isArray(value.lgas)) {
+      setLga(value.lgas)
+    }
+    
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -175,10 +181,10 @@ export const VolunteerReport = () => {
     if (formValues.state.state === 'Kaduna' || formValues.state.state === 'Plateau') {
       getCommuinities(formValues.localGovt)
       setDisplayCommunity(true);
-      setWardCol('col-lg-3 col-md-12');
+      setWardCol('col-lg-2 col-md-12');
     } else {
       setDisplayCommunity(false);
-      setWardCol('col-lg-4 col-md-12')
+      setWardCol('col-lg-3 col-md-12')
     }
   }, [formValues.state, formValues.localGovt])
 
@@ -230,19 +236,36 @@ export const VolunteerReport = () => {
       resolved
     } = formValues;
 
-    const address = {
-      state: state.state,
-      localGovt,
-      community,
-      country: mapAddress?.country,
-      countryCode: mapAddress?.countryCode,
-      fullAddress: mapAddress?.fullAddress,
-      latitude: mapAddress?.latitude,
-      longitude: mapAddress?.longitude,
-      userTypedAddress: mapAddress?.userTypedAddress,
-    }
-
-    const reporterId = user?.user?._id || 'anonymous'
+    let address
+    if (userTypedAddress?.length > 2) {
+      if (mapAddress?.latitude || mapAddress?.longitude) {
+        const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(userTypedAddress)
+        address = {
+          state: state.state,
+          localGovt,
+          community,
+          country,
+          countryCode,
+          fullAddress,
+          latitude,
+          longitude,
+          userTypedAddress: mapAddress?.userTypedAddress,
+        }   
+      } else {
+        address = {
+          state: state.state,
+          localGovt,
+          community,
+          country: mapAddress?.country,
+          countryCode: mapAddress?.countryCode,
+          fullAddress: mapAddress?.fullAddress,
+          latitude: mapAddress?.latitude,
+          longitude: mapAddress?.longitude,
+          userTypedAddress: mapAddress?.userTypedAddress,
+        }  
+      }
+    } else {
+      const reporterId = user?.user?._id || 'anonymous'
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
     if (!userTypedAddress || !localGovt || !state || !description) {
@@ -280,6 +303,7 @@ export const VolunteerReport = () => {
       setTimeout(() => setLoading(false), 1000)
       navigate('/')
     }
+  } 
   };
 
 
@@ -335,7 +359,7 @@ export const VolunteerReport = () => {
                           <textarea
                             className="font-sm color-text-paragraph-2"
                             name="description"
-                            placeholder="Describe the incident and number of casualty"
+                            placeholder="Kindly Describe The Incident To The best of Your Ability"
                             value={formValues.description}
                             onChange={handleChange}
                           />
@@ -343,48 +367,7 @@ export const VolunteerReport = () => {
                         </div>
                       </div>
 
-                      <div className="col-lg-4 col-md-4">
-                        <div className="input-style mb-20">
-                        <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
-                          <input
-                            className="font-sm color-text-paragraph-2"
-                            name="numberKilled"
-                            onChange={handleChange}
-                            value={formValues.numberKilled}
-                            placeholder="Numbers Killed"
-                            type="text"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-lg-4 col-md-4">
-                        <div className="input-style mb-20">
-                        <label className="form-label" htmlFor="input-2">Numbers Injured *</label>
-                          <input
-                            className="font-sm color-text-paragraph-2"
-                            name="numberInjured"
-                            onChange={handleChange}
-                            value={formValues.numberInjured}
-                            placeholder="Numbers Injured"
-                            type="text"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-lg-4 col-md-4">
-                        <div className="input-style mb-20">
-                        <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
-                          <input
-                            className="font-sm color-text-paragraph-2"
-                            name="nums_women_children_affected"
-                            onChange={handleChange}
-                            value={formValues.nums_women_children_affected}
-                            placeholder="Numbers Women & Children Affected"
-                            type="text"
-                          />
-                        </div>
-                      </div>
-  
+                  
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group mb-30">
                           <div class="box-upload">
@@ -396,7 +379,6 @@ export const VolunteerReport = () => {
                       
                           </div>
                       </div>
-  
   
                       <div className="col-lg-4 col-md-4">
                         <div className="input-style mb-20">
@@ -428,6 +410,8 @@ export const VolunteerReport = () => {
                       
                       </div>
                     
+                      { displayCommunity && <div className="col-lg-1"> </div> }
+                        
                       <div className={WardCol}>
                         <div className="input-style mb-20">
                           <div className="input-style mb-20">
@@ -464,97 +448,168 @@ export const VolunteerReport = () => {
   
                       <div className={WardCol}>
                         <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Address *</label>
+                          <label className="form-label" htmlFor="input-2">Land Mark*</label>
+                          <input
+                            className="font-sm color-text-paragraph-2"
+                            name="userTypedAddress"
+                            onChange={handleChange}
+                            value={formValues.userTypedAddress}
+                            placeholder="Land Mark"
+                            type="text"
+                          />
+                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                        </div>
+                      </div>
+
+                      <div className={WardCol}>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="input-2">Address</label>
                           <Places dataToComponent={handlePlacesData}/>
                           {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
                         </div>
                       </div>
-                      
-  
-                      <div className={formCol}>
-                        <div className="input-style mb-20">
-                        <label className="form-label" htmlFor="input-2">Security Intervention? </label>
-                        <BooleanDropDown label={'Intervention'} dataToComponent={ handleDropDownData }/>
-                        </div>
-                      </div>
-  
-                      {
-                        formValues?.intervention === true ? 
-                        <>
-                          <div className={formCol}>
+
+                      { displayCommunity && <div className="col-lg-1"> </div> }
+                        <Button
+                          onClick={() => setOpen(!open)}
+                          aria-controls="example-collapse-text"
+                          aria-expanded={open}
+                          style={{
+                            backgroundColor: "#c2c9d1",
+                            borderColor: "#c2c9d1"
+                          }}
+                        >
+                          ADVANCE FORM
+                        </Button>
+                        
+                        <Collapse in={open}>
+                          <div id="example-collapse-text">
+                            <div className="row">
+                              <div style={{marginTop: '20px'}}></div>
+                              <div className="col-lg-4 col-md-4">
+                                <div className="input-style mb-20">
+                                <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
+                                <input
+                                  className="font-sm color-text-paragraph-2"
+                                  name="numberKilled"
+                                  onChange={handleChange}
+                                  value={formValues.numberKilled}
+                                  placeholder="Numbers Killed"
+                                  type="text"
+                                />
+                                </div>
+                              </div>
+
+                              <div className="col-lg-4 col-md-4">
+                                <div className="input-style mb-20">
+                                <label className="form-label" htmlFor="input-2">Numbers Injured *</label>
+                                  <input
+                                    className="font-sm color-text-paragraph-2"
+                                    name="numberInjured"
+                                    onChange={handleChange}
+                                    value={formValues.numberInjured}
+                                    placeholder="Numbers Injured"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-lg-4 col-md-4">
+                                <div className="input-style mb-20">
+                                <label className="form-label" htmlFor="input-2">Numbers of Women & Children Killed *</label>
+                                  <input
+                                    className="font-sm color-text-paragraph-2"
+                                    name="nums_women_children_affected"
+                                    onChange={handleChange}
+                                    value={formValues.nums_women_children_affected}
+                                    placeholder="Numbers Women & Children Affected"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className={formCol}>
                               <div className="input-style mb-20">
-                              <label className="form-label" htmlFor="input-2">Security Agency intervention </label>
-                              <DropDown label={'Agency'} dataToComponent={ handleDropDownData } />
+                              <label className="form-label" htmlFor="input-2">Security Intervention? </label>
+                              <BooleanDropDown label={'Intervention'} dataToComponent={ handleDropDownData }/>
                             </div>
-                          </div> 
-  
-                        <div className={formCol}>
-                          <div className="">
-                          <label className="form-label" htmlFor="input-2">Has it been Resolved?</label>
-                            <BooleanDropDown label={'Resolved'} dataToComponent={ handleDropDownData }/>
                           </div>
-                        </div>
-                        </>
-                        : ""
-                      }
   
-                      <div className={formCol}>
-                        <div className="">
-                        <label className="form-label" htmlFor="input-2">Has it happened before?</label>
-                          <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
-                        </div>
-                      </div>
+                          {
+                            formValues?.intervention === true ? 
+                            <>
+                              <div className={formCol}>
+                                  <div className="input-style mb-20">
+                                  <label className="form-label" htmlFor="input-2">Security Agency intervention </label>
+                                  <DropDown label={'Agency'} dataToComponent={ handleDropDownData } />
+                                </div>
+                              </div> 
+      
+                            <div className={formCol}>
+                              <label className="form-label" htmlFor="input-2">Has it been Resolved?</label>
+                                <BooleanDropDown label={'Resolved'} dataToComponent={ handleDropDownData }/>
+                            </div>
+                            </>
+                            : ""
+                          }
   
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
-                    
-                      <div className={formCol}>
-                        <div className="">
-                        <label className="form-label" htmlFor="input-2">Source of Information</label>
-                          <InformationSource label={'Source of Information'} dataToComponent={ handleDropDownData }/>
-                        </div>
-                      </div>
+                          <div className={formCol}>
+                            <label className="form-label" htmlFor="input-2">Has it happened before?</label>
+                              <BooleanDropDown label={'Re-Occurence'} dataToComponent={ handleDropDownData }/>
+                              <br/>
+                          </div>
   
-                      {
-                        displayMediaLink ?
-                        <div className={formCol}>
-                        <div className="">
-                        <label className="form-label" htmlFor="input-2">Website Link</label>
-                        <input
-                            className="font-sm color-text-paragraph-2"
-                            name="mediaLinks"
-                            value={formValues.mediaLinks}
-                            placeholder="Website Link"
-                            type="text"
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div> : ""
-                      }
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
+                      
+                          <div className={formCol}>
+                            <label className="form-label" htmlFor="input-2">Source of Information</label>
+                            <InformationSource label={'Source of Information'} dataToComponent={ handleDropDownData }/>
+                          </div>
   
-                      <section className="mt-20">
-                      {
-                        !loading ? (
-                            <SubmitButton onClick={ handleSubmit } title={'Report Incident'} className={'submit btn btn-send-message'}/>
-                        ) : (
-                            <LoadingButton />
-                        ) 
-                      }
-                      </section>
-                  
+                          {
+                            displayMediaLink ?
+                            <div className={formCol}>
+                            <label className="form-label" htmlFor="input-2">Website Link</label>
+                            <input
+                                className="font-sm color-text-paragraph-2"
+                                name="mediaLinks"
+                                value={formValues.mediaLinks}
+                                placeholder="Website Link"
+                                type="text"
+                                onChange={handleChange}
+                              />
+                          </div> : ""
+                          }
+                          </div>  
+                          </div>
+                      </Collapse>
+                      <br/>
+                      <br/>
+                      <br/>
+                      <br/>
+                      <br/>
                     </div>
                   </form>
                   <p className="form-messege" />
                 </div>
                 
               </div>
+              <div class="container">
+                    <div class="row">
+                      <div class="col-lg-4"></div>
+                      <div class="col-lg-4">{
+                        !loading ?
+                        <button 
+                          onClick={ handleSubmit } 
+                         style={{width: '50%'}}
+                          type="button" 
+                          class="btn btn-block btn-success">Submit Report
+                        </button>
+                        : <LoadingButton />
+                      }
+                      </div>
+                      </div>
+                    <div class="col-lg-4"></div>
+                  </div>
             </div>
           </section>
   
