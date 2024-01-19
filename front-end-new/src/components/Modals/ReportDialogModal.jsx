@@ -37,8 +37,8 @@ export default function ReportDialogModal(props) {
       </Modal.Header>
       <Modal.Body>
       <div className={styles.container}>
-        <button className={styles.left_button} onClick={redirect}>No</button>
         <button className={styles.right_button} onClick={handleClick}>Yes</button>
+        <button className={styles.left_button} onClick={redirect}>No</button>
     </div>
       </Modal.Body>
       <Modal.Footer>

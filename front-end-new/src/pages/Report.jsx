@@ -86,6 +86,7 @@ export const Report = () => {
   };
 
   const handleStateData = (data) => {
+    console.log('VALUE ---------->>>>>>>>>>>> >>>>>>', value)
     const { localGovt, state, community } = formValues
     const { label, value } = data
     const errors = formValues.errors;
@@ -282,6 +283,8 @@ export const Report = () => {
     }
   };
 
+  console.log('BONKU ===============>>>>>>>> ', lga)
+
 
   return (
     <>
@@ -335,7 +338,7 @@ export const Report = () => {
                           <textarea
                             className="font-sm color-text-paragraph-2"
                             name="description"
-                            placeholder="Describe the incident and number of casualty"
+                            placeholder="Kindly Describe The Incident To The best of Your Ability"
                             value={formValues.description}
                             onChange={handleChange}
                           />

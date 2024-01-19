@@ -27,7 +27,7 @@ export const App = () => {
     { path: "/contact", element: <Contact /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
-    { path: "/report", element: !user ? <Report /> : <VolunteerReport/> },
+    { path: "/report", element: <VolunteerReport /> },
     { path: "/user-profile", element: <UserProfile /> },
     { path: "/resources", element:  <Resources /> },
     { path: "/article/:articleId", element: <ResourceDetils /> },
