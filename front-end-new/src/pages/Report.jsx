@@ -70,12 +70,11 @@ export const Report = () => {
     nums_women_children_affected: '',
     numberKilled: '',
     numberInjured: '',
-    userTypedAddress: ''
+    userTypedAddress: '',
+    landMark: ''
   });
-  const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
-
   const handleDataFromDropDown = (data) => {
     const { value } = data
     const errors = formValues.errors;
@@ -115,23 +114,6 @@ export const Report = () => {
       };
     });
   }
-
-  const handleDropDownData = (data) => {
-    const { label, value } = data
-    const {reoccurence, intervention, agency, resolved, informationSource } = formValues
-    const errors = formValues.errors;
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        errors,
-        reoccurence: label === 'Re-Occurence' ? value : reoccurence,
-        intervention: label === 'Intervention' ? value : intervention,
-        agency: label === 'Agency' ? value : agency,
-        resolved: label === 'Resolved' ? value : resolved,
-        informationSource: label === 'Source of Information' ? value : informationSource,
-      };
-    });
-  };
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -232,47 +214,62 @@ export const Report = () => {
       numberKilled,
       numberInjured,
       userTypedAddress,
+      landMark,
       reoccurence,
       resolved
     } = formValues;
 
 
     let address
-    if (userTypedAddress?.length > 2) {
-      if (mapAddress?.latitude || mapAddress?.longitude) {
-        const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(userTypedAddress)
-        address = {
-          state: state.state,
-          localGovt,
-          community,
-          country,
-          countryCode,
-          fullAddress,
-          latitude,
-          longitude,
-          userTypedAddress: mapAddress?.userTypedAddress,
-        }   
-      } else {
-        address = {
-          state: state.state,
-          localGovt,
-          community,
-          country: mapAddress?.country,
-          countryCode: mapAddress?.countryCode,
-          fullAddress: mapAddress?.fullAddress,
-          latitude: mapAddress?.latitude,
-          longitude: mapAddress?.longitude,
-          userTypedAddress: mapAddress?.userTypedAddress,
-        }  
+    if (landMark?.length > 10) {
+      try {
+        if (!userTypedAddress && landMark?.length > 2) {
+          const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark)
+          address = {
+            state: state.state,
+            localGovt,
+            community,
+            country,
+            countryCode,
+            fullAddress,
+            latitude,
+            longitude,
+            userTypedAddress: landMark,
+          }
+        } else {
+          address = {
+            state: state.state,
+            localGovt,
+            community,
+            country: mapAddress?.country,
+            countryCode: mapAddress?.countryCode,
+            fullAddress: mapAddress?.fullAddress,
+            latitude: mapAddress?.latitude,
+            longitude: mapAddress?.longitude,
+            userTypedAddress: landMark ? landMark : mapAddress?.userTypedAddress,
+          }  
+        }
+      } catch (error) {
+        console.log('Error ===========>>>>>>> ', error)
       }
     } else {
-      return 
+      return toastr.error('Kindly Check your Address fields');
     }
+  
     setLoading(true);
     const reporterId = user?.user?._id || 'anonymous'
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
-    if (!userTypedAddress || !localGovt || !state || !description) {
+    if (!landMark) {
+      setLoading(false);
+      return 
+    }
+
+    if (!landMark && userTypedAddress) {
+      setLoading(false);
+      return 
+    }
+    if (!localGovt || !state || !description) {
       setLoading(false);
       return 
     }
@@ -454,13 +451,13 @@ export const Report = () => {
                           <label className="form-label" htmlFor="input-2">Land Mark*</label>
                           <input
                             className="font-sm color-text-paragraph-2"
-                            name="userTypedAddress"
+                            name="landMark"
                             onChange={handleChange}
-                            value={formValues.userTypedAddress}
+                            value={formValues.landMark}
                             placeholder="Land Mark"
                             type="text"
                           />
-                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                          {submitForm && formValues.landMark.length < 1 ? <span className="form_error"> { 'LandMark is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
@@ -468,12 +465,10 @@ export const Report = () => {
                         <div className="form-group">
                           <label className="form-label" htmlFor="input-2">Address</label>
                           <Places dataToComponent={handlePlacesData}/>
-                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
                       { displayCommunity && <div className="col-lg-1"> </div> }
-                 
                       <br/>
                       <br/>
                       <br/>
