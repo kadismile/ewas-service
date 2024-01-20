@@ -38,12 +38,10 @@ export const advancedResults = async (req, model, populate, select) => {
       
     }
 
-    console.log('transformedQuery ===============> ', transformedQuery)
-
     const results  = await model.find(transformedQuery)
       .limit(parseInt(query.limit, 10))
       .populate('reportTypeId')
-      .sort({ createdAt: query.sort })
+      .sort({ createdAt: query.sort ? query.sort : 'desc' })
     return {
       count: results.length,
       data: results,

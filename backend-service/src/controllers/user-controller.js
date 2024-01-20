@@ -290,8 +290,8 @@ export const inviteUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      return res.status(200).json({  
-        status: "success", message: "user already exists"
+      return res.status(422).json({  
+        status: "failed", message: "user already exists"
       });
     } else {
       const invite = new Invitation({

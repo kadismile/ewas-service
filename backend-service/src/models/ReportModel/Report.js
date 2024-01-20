@@ -1,6 +1,9 @@
 // @ts-nocheck
 import { Schema, model } from 'mongoose';
 import { reportsAfterSave } from '../ReportModel/reports_after-save.js';
+import { ReportType } from '../ReportTypeModel/ReportTypeModel.js'
+import { REPORT_TYPE } from '../../lib/constants.js'
+
 
 
 const generateRandomLetters = () => {
@@ -198,7 +201,18 @@ reportSchema.pre('find', async function() {
 reportSchema.post('save', async function (doc) {
   doc.isNew
   await reportsAfterSave(doc)
-  console.log(`Notification sent to user ${doc.title}`);
+  console.log(`Notification sent to user ${doc.reportSlug}`);
+});
+
+reportSchema.pre('save', async function (next) {
+  if (this.isNew || this.isModified('reportSlug')) {
+    if (this.reportSlug) {
+      const reportType = await ReportType.findOne({ _id: this.reportTypeId});
+      const foundSlug = REPORT_TYPE.find((slug) => Object.keys(slug)[0] === reportType.name)
+      this.reportSlug = Object.values(foundSlug)[0] + '-' + new Date().getTime();
+    }
+  }
+  next();
 });
 
 reportSchema.index({
