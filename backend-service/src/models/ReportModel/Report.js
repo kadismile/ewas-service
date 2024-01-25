@@ -209,7 +209,7 @@ reportSchema.pre('save', async function (next) {
     if (this.reportSlug) {
       const reportType = await ReportType.findOne({ _id: this.reportTypeId});
       const foundSlug = REPORT_TYPE.find((slug) => Object.keys(slug)[0] === reportType.name)
-      this.reportSlug = Object.values(foundSlug)[0] + '-' + new Date().getTime();
+      this.reportSlug = "REPORT-" + Object.values(foundSlug)[0] + '-' + new Date().getTime();
     }
   }
   next();
