@@ -13,7 +13,7 @@ import { ReportHistory } from '../models/ReportHistoryModel/ReportHistoryModel.j
 import { User } from '../models/UserModel/UserModel.js';
 import { Agency } from '../models/AgencyModel/AgencyModel.js';
 import { Department } from '../models/DepartmentModel/DepartmentModel.js';
-import { sendCPSnotification } from '../helpers/notification-helpers.js';
+import { sendCPSnotification, sendResponderNotification } from '../helpers/notification-helpers.js';
 import { sendSMS } from '../helpers/sms-helper.js';
 import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
@@ -441,10 +441,12 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
 };
 const createNotification = async (report, departmentAcronym) => {
   switch (departmentAcronym) {
-    case "CIDS": // this should be CAMS though ..pls change it ibro tomorrow 
-      // send Notiication to CPS because its CIDS, CIDS moves the workflow to CPS
+    case "CIDS":
       await sendCPSnotification(report)
       break;
+    case "Responder":
+      await sendResponderNotification(report)
+      break;  
     default:
       break;
   }
