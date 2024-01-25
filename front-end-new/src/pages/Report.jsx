@@ -219,6 +219,19 @@ export const Report = () => {
       resolved
     } = formValues;
 
+    if (!landMark) {
+      setLoading(false);
+      return 
+    }
+
+    if (!landMark && userTypedAddress) {
+      setLoading(false);
+      return 
+    }
+    if (!localGovt || !state || !description) {
+      setLoading(false);
+      return 
+    }
 
     let address
     if (landMark?.length > 10) {
@@ -260,19 +273,6 @@ export const Report = () => {
     const reporterId = user?.user?._id || 'anonymous'
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
-    if (!landMark) {
-      setLoading(false);
-      return 
-    }
-
-    if (!landMark && userTypedAddress) {
-      setLoading(false);
-      return 
-    }
-    if (!localGovt || !state || !description) {
-      setLoading(false);
-      return 
-    }
 
     const form = new FormData();
     form.append('title', title);
