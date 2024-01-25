@@ -169,6 +169,16 @@ export const ReportDetails = () => {
     }
   }
 
+  const showActionName = () => {
+    if (user?.department?.acronym === 'SSS') {
+      return 'Assign Report'
+    }
+    if (user?.department?.acronym === 'Responder') {
+      return 'Respond To Report'
+    }
+    return 'Verify Report'
+  }
+
   return (
     <>
     {
@@ -234,7 +244,7 @@ export const ReportDetails = () => {
                       displayVerifyAssButton() ?
                       <p> <button style={{lineHeight: '0px'}} 
                             onClick={() => handleVerifyModal(report._id)  }  
-                            className="btn btn-warning">Verify Report</button>
+                            className="btn btn-warning">{showActionName()}</button>
                       </p> : ""
                     }
                     
@@ -357,7 +367,7 @@ export const ReportDetails = () => {
 
                           <div className="col-lg-12"> 
                             <div className="form-group mt-10">
-                              <button className="btn btn-default btn-brand">Report History</button>
+                              <h5>Report History</h5>
                             </div>
                           </div>
                         </div>
