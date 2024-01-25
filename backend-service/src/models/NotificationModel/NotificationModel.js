@@ -7,14 +7,14 @@ const notificationSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: [true, 'Please Add userId']
   },
-  
+
   message: {
     type: String,
     required: [true, 'Please Add noticiation message']
   },
   isRead: {
-    type: Boolean, 
-    default: false 
+    type: String, 
+    default: 'not-read'
   },
   isActive : {
     type: Boolean,

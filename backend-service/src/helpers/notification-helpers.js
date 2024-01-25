@@ -25,3 +25,23 @@ export const sendCPSnotification = async (report) => {
     }
   }
 }
+
+export const sendResponderNotification = async (report) => {
+  const RESPONDER_DEPARTMENT = process.env.RESPONDER_DEPARTMENT
+  const users = await User.find({ department: RESPONDER_DEPARTMENT })
+  const message = `<a href="${process.env.DASHBOARD_URL}report/${report.reportSlug}"> ${report.reportSlug} </a>`
+  if (users.length) {
+    for (const userData of users) {
+      try {
+        const notifData = {
+          userId: userData._id,
+          message
+        };
+        const notification = new Notification(notifData);
+        await notification.save();
+      } catch (error) {
+        console.error('Error creating notification:', error);
+      }
+    }
+  }
+}
