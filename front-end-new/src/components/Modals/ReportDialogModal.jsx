@@ -22,6 +22,7 @@ export default function ReportDialogModal(props) {
         props.onHide()
         return navigate('/login', { state: { state } });
       } else {
+        props.onHide()
         return navigate('/volunteer-report');
       }
     }
