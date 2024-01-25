@@ -909,7 +909,7 @@ h6,
   transform: translateY(-2px);
   transition: 0.2s;
 }
-.btn.btn-notify {
+/* .btn.btn-notify {
   background: url(../images/notify.svg) no-repeat center;
   display: inline-block;
   vertical-align: middle;
@@ -925,7 +925,7 @@ h6,
   position: absolute;
   top: 15px;
   right: 15px;
-}
+} */
 .btn.icon-edit {
   background-image: url(../imgs/page/dashboard/edit.svg);
   background-repeat: no-repeat;

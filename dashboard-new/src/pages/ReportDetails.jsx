@@ -12,6 +12,7 @@ import { SubmitButton } from "../components/elements/Buttons";
 import { EditReportModal } from "../modals/EditReportModal";
 import { ReviewModal } from "../modals/ReviewModal";
 import { DraftModal } from "../modals/DraftModal";
+import { Notifications } from "../components/Notification/Notification";
 
 
 export const ReportDetails = () => {
@@ -47,7 +48,7 @@ export const ReportDetails = () => {
           setReport(report)
           setreportHistory(reportHistory)
           setDraftReport(draftReport)
-          // updateNotification(reportId) visit this later 
+          updateNotification({ userId: user._id, reportSlug })
         }
       })
     } else {
@@ -56,8 +57,8 @@ export const ReportDetails = () => {
   }
 
 
-  const updateNotification = async (reportId) => {
-    await crudService.updateNotification(reportId)
+  const updateNotification = async (data) => {
+    await crudService.updateNotification(data)
   }
 
   const capitalize = (value) => {

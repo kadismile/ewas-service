@@ -30,7 +30,6 @@ export const EditResponderModal = (props) => {
         errors: initialErrors })
     }
     return () => {
-      console.log('dead com')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, email, phoneNumber]);

@@ -2,125 +2,37 @@ import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer/Footer"
 import { PageLoader } from "../components/elements/spinners"
-import StateDropDown from "../components/elements/NigerianStates"
-import LGADropDown from "../components/elements/LGADropDown"
-import { IncidentType } from "../components/elements/IncidentTypes"
-import moment from "moment"
-import { CalendarModal } from "../modals/CalendarModal"
-import { reportService } from "../services/reportsService.js"
 import { crudService } from "../services/crudService"
 import ReactMapGL, { Marker, Popup, NavigationControl } from "react-map-gl"
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { LineChart } from "../components/charts/LineChart.jsx";
 import { VerticalBarChart } from "../components/charts/VerticalBarChat.jsx";
+import { FilterModal } from "../modals/FilterModal.jsx";
 
 export const Home = (props) => {
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
-  const [coordinates, setCoordinates] = useState([])
   const [selectedMarker, setSelectedMarker] = useState(false);
-  const formFields = {
-    state: undefined,
-    localGovt: undefined,
-    incidentType: undefined,
-    date: '',
-    rawDate: '',
-  }
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
-  const [formValues, setFormValues] = useState({
-    ...formFields,
-    errors: formFields,
-  })
-  const { state, localGovt,incidentType, rawDate } = formValues
-  const [lga, setLga] = useState(["select a state"])
-  const [showModal, setShowModal] = useState(false);
-
-
-  const fetchData = () => {
-    const { state, localGovt,incidentType, rawDate } = formValues
-    setLoading(true)
-    crudService.getReports({state, localGovt,incidentType, rawDate}).then((res) => {
-      const {
-        data: { data },
-      } = res
-      setReports(data)
-      prepareCoordinates(data)
-      setTimeout(() => setLoading(false), 500)
-    })
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [state, localGovt, incidentType, rawDate])
-
-  const prepareCoordinates = (reports) => {
-    let coordinates = []
-    if (reports.length) {
-      for (let report of reports) {
-        coordinates.push(report)
-      }
-    }
-    setCoordinates(coordinates)
-  }
-
-  const handleStateData = (data) => {
-    const { value } = data || {}
-    const errors = formValues.errors
-    setLga(value?.lgas)
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        errors,
-        state: value?.state,
-      }
-    })
-  }
-
-  const handleLgaData = (data) => {
-    const { value } = data || {}
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        localGovt: value,
-      }
-    })
-  }
-
-  const handleDataFromDropDown = (data) => {
-    const { value } = data || {}
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        incidentType: value,
-      }
-    })
-  }
-
-  const handleShowModal = () => {
-    setShowModal(true);
-  };
 
   const handleCloseModal = () => {
-    setShowModal(false);
+    setShowFilterModal(false)
   };
 
-  const calendarData = (calData = []) => {
-    if (Array.isArray(calData)) {
-      const formatedDates = calData?.map((date) =>moment(date).format('YYYY-MM-DD'))
-      setFormValues((prevState) => {
-        return {
-          ...prevState,
-          date: moment(calData[1]).format('LL'),
-          rawDate: formatedDates
-        };
-      });
+  const handleFilterData = (data) => {
+    setLoading(true)
+    if (data.length) {
+      setLoading(false)
+      setReports(data)
+    } else {
+      setLoading(false)
     }
   }
-
 
   return (
     <>
-      <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
+      <FilterModal show={showFilterModal} onHide={handleCloseModal} dataFromFilter={handleFilterData} />
       {loading ? (
         <PageLoader />
       ) : (
@@ -134,56 +46,15 @@ export const Home = (props) => {
                 </div>
                 <div className="col-xl-6 col-lg-7 text-lg-end mt-sm-15">
                   <div className="display-flex2">
-                    <div
-                      className="box-border mr-10"
-                      style={{ padding: "0px 0px" }}
-                    >
-                      <StateDropDown label={"State"} dataToComponent={handleStateData}/>
-                    </div>
-
-                    <div
-                      className="box-border mr-10"
-                      style={{ padding: "0px 0px" }}
-                    >
-                      <LGADropDown
-                        label={"LGA"}
-                        lgaData={lga}
-                        dataToComponent={handleLgaData}
-                      />
-                    </div>
-
-                    <div
-                      className="box-border mr-10"
-                      style={{ padding: "0px 0px" }}
-                    >
-                      <IncidentType
-                        label={"Incident Type"}
-                        dataToComponent={handleDataFromDropDown}
-                      />
-                    </div>
-
-                    
-                    <div className="box-border mr-10"
-                      style={{ padding: "0px 0px" }}>
-                        <input
-                          className="font-sm color-text-paragraph-2"
-                          name="date"
-                          style={{height: '39px'}}
-                          placeholder="Date"
-                          type="text"
-                          value={formValues.date}
-                          onClick={() => handleShowModal()}
-                        />
-                    </div>
-  
-                    
-                    {/* <a
-                      href="#/"
-                      onClick={fetchData}
-                      style={{ marginRight: "10px" }}
-                    >
-                      <i class="fa-solid fa-magnifying-glass"></i>
-                    </a> */}
+                  <button 
+                    onClick={() => setShowFilterModal(true)}
+                    className="btn btn-default" 
+                    type="submit" 
+                    style={props.style}
+                  >
+                    <i class="fa-solid fa-bars"></i> FIlter 
+                  </button>
+                  
                   </div>
                 </div>
               </div>
