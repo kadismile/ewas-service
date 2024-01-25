@@ -31,7 +31,7 @@ export const Notifications = () => {
   };
 
   const checkNotStatus = () => {
-    const cssCheck = data.find((not) => not.isRead !== true)
+    const cssCheck = data.find((not) => not.isRead === 'not-read')
     if (cssCheck) {
       return {...iconStyles}
     } 
