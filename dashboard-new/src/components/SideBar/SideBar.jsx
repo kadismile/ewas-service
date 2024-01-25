@@ -61,7 +61,7 @@ export const SideBar = () => {
                 <li>
                   <Link className={`dashboard2 ${getActiveLink(["/department"])}`} to="/department">
                     <img src="/images/jobs.svg" alt="jobBox" />
-                    <span className="name">Department</span>
+                    <span className="name">Departments</span>
                   </Link>
                 </li>
               </WithPermissions>
@@ -70,7 +70,7 @@ export const SideBar = () => {
               <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }><li>
                 <Link className={`dashboard2 ${getActiveLink(["/responder"])}`} to="/responder">
                   <img src="/images/profiles.svg" alt="jobBox" />
-                  <span className="name">Responder</span>
+                  <span className="name">Responders</span>
                 </Link> 
                 </li>
               </WithPermissions>
@@ -117,7 +117,9 @@ export const SideBar = () => {
           </nav>
           <div className="border-bottom mb-20 mt-20" />
           <div class="footer-social">
-          <a class="icon-socials icon-linkedin" onClick={() => handleShowModal()} href="#"> <i class="fa-brands fa-google fa-2x"></i> </a> &nbsp; &nbsp;
+
+            <button className="btn btn-success"onClick={() => handleShowModal()}> <i class="fa-brands fa-google fa-1x"></i> &nbsp; &nbsp; Search News  </button>
+         
           </div>
           <br />
           <br />

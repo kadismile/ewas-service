@@ -109,7 +109,7 @@ export const Search = ({ loading, setLoading, setData, searchTextHandler, model 
       <input
         type="text"
         className="form-control range_flatpicker flatpickr-input"
-        placeholder="search ....."
+        placeholder="type key-word ....."
         style={{ width: "250px" }}
         onChange={ handleChange }
         value={formValues.searchText}

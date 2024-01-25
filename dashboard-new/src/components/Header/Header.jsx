@@ -48,18 +48,13 @@ export const Header = () => {
             <div className="header-left">
               <div className="header-logo">
                 <a className="d-flex" href="/">
-                  {/* <img alt="jobBox" src="/images/logo.svg" /> */}
-                  <h3> E W E R</h3>
+                  <img alt="jobBox" src="/images/PARTNER-LOGO.png" style={{width: '68%'}}/>
+                 {/*  <h3> E W E R</h3> */}
                 </a>
-                </div><span className="btn btn-grey-small ml-10">Admin area</span>
+                </div>
+                
             </div>
-            <div className="header-search"> 
-              <div className="box-search"> 
-                <form action>
-                  <input className="form-control input-search" type="text" name="keyword" placeholder="Search" />
-                </form>
-              </div>
-            </div>
+            
             <div className="header-menu d-none d-md-block">
             
             </div>
