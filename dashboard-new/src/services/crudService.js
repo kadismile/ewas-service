@@ -186,16 +186,16 @@ export const crudService =  {
     }
   },
 
-  updateNotification: async (reportId) => {
-    if (reportId) 
+  updateNotification: async (data) => {
+    if (!data)
     return {
       status: 'failed',
       message: '',
     }
     try {
-      const url = `${serverUrl}/notification?_id=${reportId}`
-      const method = 'PUT'
-      const response = await client(url, method);
+      const url = `${serverUrl}/notification`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
       return response
     } catch (e) {
       throw e

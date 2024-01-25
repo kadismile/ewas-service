@@ -27,7 +27,6 @@ export const EditArticleModal = ({ data, onHide, show }) => {
       })
     }
     return () => {
-      console.log('dead com')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, description,]);

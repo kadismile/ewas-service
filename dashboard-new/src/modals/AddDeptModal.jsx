@@ -109,7 +109,6 @@ export const AddDeptModal = (props) => {
   return (
     <Modal
       aria-labelledby="contained-modal-title-vcenter"
-      centered
       show={props.show}
       onHide={() => props.onHide({addDept: true})}
     >

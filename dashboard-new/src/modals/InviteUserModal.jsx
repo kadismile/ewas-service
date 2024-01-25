@@ -22,11 +22,11 @@ export const InviteUserModal = (props) => {
   const [loading, setLoading] = useState(false);
 
   const failedValidation = () => {
-    const { email, phoneNumber } = formValues
+    const { email, department } = formValues
     if (email?.length < 3 || !isEmail(email)) {
       return true
     }
-    if (phoneNumber?.length < 10) {
+    if (department?.length < 3) {
       return true
     }
 
@@ -121,7 +121,7 @@ export const InviteUserModal = (props) => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="input-1">
-                Phone Number
+                Department
               </label>
               <DepartmentDropDown
                   label={"Incident Type"}

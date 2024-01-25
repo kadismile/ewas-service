@@ -5,105 +5,32 @@ import { reportService } from "../services/reportsService"
 import moment from "moment"
 import { Link } from "react-router-dom"
 import { PageLoader } from "../components/elements/spinners"
-import StateDropDown from "../components/elements/NigerianStates"
-import LGADropDown from "../components/elements/LGADropDown"
-import { IncidentType } from "../components/elements/IncidentTypes"
-import { CalendarModal } from "../modals/CalendarModal"
-import { ReportFilterDropDown } from "../components/elements/ReportFilterDropDown"
 import { Search } from "../components/elements/Search"
-import { mkConfig, generateCsv, download } from "export-to-csv";
+import { FilterModal } from "../modals/FilterModal"
 
 export const Reports = () => {
 
-  const downloadCSV = () => {
-    const csvConfig = mkConfig({ 
-      useKeysAsHeaders: true ,
-      filename: `report-${moment().format("MMM D, YYYY")}`
-    });
-    const csvData = reportService.prepareCsvData(data)
-    const csv = generateCsv(csvConfig)(csvData);
-    download(csvConfig)(csv);
-  }
-
-  const formFields = {
-    state: undefined,
-    localGovt: undefined,
-    incidentType: undefined,
-    filterReport: undefined,
-    date: '',
-    rawDate: '',
-  }
-
-  const [formValues, setFormValues] = useState({
-    ...formFields,
-    errors: formFields,
-  })
-
-  const { state, localGovt,incidentType, rawDate, filterReport } = formValues
   const [loading, setLoading] = useState(true)
-  const [data, setdata] = useState([])
-  const [lga, setLga] = useState(["select a state"])
+  const [reports, setReports] = useState([])
   const [showModal, setShowModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   const fetchData = () => {
     setLoading(true)
-    crudService.getReports({state, localGovt, incidentType, filterReport, rawDate}).then((res) => {
+    crudService.getReports().then((res) => {
       const {
         data: { data },
       } = res
-      setdata(data)
+      setReports(data)
       setTimeout(() => setLoading(false), 500)
     })
   }
 
   useEffect(() => {
     fetchData()
-  }, [state, localGovt, incidentType, filterReport, rawDate])
+  }, [])
 
-  const handleStateData = (data) => {
-    const { value } = data || {}
-    const errors = formValues.errors
-    setLga(value?.lgas)
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        errors,
-        state: value?.state,
-      }
-    })
-  }
-
-  const handleLgaData = (data) => {
-    const { value } = data || {}
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        localGovt: value,
-      }
-    })
-  }
-
-  const handleDataFromDropDown = (data) => {
-    const { value } = data || {}
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        incidentType: value,
-      }
-    })
-  }
-
-  const handleFilterData = (data) => {
-    const { value } = data || {}
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        filterReport: value,
-      }
-    })
-  }
-
-  const listItems = data.map((report, key) => {
+  const listItems = reports.map((report, key) => {
     let number = key + 1
     return (
       <tr key={key}>
@@ -123,26 +50,12 @@ export const Reports = () => {
     )
   })
 
-  const handleShowModal = () => {
-    setShowModal(true);
-  };
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setShowFilterModal(false)
   };
 
-  const calendarData = (calData = []) => {
-    if (Array.isArray(calData)) {
-      const formatedDates = calData?.map((date) =>moment(date).format('YYYY-MM-DD'))
-      setFormValues((prevState) => {
-        return {
-          ...prevState,
-          date: moment(calData[1]).format('LL'),
-          rawDate: formatedDates
-        };
-      });
-    }
-  }
 
   const handleSearchText = () => {
     setLoading(true)
@@ -154,13 +67,22 @@ export const Reports = () => {
   };
 
   const handleDataChange = (data) => {
-    setdata(data);
+    setReports(data);
   };
 
+  const handleFilterData = (data) => {
+    setLoading(true)
+    if (data.length) {
+      setLoading(false)
+      setReports(data)
+    } else {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
-      <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
+      <FilterModal show={showFilterModal} onHide={handleCloseModal} dataFromFilter={handleFilterData} />
       {loading ? (
         <PageLoader />
       ) : (
@@ -206,66 +128,14 @@ export const Reports = () => {
                             </span>
                           </div>
                           <div className="col-xl-8 col-lg-7 text-lg-end mt-sm-15">
-                            <div className="display-flex2">
-                            <div
-                                className="box-border mr-10"
-                                style={{ padding: "0px 0px" }}
-                              >
-                                <ReportFilterDropDown label={"Filter"} dataToComponent={handleFilterData}/>
-                              </div>
-
-                              <div
-                                className="box-border mr-10"
-                                style={{ padding: "0px 0px" }}
-                              >
-                                <StateDropDown label={"State"} dataToComponent={handleStateData}/>
-                              </div>
-
-                              <div
-                                className="box-border mr-10"
-                                style={{ padding: "0px 0px" }}
-                              >
-                                <LGADropDown
-                                  label={"LGA"}
-                                  lgaData={lga}
-                                  dataToComponent={handleLgaData}
-                                />
-                              </div>
-
-                              <div
-                                className="box-border mr-10"
-                                style={{ padding: "0px 0px" }}
-                              >
-                                <IncidentType
-                                  label={"Incident Type"}
-                                  dataToComponent={handleDataFromDropDown}
-                                />
-                              </div>
-
-                              
-                              <div className="box-border mr-10"
-                                style={{ padding: "0px 0px" }}>
-                                  <input
-                                    className="font-sm color-text-paragraph-2"
-                                    name="date"
-                                    style={{height: '39px'}}
-                                    placeholder="Date"
-                                    type="text"
-                                    value={formValues.date}
-                                    onClick={() => handleShowModal()}
-                                  />
-                              </div>
-            
-                              
-                              <a
-                                href="#/"
-                                style={{ marginRight: "10px" }}
-                                title="Dowmload CSV"
-                                onClick={downloadCSV}
-                              >
-                                <i class="fa-solid fa-cloud-download"></i>
-                              </a>
-                            </div>
+                          <button 
+                            onClick={() => setShowFilterModal(true)}
+                            className="btn btn-default" 
+                            type="submit" 
+                          >
+                            <i class="fa-solid fa-bars"></i> FIlter 
+                          </button>
+                            
                           </div>
                         </div>
                       </div>

@@ -1,4 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { GoogleSearchModal } from "../../modals/GoogleSearchModal";
 import { WithPermissions } from "../../components/elements/WithPermissions";
 import { 
   DEPARTMENT_PERMISSIONS, 
@@ -6,6 +8,7 @@ import {
   ARTICLE_PERMISSIONS } from "../../utils/permissions.js"
 
 export const SideBar = () => {
+  const [showModal, setShowModal] = useState(false);
   const location = useLocation();
   const getActiveLink = (pathname) => {
     const path = location.pathname;
@@ -13,11 +16,20 @@ export const SideBar = () => {
       return "active";
     }
   };
+
+  const handleShowModal = (data) => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   
 
   return (
     <>
       <div className="nav">
+          <GoogleSearchModal show={showModal} onHide={handleCloseModal} />
           <nav className="nav-main-menu">
             <ul className="main-menu">
               <li> 
@@ -105,7 +117,7 @@ export const SideBar = () => {
           </nav>
           <div className="border-bottom mb-20 mt-20" />
           <div class="footer-social">
-            
+          <a class="icon-socials icon-linkedin" onClick={() => handleShowModal()} href="#"> <i class="fa-brands fa-google fa-2x"></i> </a> &nbsp; &nbsp;
           </div>
           <br />
           <br />

@@ -5,12 +5,11 @@ import { useEffect,  useState } from 'react';
 import { crudService } from '../../services/crudService';
 import parse from 'html-react-parser';
 import { ChangePasswordModal } from '../../modals/ChangePasswordModal';
-import { GoogleSearchModal } from "../../modals/GoogleSearchModal";
+import { Notifications } from '../Notification/Notification';
 
 export const Header = () => {
   const [data, setdata] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [showGoogle, setShowGoogle] = useState(false);
   let user = store?.getState()?.user?.user
   if (user) {
     user = user.user
@@ -37,15 +36,12 @@ export const Header = () => {
   };
   const handleCloseModal = () => {
     setShowModal(false);
-    setShowGoogle(false)
   };
 
-  console.log('showGoogle ', showGoogle)
 
   return (
     <>
     <ChangePasswordModal show={showModal} onHide={handleCloseModal} />
-    <GoogleSearchModal show={showGoogle} onHide={handleCloseModal} />
       <header className="header sticky-bar"> 
         <div className="container">
           <div className="main-header">
@@ -69,27 +65,8 @@ export const Header = () => {
             </div>
             <div className="header-right">
               <div className="block-signin">
-
-                <div className="dropdown d-inline-block">
-                <a  onClick={ () => setShowGoogle(true)} class="btn btn-default hover-up" href="#/"><i class="fa-brands fa-google"></i></a> &nbsp;
-               {/*  <a class="btn btn-default  hover-up" href="#/"><i class="fa-brands fa-twitter"></i></a> */}
-
-                <a className="btn btn-notify" id="dropdownNotify" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"></a>
-                  <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
-                    {
-                      data.map((not, key)=> {
-                        return (
-                          <li key={key}>
-                            <a className="dropdown-item active">
-                              { parse(not.message) }
-                              </a>
-                        </li>
-                        )
-                      })
-                    }
-                  
-                  </ul>
-                </div>
+                <Notifications />
+                
                 <div className="dropdown d-inline-block">
                   <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
                     <li><a className="dropdown-item active" href="#">10 notifications</a></li>
