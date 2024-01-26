@@ -4,14 +4,14 @@ import Select from 'react-select';
 import { crudService } from "../../services/crudService";
 
 
-export const RespondersDropDown = ({ dataToComponent }) => {
+export const RespondersDropDown = ({ dataToComponent, label }) => {
   const [selectedOption, setSelectedOption] = useState('other');
   const [reportTypes, setReportTypes] = useState([])
 
   const handleClick = async (data) => {
     const { value } = data
     setSelectedOption(value)
-    dataToComponent({value})
+    dataToComponent({label, value})
   }
 
   useEffect(() => {
