@@ -3,16 +3,13 @@ import { store } from '../redux/store';
 import { useParams } from 'react-router-dom';
 import moment from 'moment'
 import { MediaDisplay } from '../components/elements/MediaDisplay';
-import { DisplayFileModal } from "../modals/DisplayFileModal";
-import { reportService } from "../services/reportsService";
 import { crudService } from "../services/crudService";
 import { AssignmentModal } from "../modals/AssignmentModel";
 import { VerifyReportModal } from "../modals/VerifyReportModal";
-import { SubmitButton } from "../components/elements/Buttons";
 import { EditReportModal } from "../modals/EditReportModal";
 import { ReviewModal } from "../modals/ReviewModal";
 import { DraftModal } from "../modals/DraftModal";
-import { Notifications } from "../components/Notification/Notification";
+import { PageLoader } from "../components/elements/spinners";
 
 
 export const ReportDetails = () => {
@@ -118,6 +115,9 @@ export const ReportDetails = () => {
   }
 
   const displayEditButton = () => {
+    if (user.responder) {
+      return false
+    }
     const actionableUser = report?.actionableUsers
     if (actionableUser?.currentUser?._id === user?._id
       ) {
@@ -146,7 +146,8 @@ export const ReportDetails = () => {
 
   const displayActionButtons = () => {
     const actionableUser = report?.actionableUsers;
-    return actionableUser?.nextActionableDept === user.department._id
+    return actionableUser?.nextActionableDept === user.department._id || 
+            actionableUser?.nextActionableDept === user.responder
   }
 
   const handleVerifyModal = (data) => {
@@ -167,6 +168,10 @@ export const ReportDetails = () => {
     if (user?.department?.acronym === 'CAMS') {
       return 'Verify Report'
     }
+
+    if (user?.responder) {
+      return 'Respond To Report'
+    }
   }
 
   const showActionName = () => {
@@ -182,14 +187,20 @@ export const ReportDetails = () => {
   return (
     <>
     {
-      loading ? '......Loading ' : 
+      loading ? <PageLoader/>: 
 
       <div className="box-content">
         <ReviewModal show={showCommentModal} onHide={handleCloseModal} report={report} user={user}/>
         <EditReportModal show={showEditModal} onHide={handleCloseModal} data={report} user={ user } />
         {/* <DisplayFileModal show={showModal} onHide={handleCloseModal} data={url} /> */}
         <AssignmentModal show={showAssModal} onHide={handleCloseModal} data={assData} />
-        <VerifyReportModal show={showVerifyModal} onHide={handleCloseModal} data={assData} depAcronym={user.department.acronym} title={getByTitle()}/>
+        <VerifyReportModal 
+          show={showVerifyModal} 
+          onHide={handleCloseModal} 
+          data={assData} 
+          depAcronym={user.department.acronym}
+          title={getByTitle()}
+        />
         <DraftModal show={showDraftModal} onHide={handleCloseModal} draftReport={draftReport}/>
         <div className="box-heading">
           <div className="box-title"> 
@@ -203,10 +214,12 @@ export const ReportDetails = () => {
                       { 
                         displayWorkOnReport() ?
                           <li>
-                            <a className={'btn btn-success btn-xm'}
-                              onClick={() => handleAssingmentModal(report._id)}
-                              style={{ padding: '6px 9px'}}> Work on Report ?
-                            </a>
+                            <button
+                              style={{lineHeight: "5px"}} 
+                              class="btn btn-success btn-brand"
+                              onClick={() => handleAssingmentModal(report._id)}>
+                              Work on Report?
+                            </button>
                           </li> : ""
                       }
 
@@ -216,7 +229,8 @@ export const ReportDetails = () => {
                                 <button 
                                   onClick={() => setEditModal(true)} 
                                   style={{lineHeight: '5px'}}
-                                  className="btn btn-default btn-brand">Edit Report</button>
+                                  className="btn btn-default btn-brand">Edit Report
+                                </button>
                             </div>
                           </li> : ''
                         }
@@ -242,9 +256,12 @@ export const ReportDetails = () => {
                     
                     {displayActionButtons() &&
                       displayVerifyAssButton() ?
-                      <p> <button style={{lineHeight: '0px'}} 
-                            onClick={() => handleVerifyModal(report._id)  }  
-                            className="btn btn-warning">{showActionName()}</button>
+                      <p> 
+                        <button 
+                          onClick={() => handleVerifyModal(report._id)}
+                          style={{lineHeight: '5px'}}
+                          className="btn btn-warning btn-brand">{showActionName()}
+                        </button>
                       </p> : ""
                     }
                     
@@ -375,15 +392,14 @@ export const ReportDetails = () => {
                           { reportHistory.map((rHistory) => {
                               return (
                               <div className="item-timeline"> 
-                                <div className="timeline-year"> <span>{moment(rHistory.createdAt).format('DD MMM YYYY h:mma')}</span></div>
+                                <div className="timeline-year"> <span>{moment(rHistory?.createdAt).format('DD MMM YYYY h:mma')}</span></div>
                                 <div className="timeline-info"> 
-                                  <p className="color-brand-1 mb-20" style={{fontSize: '15px'}}>{rHistory.comment}</p>
+                                  <p className="color-brand-1 mb-20" style={{fontSize: '15px'}}>{rHistory?.comment}</p>
                                   <hr/>
                                 </div>
                               </div>
                               )
                           })}
-                          
                         </div>
                       </div>
                     </div>

@@ -37,9 +37,9 @@ export const ReviewModal = (props) => {
     return  (
       <div className="item-timeline"> 
         <div className="timeline-year"> 
-        <span>{moment(rHistory.createdAt).format('DD MMM YYYY h:mma')}
+        <span>{moment(rHistory?.createdAt).format('DD MMM YYYY h:mma')}
         <br/>
-        by { rHistory.userId.fullName }
+        by { rHistory?.userId.fullName }
         </span>
         <span></span>
         </div>
@@ -47,7 +47,7 @@ export const ReviewModal = (props) => {
         <p className="color-brand-1 mb-20" style={{
           fontSize: '15px', wordWrap: 'break-word', width: '1000px'
         }}>
-          {rHistory.comments}
+          {rHistory?.comments}
           </p>
         <hr/>
         </div>
@@ -85,10 +85,9 @@ export const ReviewModal = (props) => {
                       reporHistoryItems(rHistory)
                 }
                 {
-                  isResponder && rHistory.currentDepartment.acronym === SSS && 
+                  isResponder && rHistory?.currentDepartment?.acronym === SSS && 
                       reporHistoryItems(rHistory)
                 }
-
                 </>
               )})
             }          

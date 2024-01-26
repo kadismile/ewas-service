@@ -139,8 +139,8 @@ export const Articles = (props) => {
                 <div className="panel-white">
                   <div className="panel-head">
                   <Search
-                    loading={loading} 
-                    setLoading={ handleLoadingChange }
+                    loading={loading}
+                    setLoading={ handleLoadingChange}
                     setData={ handleDataChange }
                     searchTextHandler={ handleSearchText }
                     type={'articles'}

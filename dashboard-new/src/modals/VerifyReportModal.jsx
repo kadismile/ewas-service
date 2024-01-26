@@ -1,11 +1,13 @@
 import {useState, useEffect} from 'react'
 import { store } from '../redux/store';
 import { Modal } from 'react-bootstrap';
-import { DisabledButton, LoadingButton, SubmitButton } from '../components/elements/Buttons';
+import { SubmitButton } from '../components/elements/Buttons';
 import { reportService } from '../services/reportsService';
 import toastr from 'toastr';
 import Select from 'react-select';
 import { RespondersDropDown } from '../components/elements/RespondersDropDown';
+import { formErrorMessage } from '../helpers/form-error-messages';
+import { crudService } from "../services/crudService";
 
 
 export const VerifyReportModal = (props) => {
@@ -13,9 +15,18 @@ export const VerifyReportModal = (props) => {
   if (user) {
     user = user.user
   }
-  const formFields = {
-    comments: ''
-  };
+
+  const [submitForm, setSubmitForm] = useState(false);
+  const [formValues, setFormValues] = useState({
+      comments: undefined,
+      verMethod: undefined,
+      reportStatus: undefined,
+      camsVeriMethod: undefined,
+      camsVeriOptions: undefined,
+      responder: undefined,
+  });
+  const [loading, setLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
 
   const verificationOptions = () => {
       return [
@@ -51,6 +62,40 @@ export const VerifyReportModal = (props) => {
     ]
   }
 
+  const responderVerificationMethods = () => {
+    return [
+      {
+        value: 'Dialog',
+        label: 'Dialog'
+      },
+      {
+        value: 'Use of Force',
+        label: 'Use of Force'
+      },
+      {
+        value: 'Arrest',
+        label: 'Arrest'
+      },
+    ]
+  }
+
+  const reportStatusMethods = () => {
+    return [
+      {
+        value: 'Resolved',
+        label: 'Resolved'
+      },
+      {
+        value: 'Unresolved',
+        label: 'Unresolved'
+      },
+      {
+        value: 'Processing',
+        label: 'Processing'
+      },
+    ]
+  }
+
   const customStyles = {
     input: (provided) => ({
       ...provided,
@@ -65,72 +110,16 @@ export const VerifyReportModal = (props) => {
     }),
   };
 
-  const [submitForm, setSubmitForm] = useState(false);
-  const [formValues, setFormValues] = useState({
-    ...formFields,
-    errors: formFields,
-  });
-  const [loading, setLoading] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
-  const [selectedMethod, setSelectedMethod] = useState('');
-  const [responder, setResponder] = useState('');
-
-  const disableForm = () => {
-    const newValues = { ...formValues };
-    let isError = false;
-    for (let val of Object.values(newValues)) {
-      if (val === "") {
-        isError = true;
-      }
-    }
-    if (isError && submitForm) {
-      return true;
-    }
-    if (!isError && !submitForm) {
-      return true;
-    }
-    if (isError && !submitForm) {
-      return true;
-    }
-    if (!isError && !submitForm) {
-      return false;
-    }
-  };
-
-  const validateForm = (name, errors, value) => {
-    switch (name) {
-      case "comments":
-        errors.comments = "";
-        if (value.length < 10) {
-          errors.comments = "comments must be more than 10 characters";
-          setSubmitForm(false);
-        } else {
-          setSubmitForm(true);
-        }
-        return errors.comments;
-      default:
-        setSubmitForm(false);
-        break;
-    }
-  };
 
   const handleChange = (event) => {
     event.preventDefault();
     let { name, value } = event.target;
-    let errors = formValues.errors;
-    validateForm(name, errors, value);
     setFormValues((prevState) => {
       return {
         ...prevState,
-        errors,
         [name]: value,
       };
     });
-    for (let val of Object.values(formValues.errors)) {
-      if (val !== "") {
-        setSubmitForm(false);
-      }
-    }
   };
 
   const handleClick = async (data) => {
@@ -138,34 +127,81 @@ export const VerifyReportModal = (props) => {
     setSelectedOption(value)
   }
 
-  const handleMethodClick = async (data) => {
-    const { value } = data
-    setSelectedMethod(value)
+  const getResponder = async () => {
+    const responder = await crudService.getAgency();
+    responder.data.map((res) => res.name)
   }
 
-  const handleData = (data) => {
-    const { value } = data
-    setResponder(value)
+  const handleMethodClick = async (data) => {
+    const responder = await getResponder()
+    const { verMethod, camsVeriMethod, camsVeriOptions, reportStatus } = formValues
+    const { value, label } = data
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        verMethod: label === 'Dialog' || label === 'Use of Force' || label === 'Arrest' ? value : verMethod,
+        reportStatus: label === 'Resolved' || label === 'Unresolved' || label === 'Processing' ? value : reportStatus,
+        camsVeriMethod: label === 'sms' || label === 'phone calls' || label === 'emails' ? value : camsVeriMethod,
+        camsVeriOptions: label === 'verified' || label === 'false-report' || label === 'returned' ? value : camsVeriOptions,
+        responder: responder?.includes(label) ? value : camsVeriOptions,
+      };
+    });
+  }
+
+  const failedValidation = () => {
+    const { comments, camsVeriOptions, camsVeriMethod, 
+            responder, verMethod, reportStatus } = formValues
+    if (props.depAcronym === 'CAMS') {
+      if (comments?.length < 10 ||  !camsVeriOptions || !camsVeriMethod ) {
+        return true
+      }
+    }
+
+    if (props.depAcronym === 'SSS') {
+      if (comments?.length < 10 ||  !responder) {
+        return true
+      }
+    }
+
+    if (props.depAcronym === 'Responder') {
+      if (comments?.length < 10 ||  !verMethod || !reportStatus) {
+        return true
+      }
+    }
+    
+    return undefined
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { comments } = formValues
+    setSubmitForm(true)
+    if (failedValidation()) {
+      return;
+    }
+    const { 
+      comments, 
+      responder, 
+      camsVeriMethod, 
+      verMethod, 
+      reportStatus, 
+      camsVeriOptions
+    } = formValues
+
     const data = {
-      comments,
-      verified: selectedOption,
       reportId: props.data,
+      verified: camsVeriMethod,
       userId: user._id,
-      verificationMethod: selectedMethod,
-      responder,
+      verificationMethod: camsVeriOptions,
+      comments,
+      responderVeriMethod: verMethod,
+      reportStatus,
+      responder
     }
     const response = await reportService.verifyReport(data)
     const { message } = response
     toastr.success(message, { timeOut: 6000 });
     props.onHide({closeVerifyModal: true })
   }
-
-  const { errors} = formValues
 
   const closeModal = () => {
     props.onHide({closeVerifyModal: true })
@@ -184,7 +220,7 @@ export const VerifyReportModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <div className="text-center">
-            <h5 className="mt-10 mb-5 text-brand-1">{props.title} </h5>
+            <h5 className="mt-10 mb-5 text-brand-1">{props.title}</h5>
           </div>
         <div className="form-group">
         <form className="login-register text-start mt-20" action="#">
@@ -193,7 +229,7 @@ export const VerifyReportModal = (props) => {
           <>
               <Select
                 styles={customStyles}
-                defaultValue={{ label: 'Verification Method', value: selectedMethod }}
+                defaultValue={{ label: 'Verification Method', value: '' }}
                 onChange={ handleMethodClick }
                 options={ verificationMethods() }
                 className={'select-react'}
@@ -202,7 +238,7 @@ export const VerifyReportModal = (props) => {
 
               <Select
                 styles={customStyles}
-                defaultValue={{ label: 'Verify Report', value: selectedOption }}
+                defaultValue={{ label: 'Verify Report', value: '' }}
                 onChange={ handleClick }
                 options={ verificationOptions() }
                 className={'select-react'}
@@ -211,44 +247,62 @@ export const VerifyReportModal = (props) => {
               <br/>
               </>
             }
+
+            {
+              props.depAcronym === 'Responder' &&
+            <>
+              <Select
+                styles={customStyles}
+                defaultValue={{ label: 'Verification Method', value: '' }}
+                onChange={ handleMethodClick }
+                options={ responderVerificationMethods() }
+                className={'select-react'}
+              />
+              { formErrorMessage('verMethod', formValues, submitForm)}
+              <br/>
+              <br/>
+
+              <Select
+                styles={customStyles}
+                defaultValue={{ label: 'Situation Report', value: selectedOption }}
+                onChange={ handleMethodClick }
+                options={ reportStatusMethods() }
+                className={'select-react'}
+              />
+              { formErrorMessage('reportStatus', formValues, submitForm)}
+              <br/>
+              <br/>
+            </>
+            }
             
             <div className="form-group">
               <label className="form-label" htmlFor="input-1">
-                Comments *
+                Comments*
               </label>
               <div class="form-group mb-30"> 
                 <textarea class="form-control"
                   name="comments" 
-                  rows="5"
+                  rows="4" cols="50"
                   onChange={handleChange}
                   value={formValues.comments}
                 >
                 </textarea>
-                { errors.comments ? <span className="form_error"> {errors.comments}</span> : ""}
+                { formErrorMessage('comments', formValues, submitForm)}
               </div>
             </div>
 
             { props.depAcronym === 'SSS' &&
-              <RespondersDropDown dataToComponent={handleData} />
+              <RespondersDropDown dataToComponent={handleMethodClick} />
             }
 
             <br/>
             <br/>
             <div className="form-group">
-              {disableForm() ? (
-                <DisabledButton
-                  title={"Submit"}
-                  className={"btn btn-brand-1 w-100"}
-                />
-              ) : !loading ? (
-                <SubmitButton
-                  onClick={handleSubmit}
-                  title={"Submit"}
-                  className={"btn btn-brand-1 w-100"}
-                />
-              ) : (
-                <LoadingButton />
-              )}
+              <SubmitButton
+                onClick={handleSubmit}
+                title={"Submit"}
+                className={"btn btn-brand-1 w-100"}
+              />
             </div>
             
           </form>

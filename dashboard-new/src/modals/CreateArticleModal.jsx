@@ -160,7 +160,7 @@ export const CreateArticleModal = (props) => {
                     
                     <div className="col-lg-12 col-md-12">
                       <div className="textarea-style mb-30">
-                        { formErrorMessage('description', formValues, submitForm)}
+                        { formErrorMessage('description', formValues, submitForm) }
                       <Editor
                         data={htmlData}
                         onChange={setHtmlData}
@@ -173,15 +173,15 @@ export const CreateArticleModal = (props) => {
                 <p className="form-messege" />
               </div>
               <div className="form-group">
-                  { !loading ? (
-                    <SubmitButton
-                      onClick={handleSubmit}
-                      title={"Create  Article"}
-                      className={"btn btn-brand-1 w-100"}
-                    />
-                  ) : (
-                    <LoadingButton />
-                  )}
+                { !loading ? (
+                  <SubmitButton
+                    onClick={handleSubmit}
+                    title={"Create  Article"}
+                    className={"btn btn-brand-1 w-100"}
+                  />
+                ) : (
+                  <LoadingButton />
+                )}
             </div>
             
             </div>
