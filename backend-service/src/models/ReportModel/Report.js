@@ -124,7 +124,7 @@ const reportSchema = new Schema({
   status: {
     type: String,
     default: 'processing',
-    enum:['processing', 'processed', 'pending']
+    enum:['resolved', 'unresolved', 'processing']
   },
   address: {
     type: addressSchema,
@@ -172,6 +172,9 @@ const reportSchema = new Schema({
     default: () => generateRandomLetters() + Math.floor(100 + Math.random() * 900)
   },
   verificationMethod: {
+    type: String,
+  },
+  responderVeriMethod: {
     type: String,
   },
   responder: {
