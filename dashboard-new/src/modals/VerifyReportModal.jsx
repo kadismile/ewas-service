@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import { store } from '../redux/store';
 import { Modal } from 'react-bootstrap';
 import { SubmitButton } from '../components/elements/Buttons';
@@ -7,7 +7,6 @@ import toastr from 'toastr';
 import Select from 'react-select';
 import { RespondersDropDown } from '../components/elements/RespondersDropDown';
 import { formErrorMessage } from '../helpers/form-error-messages';
-import { crudService } from "../services/crudService";
 
 
 export const VerifyReportModal = (props) => {
@@ -25,8 +24,6 @@ export const VerifyReportModal = (props) => {
       camsVeriOptions: undefined,
       responder: undefined,
   });
-  const [loading, setLoading] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
 
   const verificationOptions = () => {
       return [
@@ -122,19 +119,8 @@ export const VerifyReportModal = (props) => {
     });
   };
 
-  const handleClick = async (data) => {
-    const { value } = data
-    setSelectedOption(value)
-  }
-
-  const getResponder = async () => {
-    const responder = await crudService.getAgency();
-    responder.data.map((res) => res.name)
-  }
-
   const handleMethodClick = async (data) => {
-    const responder = await getResponder()
-    const { verMethod, camsVeriMethod, camsVeriOptions, reportStatus } = formValues
+    const { verMethod, camsVeriMethod, camsVeriOptions, reportStatus, responder } = formValues
     const { value, label } = data
     setFormValues((prevState) => {
       return {
@@ -143,14 +129,17 @@ export const VerifyReportModal = (props) => {
         reportStatus: label === 'Resolved' || label === 'Unresolved' || label === 'Processing' ? value : reportStatus,
         camsVeriMethod: label === 'sms' || label === 'phone calls' || label === 'emails' ? value : camsVeriMethod,
         camsVeriOptions: label === 'verified' || label === 'false-report' || label === 'returned' ? value : camsVeriOptions,
-        responder: responder?.includes(label) ? value : camsVeriOptions,
+        responder: label === 'Responders' ? value : responder,
       };
     });
   }
 
   const failedValidation = () => {
-    const { comments, camsVeriOptions, camsVeriMethod, 
-            responder, verMethod, reportStatus } = formValues
+    const { 
+      comments, camsVeriOptions, camsVeriMethod, 
+      responder, verMethod, reportStatus
+    } = formValues
+
     if (props.depAcronym === 'CAMS') {
       if (comments?.length < 10 ||  !camsVeriOptions || !camsVeriMethod ) {
         return true
@@ -234,15 +223,18 @@ export const VerifyReportModal = (props) => {
                 options={ verificationMethods() }
                 className={'select-react'}
               />
+              { formErrorMessage('camsVeriMethod', formValues, submitForm)}
+              <br/>
               <br/>
 
               <Select
                 styles={customStyles}
                 defaultValue={{ label: 'Verify Report', value: '' }}
-                onChange={ handleClick }
+                onChange={ handleMethodClick }
                 options={ verificationOptions() }
                 className={'select-react'}
               />
+              { formErrorMessage('camsVeriOptions', formValues, submitForm) }
               <br/>
               <br/>
               </>
@@ -264,7 +256,7 @@ export const VerifyReportModal = (props) => {
 
               <Select
                 styles={customStyles}
-                defaultValue={{ label: 'Situation Report', value: selectedOption }}
+                defaultValue={{ label: 'Situation Report', value: '' }}
                 onChange={ handleMethodClick }
                 options={ reportStatusMethods() }
                 className={'select-react'}
@@ -292,7 +284,10 @@ export const VerifyReportModal = (props) => {
             </div>
 
             { props.depAcronym === 'SSS' &&
-              <RespondersDropDown dataToComponent={handleMethodClick} />
+            <>
+              <RespondersDropDown dataToComponent={handleMethodClick} label={"Responders"}/>
+              { formErrorMessage('responder', formValues, submitForm)}
+            </>
             }
 
             <br/>

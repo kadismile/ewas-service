@@ -70,8 +70,8 @@ export const formErrorMessage = (value, formValues, submitForm)  => {
     }
 
     if (value === 'comments') {
-      if (submitForm && !formValues.comments?.length) {
-        return <span className="form_errors"> Pls add a comment</span>
+      if (submitForm && (!formValues.comments?.length || formValues.comments?.length < 10) ) {
+        return <span className="form_errors"> Pls add a comment and should be meaningful</span>
       }
     }
 
@@ -86,6 +86,25 @@ export const formErrorMessage = (value, formValues, submitForm)  => {
         return <span className="form_errors"> Pls add a report status</span>
       }
     }
+
+    if (value === 'camsVeriMethod') {
+      if (submitForm && !formValues.camsVeriMethod ) {
+        return <span className="form_errors"> Pls add a verification method</span>
+      }
+    }
+
+    if (value === 'responder') {
+      if (submitForm && !formValues.responder  ) {
+        return <span className="form_errors"> Pls add a responder</span>
+      }
+    }
+
+    if (value === 'camsVeriOptions') {
+      if (submitForm && !formValues.camsVeriOptions  ) {
+        return <span className="form_errors"> Pls add a verification option</span>
+      }
+    }
+    //camsVeriOptions
 
     if (value === 'fileName') {
       if (submitForm && !formValues.fileName?.length  ) {
