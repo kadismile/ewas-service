@@ -69,6 +69,24 @@ export const formErrorMessage = (value, formValues, submitForm)  => {
       }
     }
 
+    if (value === 'comments') {
+      if (submitForm && !formValues.comments?.length) {
+        return <span className="form_errors"> Pls add a comment</span>
+      }
+    }
+
+    if (value === 'verMethod') {
+      if (submitForm && !formValues.verMethod  ) {
+        return <span className="form_errors"> Pls add a verification method</span>
+      }
+    }
+
+    if (value === 'reportStatus') {
+      if (submitForm && !formValues.reportStatus  ) {
+        return <span className="form_errors"> Pls add a report status</span>
+      }
+    }
+
     if (value === 'fileName') {
       if (submitForm && !formValues.fileName?.length  ) {
         return <span className="form_errors"> pls  add a file of image/video</span>

@@ -98,7 +98,7 @@ export const Users = (props) => {
                     <div className=" col-lg-4"></div>
                       <Search
                         loading={loading} 
-                        setLoading={ handleLoadingChange }
+                        setLoading={handleLoadingChange}
                         setData={ handleDataChange }
                         searchTextHandler={ handleSearchText }
                         type={'users'}
