@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DisabledButton, LoadingButton, SubmitButton, } from "../elements/Buttons";
 import { crudService } from "../../services/crudService";
 
-export const Search = ({ loading, setLoading, setData, searchTextHandler, model }) => {
+export const Search = ({ loading, setLoading, setData, searchTextHandler, type }) => {
 
   const [searchText, setSearchText] = useState('');
 
@@ -86,12 +86,13 @@ export const Search = ({ loading, setLoading, setData, searchTextHandler, model 
     event.preventDefault();
     setLoading(true);
     const { searchText } = formValues;
+
     const body = {
-      searchTerm: searchText,
+      searchText,
       query: {
         limit: 50,
       },
-      model,
+      type,
     };
     const response = await crudService.searchResource(body);
     const { status, data } = response;

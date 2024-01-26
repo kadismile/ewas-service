@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import React from "react"
 import { crudService } from "../services/crudService"
-import { reportService } from "../services/reportsService"
 import moment from "moment"
 import { Link } from "react-router-dom"
 import { PageLoader } from "../components/elements/spinners"
@@ -123,7 +122,7 @@ export const Reports = () => {
                               setLoading={ handleLoadingChange }
                               setData={ handleDataChange }
                               searchTextHandler={ handleSearchText }
-                              model={'report'}
+                              type={'reports'}
                             />
                             </span>
                           </div>
