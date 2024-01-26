@@ -13,7 +13,7 @@ import { ReportHistory } from '../models/ReportHistoryModel/ReportHistoryModel.j
 import { User } from '../models/UserModel/UserModel.js';
 import { Agency } from '../models/AgencyModel/AgencyModel.js';
 import { Department } from '../models/DepartmentModel/DepartmentModel.js';
-import { sendCPSnotification, sendResponderNotification } from '../helpers/notification-helpers.js';
+import { sendSSSnotification, sendResponderNotification } from '../helpers/notification-helpers.js';
 import { sendSMS } from '../helpers/sms-helper.js';
 import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
@@ -343,7 +343,8 @@ export const editReport = async (req, res) => {
 
 export const verifyReport = async (req, res) => {
   try {
-    const { comments,reportId,verificationMethod, responder, userId } = req.body
+    const { comments, reportId, verificationMethod,
+            responder, userId, reportStatus, responderVeriMethod } = req.body
     const report = await Report.findOne({ _id: reportId }).lean()
     const user = req.user;
     
@@ -365,7 +366,13 @@ export const verifyReport = async (req, res) => {
           const body = 'An SMS is sent your way kindly read it '
           // await sendSMS(body, agency?.phoneNumbers)
         }
-        
+      }
+
+      if (user.role === "responder") {
+        await Report.findOneAndUpdate({ _id: report._id }, {
+          responderVeriMethod,
+          status: reportStatus
+        })
       }
       res.status(200).json({
         status: "success",
@@ -439,14 +446,15 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   }
   return reporter;
 };
+
 const createNotification = async (report, departmentAcronym) => {
   switch (departmentAcronym) {
-    case "CIDS":
-      await sendCPSnotification(report)
+    case "CAMS":
+      await sendSSSnotification(report)
       break;
-    case "Responder":
+    case "SSS":
       await sendResponderNotification(report)
-      break;  
+      break;
     default:
       break;
   }

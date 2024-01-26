@@ -22,11 +22,14 @@ export const searchRsource = async (req, res) => {
     },
   };
 
-  console.log('Query ======================>>>>>>>>>>>>>>>>. ', Model(type))
-
   return res.status(200).json({
     status: "success",
-    data: await Model(type).aggregate([
+    data: await Model(type).find({
+      $text: {
+        $search: searchText
+      }
+    })
+    /* data: await Model(type).aggregate([
       {
         $search: {
           ...method,
@@ -36,7 +39,7 @@ export const searchRsource = async (req, res) => {
       {
         $limit: limit,
       },
-    ]),
+    ]), */
   });
 };
 

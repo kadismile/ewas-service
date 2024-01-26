@@ -6,9 +6,9 @@ export const newNotificationMessage = (data) => {
 }
 
 
-export const sendCPSnotification = async (report) => {
-  const CPS_DEPARTMENT = process.env.CPS_DEPARTMENT
-  const users = await User.find({ department: CPS_DEPARTMENT })
+export const sendSSSnotification = async (report) => {
+  const SSS_DEPARTMENT = process.env.SSS_DEPARTMENT
+  const users = await User.find({ department: SSS_DEPARTMENT })
   const message = `<a href="${process.env.DASHBOARD_URL}report/${report.reportSlug}"> ${report.reportSlug} </a>`
   if (users.length) {
     for (const userData of users) {
