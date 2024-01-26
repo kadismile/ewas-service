@@ -10,6 +10,7 @@ import { AGENCY_PERMISSIONS } from "../utils/permissions.js"
 import { CreateArticleModal } from "../modals/CreateArticleModal.jsx";
 import moment from "moment";
 import { EditArticleModal } from "../modals/EditArticleModal.jsx";
+import { Search } from "../components/elements/Search.jsx";
 
 export const Articles = (props) => {
   const [loading, setLoading] = useState(true);
@@ -73,6 +74,19 @@ export const Articles = (props) => {
     });
   }
 
+  const handleSearchText = () => {
+    setLoading(true)
+    fetchData()
+  };
+
+  const handleLoadingChange = (isLoading) => {
+    setLoading(isLoading)
+  };
+
+  const handleDataChange = (data) => {
+    setdata(data);
+  };
+
   const listItems = data.map((article, key) => {
     let number = key + 1;
     return (
@@ -124,7 +138,13 @@ export const Articles = (props) => {
               <div className="container">
                 <div className="panel-white">
                   <div className="panel-head">
-                    <h5>Articles</h5>
+                  <Search
+                    loading={loading} 
+                    setLoading={ handleLoadingChange }
+                    setData={ handleDataChange }
+                    searchTextHandler={ handleSearchText }
+                    type={'articles'}
+                  />
                     <a className="menudrop" id="dropdownMenu2" type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"

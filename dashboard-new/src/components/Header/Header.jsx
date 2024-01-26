@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { resetUser } from "../../redux/user-slice";
 import { useEffect,  useState } from 'react';
 import { crudService } from '../../services/crudService';
-import parse from 'html-react-parser';
 import { ChangePasswordModal } from '../../modals/ChangePasswordModal';
 import { Notifications } from '../Notification/Notification';
 

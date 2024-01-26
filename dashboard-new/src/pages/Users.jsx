@@ -101,7 +101,7 @@ export const Users = (props) => {
                         setLoading={ handleLoadingChange }
                         setData={ handleDataChange }
                         searchTextHandler={ handleSearchText }
-                        model={'users'}
+                        type={'users'}
                       />
                     </div>
                     
