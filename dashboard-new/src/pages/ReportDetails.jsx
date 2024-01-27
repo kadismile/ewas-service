@@ -145,6 +145,9 @@ export const ReportDetails = () => {
   }
 
   const displayActionButtons = () => {
+    if (report.status === "Resolved") {
+      return false;
+    }
     const actionableUser = report?.actionableUsers;
     return actionableUser?.nextActionableDept === user.department._id || 
             actionableUser?.nextActionableDept === user.responder

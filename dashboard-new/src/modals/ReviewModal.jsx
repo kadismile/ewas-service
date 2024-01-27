@@ -80,13 +80,16 @@ export const ReviewModal = (props) => {
               } */
                 return (
                 <>
-                {
+                {/* {
                   !isResponder && 
                       reporHistoryItems(rHistory)
-                }
-                {
+                } */}
+                {/* {
                   isResponder && rHistory?.currentDepartment?.acronym === SSS && 
                       reporHistoryItems(rHistory)
+                } */}
+                {
+                  reporHistoryItems(rHistory)
                 }
                 </>
               )})
