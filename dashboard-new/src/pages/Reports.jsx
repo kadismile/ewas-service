@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react"
 import React from "react"
 import { crudService } from "../services/crudService"
-import moment from "moment"
-import { Link } from "react-router-dom"
-import { PageLoader } from "../components/elements/spinners"
-import { Search } from "../components/elements/Search"
-import { FilterModal } from "../modals/FilterModal"
+import moment from "moment";
+import { store } from '../redux/store';
+import { Link } from "react-router-dom";
+import { PageLoader } from "../components/elements/spinners";
+import { Search } from "../components/elements/Search";
+import { FilterModal } from "../modals/FilterModal";
 
 export const Reports = () => {
-
+  let user = store?.getState()?.user?.user
+  if (user) {
+    user = user.user
+  }
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
   const [showModal, setShowModal] = useState(false);
@@ -17,6 +21,7 @@ export const Reports = () => {
   const fetchData = () => {
     setLoading(true)
     crudService.getReports().then((res) => {
+      console.log("Data ================>>>>>>>>>> ", res)
       const {
         data: { data },
       } = res
@@ -28,6 +33,7 @@ export const Reports = () => {
   useEffect(() => {
     fetchData()
   }, [])
+
 
   const listItems = reports.map((report, key) => {
     let number = key + 1
