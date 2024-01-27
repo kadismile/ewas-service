@@ -353,13 +353,18 @@ export const verifyReport = async (req, res) => {
       const { acronym } = department
 
       const nextActionableDept = await getNextActionableDept(acronym, responder)
-      await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
-      const comment =  `report verified by ${user.fullName} of ${acronym} Department`
-      await addHistory(user, report, comment)
-
-      await createVerification(user, reportId, verificationMethod, comments)
-      await createNotification(report, acronym)
-
+      // we are adding this if statement here because we dont want to update the actionable user for a responder so the report can be tied
+      // to the responder for ever, it might change in the future though.
+      // the {responderVeriMethod} and {reportStatus} comes from the reponders alone 
+      if (!responderVeriMethod || !reportStatus) {
+        await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
+        const comment =  `report verified by ${user.fullName} of ${acronym} Department`
+        await addHistory(user, report, comment)
+  
+        await createVerification(user, reportId, verificationMethod, comments)
+        await createNotification(report, acronym)
+      }
+      
       if (responder?.length) {
         const agency = await Agency.findOne({ _id: responder })
         if (agency.name) {
@@ -386,6 +391,16 @@ export const verifyReport = async (req, res) => {
 
 export const getAdvanced = async (req, res) => {
   const { populate, select } = req.query;
+  if (req.user.role === 'responder') {
+    const reports = await Report.find({ 'actionableUsers.currentDepartment': req.user.department }).sort({ createdAt: 'desc' })
+    return res.status(200).json({
+      status: "success",
+      data: {
+        count: reports.length,
+        data: reports,
+      }
+    });
+  }
   const reports = await advancedResults(req, Report, populate, select);
   return res.status(200).json({
     status: "success",
