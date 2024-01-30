@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import 'rc-time-picker/assets/index.css';
@@ -14,7 +13,7 @@ export const TimeDropDown = ({timeChange}) => {
     <TimePicker 
       showSecond={false}
       defaultValue={now}
-      style={{ width: 410 }}
+      style={{ width: 300 }}
       className="font-sm color-text-paragraph-2"
       onChange={onChange}
       format={format}

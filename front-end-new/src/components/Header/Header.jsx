@@ -93,9 +93,7 @@ export const Header = () => {
                       <a>Dashboard</a>
                       <ul class="sub-menu">
                         <li>
-                        <Link className={`${getActiveLink(["/report"])}`} to="/user-profile">
-                            Report
-                          </Link> 
+                        
                           <Link className={`${getActiveLink(["/user-profile"])}`} to="/user-profile">
                             Report History
                           </Link> 
