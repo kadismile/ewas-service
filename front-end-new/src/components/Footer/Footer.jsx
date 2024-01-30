@@ -2,11 +2,10 @@
 export const Footer = () => {
   return (
     <>
-      <footer className="footer mt-50 pdtop">
+      <footer className="footer pdtop" style={{paddingTop: '0px'}}>
         <div className="container">
-          <div className="footer-bottom mt-50">
+          <div className="footer-bottom ">
             <div className="row">
-              
               <div className="col-md-6">
               <p style={{color: 'white'}}> Supported By </p><br/>
               <div className="swiper-wrapper">

@@ -1,23 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { store } from '../redux/store.js';
 import DropDown from "../components/DropDown/DropDown.jsx"
 import CalendarModal from "../components/Modals/CalendarModal.jsx";
 import moment from 'moment'
 import Places from '../components/Map/Places.jsx';
-import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
-import BooleanDropDown from "../components/DropDown/BooleanDropDown.jsx";
+import { LoadingButton } from "../components/elements/Buttons.jsx";
 import { reportService } from "../services/reporterService.js";
 import toastr from 'toastr'
 import StateDropDown from "../components/DropDown/StateDropDown.jsx";
 import LGADropDown from "../components/DropDown/LGADropDown.jsx";
 import { TimeDropDown } from "../components/elements/TimePicker.jsx";
-import InformationSource from "../components/DropDown/InformationSource.jsx";
 import { useNavigate } from 'react-router-dom';
 import { PageLoader } from '../components/elements/spinners.jsx';
 import { kadunaCommunity, PlateauCommunities } from "../utils/wards.js";
 import WardDropDown from "../components/DropDown/WardDropdown.jsx";
 import { prepareAddresss } from "../utils/address-helper.js";
-import { Button, Collapse } from 'react-bootstrap';
+import { animateScroll as scroll } from 'react-scroll';
+
 
 
 export const Report = () => {
@@ -224,6 +223,11 @@ export const Report = () => {
       return 
     }
 
+    if (!reportTypeId) {
+      setLoading(false);
+      return 
+    }
+
     if (!landMark && userTypedAddress) {
       setLoading(false);
       return 
@@ -306,6 +310,10 @@ export const Report = () => {
     }
   };
 
+  useEffect(() => {
+    scroll.scrollTo(420)
+  }, []);
+
 
   return (
     <>
@@ -352,7 +360,7 @@ export const Report = () => {
                         animationName: "fadeInUp",
                       }}
                     >
-  
+
                       <div className="col-lg-12 col-md-12">
                         <div className="textarea-style mb-30">
                         <label className="form-label" htmlFor="input-2">Describe the incident and number of casualty *</label>
@@ -362,13 +370,14 @@ export const Report = () => {
                             placeholder="Kindly Describe The Incident To The best of Your Ability"
                             value={formValues.description}
                             onChange={handleChange}
+                            style={{minHeight: '130px'}}
                           />
                           {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
                   
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-3 col-md-12">
                         <div className="form-group mb-30">
                           <div class="box-upload">
                           <label className="form-label" htmlFor="input-2">Upload photo/video </label>
@@ -379,8 +388,8 @@ export const Report = () => {
                       
                           </div>
                       </div>
-  
-                      <div className="col-lg-4 col-md-4">
+
+                      <div className="col-lg-3 col-md-4">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Date of Incident *</label>
                           <input
@@ -394,14 +403,14 @@ export const Report = () => {
                         </div>
                       </div>
   
-                      <div className="col-lg-4 col-md-4">
+                      <div className="col-lg-3 col-md-4">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
-                        <TimeDropDown timeChange={handleTimeInput}/>
+                        <TimeDropDown timeChange={handleTimeInput} />
                         </div>
                       </div>
   
-                      <div className="col-lg-4 col-md-3">
+                      <div className="col-lg-3 col-md-3">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Type of Incident *</label>
                           <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
@@ -409,7 +418,8 @@ export const Report = () => {
                         </div>
                       
                       </div>
-                    
+
+
                       { displayCommunity && <div className="col-lg-1"> </div> }
                         
                       <div className={WardCol}>
@@ -463,17 +473,14 @@ export const Report = () => {
 
                       <div className={WardCol}>
                         <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Address</label>
+                          <label className="form-label" htmlFor="input-2">Map location</label>
                           <Places dataToComponent={handlePlacesData}/>
                         </div>
                       </div>
 
                       { displayCommunity && <div className="col-lg-1"> </div> }
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
+                    
+                    
                     </div>
                   </form>
                   <p className="form-messege" />
@@ -499,7 +506,6 @@ export const Report = () => {
                   </div>
             </div>
           </section>
-  
         </main>
     }
     </>

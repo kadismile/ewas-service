@@ -192,8 +192,7 @@ export const Register = () => {
                   </div>
                 </form>
               </div>
-              <div className="img-1 d-none d-lg-block"><img className="shape-1" src="images/img-1.svg" alt="JobBox" /></div>
-              <div className="img-2"><img src="images/img-2.svg" alt="JobBox" /></div>
+             
             </div>
           </div>
         </section>

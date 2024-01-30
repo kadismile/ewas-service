@@ -335,7 +335,7 @@ export const VolunteerReport = () => {
             <div className="container">
               <div className="row">
                 <div className="col-lg-12 mb-40">
-                  <h2 className="mt-5 mb-10">Volunteer To Report An Incident</h2>
+                  <h2 className="mt-5 mb-10">Report an incident</h2>
                   <p className="font-md color-text-paragraph-2">
                     The fields marked as * are important filelds
                     <br className="d-none d-lg-block" /> kindly fill all as accurate as possible
@@ -356,7 +356,7 @@ export const VolunteerReport = () => {
                       }}
                     >
   
-                      <div className="col-lg-12 col-md-12">
+                    <div className="col-lg-12 col-md-12">
                         <div className="textarea-style mb-30">
                         <label className="form-label" htmlFor="input-2">Describe the incident and number of casualty *</label>
                           <textarea
@@ -365,13 +365,14 @@ export const VolunteerReport = () => {
                             placeholder="Kindly Describe The Incident To The best of Your Ability"
                             value={formValues.description}
                             onChange={handleChange}
+                            style={{minHeight: '130px'}}
                           />
                           {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
                   
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-3 col-md-12">
                         <div className="form-group mb-30">
                           <div class="box-upload">
                           <label className="form-label" htmlFor="input-2">Upload photo/video </label>
@@ -382,8 +383,8 @@ export const VolunteerReport = () => {
                       
                           </div>
                       </div>
-  
-                      <div className="col-lg-4 col-md-4">
+
+                      <div className="col-lg-3 col-md-4">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Date of Incident *</label>
                           <input
@@ -397,14 +398,14 @@ export const VolunteerReport = () => {
                         </div>
                       </div>
   
-                      <div className="col-lg-4 col-md-4">
+                      <div className="col-lg-3 col-md-4">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Time of Incident *</label> <br/>
-                        <TimeDropDown timeChange={handleTimeInput}/>
+                        <TimeDropDown timeChange={handleTimeInput} />
                         </div>
                       </div>
   
-                      <div className="col-lg-4 col-md-3">
+                      <div className="col-lg-3 col-md-3">
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Type of Incident *</label>
                           <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
@@ -412,7 +413,8 @@ export const VolunteerReport = () => {
                         </div>
                       
                       </div>
-                    
+
+
                       { displayCommunity && <div className="col-lg-1"> </div> }
                         
                       <div className={WardCol}>
@@ -454,25 +456,27 @@ export const VolunteerReport = () => {
                           <label className="form-label" htmlFor="input-2">Land Mark*</label>
                           <input
                             className="font-sm color-text-paragraph-2"
-                            name="userTypedAddress"
+                            name="landMark"
                             onChange={handleChange}
-                            value={formValues.userTypedAddress}
+                            value={formValues.landMark}
                             placeholder="Land Mark"
                             type="text"
                           />
-                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
+                          {submitForm && formValues.landMark.length < 1 ? <span className="form_error"> { 'LandMark is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
                       <div className={WardCol}>
                         <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Address</label>
+                          <label className="form-label" htmlFor="input-2">Map location</label>
                           <Places dataToComponent={handlePlacesData}/>
-                          {submitForm && formValues.userTypedAddress.length < 1 ? <span className="form_error"> { 'Address is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
                       { displayCommunity && <div className="col-lg-1"> </div> }
+                    
+
+
                         <Button
                           onClick={() => setOpen(!open)}
                           aria-controls="example-collapse-text"
