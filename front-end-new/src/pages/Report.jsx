@@ -194,7 +194,6 @@ export const Report = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitForm(true)
-    
     let {
       title,
       reportTypeId,
@@ -298,10 +297,9 @@ export const Report = () => {
     form.append("fileUpload", fileUpload);
 
     const response = await reportService.createReports(form)
-    const { status, message} = response
-
+    const { status} = response
     if (status === 'failed') {
-      toastr.error(message);
+      toastr.error('Failed to Submit Report');
       setTimeout(() => setLoading(false), 1000)
     } else {
       toastr.success('Thank You, We Have Recieved your Report');

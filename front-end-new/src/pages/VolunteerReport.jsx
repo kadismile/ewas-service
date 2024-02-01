@@ -298,7 +298,6 @@ export const VolunteerReport = () => {
 
     const response = await reportService.createReports(form)
     const { status, message} = response
-
     if (status === 'failed') {
       toastr.error(message);
       setTimeout(() => setLoading(false), 1000)
