@@ -392,7 +392,12 @@ export const verifyReport = async (req, res) => {
 export const getAdvanced = async (req, res) => {
   const { populate, select } = req.query;
   if (req.user.role === 'responder') {
-    const reports = await Report.find({ 'actionableUsers.currentDepartment': req.user.department }).sort({ createdAt: 'desc' })
+    const reports = await Report.find({
+      $or: [
+        { 'actionableUsers.currentDepartment': req.user.department},
+        { 'actionableUsers.nextActionableDept': req.user.responder},
+      ]
+    }).sort({ createdAt: 'desc' })
     return res.status(200).json({
       status: "success",
       data: {
