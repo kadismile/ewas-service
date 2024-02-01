@@ -31,7 +31,7 @@ export const UserProfile = () => {
         <main className="main">
           <section className="section-box-2">
             <div className="container">
-              <div className="banner-hero banner-image-single"><img src="/images/about-banner.jpg" alt="jobbox" /></div>
+              <div className="banner-hero banner-image-single"><img src="/images/dashboard.png" alt="jobbox" /></div>
               <div className="box-company-profile">
                 <div className="image-compay"><img src="/images/tribal-marks.jpg" alt="jobbox" style={{width: '9%'}}/></div>
                 <div className="row mt-10">

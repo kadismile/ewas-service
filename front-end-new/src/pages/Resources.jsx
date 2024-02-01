@@ -31,7 +31,7 @@ export const Resources = () => {
         <main className="main">
           <section className="section-box-2">
             <div className="container">
-              <div className="banner-hero banner-image-single"><img src="/images/resource-banner.jpg" alt="jobbox" /></div>
+              <div className="banner-hero banner-image-single"><img src="/images/RESOURCES.png" alt="jobbox" /></div>
               <div className="box-company-profile">
               </div>
             </div>
