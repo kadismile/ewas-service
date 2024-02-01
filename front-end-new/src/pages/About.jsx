@@ -36,7 +36,7 @@ export const About = ()=> {
               </div>
               <div className="row mt-70">
                 <div className="col-lg-6 col-md-12 col-sm-12">
-                  <img src="/images/about-us.jpeg" alt="joxBox" />
+                  <img src="/images/about-us-body.webp" alt="joxBox" />
 
                   <h3 className="mt-15">Our Approach</h3>
                   <div className="mt-20">
