@@ -27,7 +27,7 @@ export const About = ()=> {
             <div className="container">
               <div className="text-center">
                 
-                <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">About Us</h2>
+                
                 <p className="font-md color-text-paragraph mt-20">
                   The EWER system is dedicated to safeguarding lives and livelihoods through cutting-edge Early Warning
                   and Early Response solutions. Our mission is to create a safer and more resilient world by providing
@@ -36,7 +36,7 @@ export const About = ()=> {
               </div>
               <div className="row mt-70">
                 <div className="col-lg-6 col-md-12 col-sm-12">
-                  <img src="/images/about-us-body.webp" alt="joxBox" />
+                  
 
                   <h3 className="mt-15">Our Approach</h3>
                   <div className="mt-20">
@@ -80,7 +80,27 @@ export const About = ()=> {
                     </p>
                   </div>
 
-                  <h3 className="mt-15">Who We Are</h3>
+                  <h3 className="mt-15">Our Mission</h3>
+                  <div className="mt-20">
+                    <p className="font-md color-text-paragraph mt-20">
+                    Our mission is to provide timely and accurate reports and notifications to safeguard lives, 
+                    protect assets, and mitigate risks in the face of conflicts, emergencies, and potential threats. 
+                    We are committed to leveraging advanced technology, data analysis, and collaboration with stakeholders to empower responders with actionable information, enhance preparedness, and enable effective response efforts
+                    </p>
+                  </div>
+
+                            
+                </div>
+              </div>
+
+
+
+
+              <div className="row mt-70">
+                
+                
+                <div className="col-lg-12 col-md-12 col-sm-12">
+                <h3 className="mt-15">Who We Are</h3>
                   <div className="mt-20">
                     <p className="font-md color-text-paragraph mt-20">
                       We are a USAID-sponsored Activity that brings together Mercy Corps Nigeria (MCN), the West
@@ -102,76 +122,7 @@ export const About = ()=> {
                       The goal of the EWER system is to enable citizens and organizations to meaningfully engage in
                       effective early warning signaling and early and timely responses from authorities.
                     </p>
-                  </div>           
-                </div>
-              </div>
-
-
-
-
-              <div className="row mt-70">
-                
-                
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                  <h3 className="mt-15">Key Features and Benefits of the EWERS System</h3>
-                  <div className="mt-20">
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> Real-Time Data Integration: </b>Our system seamlessly integrates real-time data from a wide range of
-                      sources, including real time reporting, satellite imagery, and more. This enables us to provide up-to-the-
-                      minute information about potential threats.
-                    </p>
-                    
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> Advanced Predictive Analytics: </b>Using state-of-the-art predictive analytics and machine learning
-                        algorithms, our system can forecast potential conflicy with a high degree of accuracy. This means you
-                        can stay ahead of disasters and take proactive measures..
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> Customizable Alerts: </b>We understand that different communities and organizations have unique needs.
-                        Our system allows for the customization of alert thresholds and delivery methods, ensuring that you
-                        receive the information you need in the way you want it.
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> Geospatial Mapping: </b>Our interactive geospatial mapping interface provides a clear visual representation
-                        of the evolving situation. Users can easily identify at-risk areas, evacuation routes all from the comfort
-                        of a mobile device.
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> Community Engagement: </b>We believe in the power of community involvement. Our system includes
-                        features that facilitate community engagement and communication, ensuring that everyone is informed
-                        and prepared.
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> Response Coordination: </b>In addition to early warning, our system supports emergency response
-                        coordination. It connects response teams, allows for resource allocation, and provides real-time
-                        communication during crises.
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}> User-Centric Design: </b>We have prioritized user experience in the development of our system, making it
-                        user-friendly and intuitive for a wide range of users.
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}>Reliability: </b>We take data security and system reliability seriously. Our robust infrastructure ensures that
-                        the system remains operational even in challenging conditions.
-                    </p>
-
-                    <p className="font-md color-text-paragraph mt-20">
-                      <b style={{fontWeight: 'bolder'}}>Continuous Improvement: </b>
-                      We are committed to staying at the forefront of technology and disaster
-                      management. Our system is designed for continuous improvement and updates to adapt to emerging
-                      challenges.
-                    </p>
-                    <p className="font-md color-text-paragraph mt-20"> 
-                      Join us today and become a part of a community of volunteers committed to saving lives across
-                      Nigeria…
-                    </p>
-                  </div>           
+                  </div>
                 </div>
               </div>
             </div>

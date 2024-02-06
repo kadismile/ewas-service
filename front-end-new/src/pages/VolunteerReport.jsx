@@ -33,7 +33,7 @@ export const VolunteerReport = () => {
   })
 
   const calendarData = (calData) => {
-    const errors = formValues.errors;
+    const errors = formValues?.errors;
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -67,7 +67,8 @@ export const VolunteerReport = () => {
     state: '',
     localGovt: '',
     community: '',
-    nums_women_children_affected: '',
+    nums_women_affected: '',
+    nums_children_affected: '',
     numberKilled: '',
     numberInjured: '',
     userTypedAddress: ''
@@ -78,7 +79,7 @@ export const VolunteerReport = () => {
 
   const handleDataFromDropDown = (data) => {
     const { value } = data
-    const errors = formValues.errors;
+    const errors = formValues?.errors;
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -119,7 +120,7 @@ export const VolunteerReport = () => {
   const handleDropDownData = (data) => {
     const { label, value } = data
     const {reoccurence, intervention, agency, resolved, informationSource } = formValues
-    const errors = formValues.errors;
+    const errors = formValues?.errors;
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -159,18 +160,18 @@ export const VolunteerReport = () => {
   };
 
   useEffect(() => {
-    if (formValues.intervention === 'Yes') {
+    if (formValues?.intervention === 'Yes') {
       setFormCol('col-lg-4 col-md-12')
     } else {
       setFormCol('col-lg-6 col-md-12')
     }
 
-    if (formValues.informationSource === 'Website Link') {
+    if (formValues?.informationSource === 'Website Link') {
       setDisplayLink(true)
     } else {
       setDisplayLink(false)
     }
-  }, [formValues.intervention, formValues.informationSource])
+  }, [formValues?.intervention, formValues?.informationSource])
 
   const getCommuinities = (localGovt) => {
     const foundCommunities = [...kadunaCommunity, ...PlateauCommunities].filter((comm) => comm.lga == localGovt)
@@ -178,8 +179,8 @@ export const VolunteerReport = () => {
   }
 
   useEffect(() => {
-    if (formValues.state.state === 'Kaduna' || formValues.state.state === 'Plateau') {
-      getCommuinities(formValues.localGovt)
+    if (formValues?.state?.state === 'Kaduna' || formValues?.state?.state === 'Plateau') {
+      getCommuinities(formValues?.localGovt)
       setDisplayCommunity(true);
       setWardCol('col-lg-2 col-md-12');
     } else {
@@ -200,7 +201,7 @@ export const VolunteerReport = () => {
   };
 
   const handleTimeInput = (time) => {
-    const errors = formValues.errors;
+    const errors = formValues?.errors;
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -211,9 +212,9 @@ export const VolunteerReport = () => {
   }
 
   const handleSubmit = async (event) => {
+    setLoading(true)
     event.preventDefault();
     setSubmitForm(true)
-    
     let {
       title,
       reportTypeId,
@@ -228,14 +229,14 @@ export const VolunteerReport = () => {
       state,
       localGovt,
       community,
-      nums_women_children_affected,
+      nums_women_affected,
+      nums_children_affected,
       numberKilled,
       numberInjured,
       userTypedAddress,
       reoccurence,
       resolved
     } = formValues;
-
 
     let address
     if (userTypedAddress?.length > 2) {
@@ -266,6 +267,7 @@ export const VolunteerReport = () => {
         }  
       }
     } else {
+      setLoading(false)
       return 
     }
     setLoading(true);
@@ -290,7 +292,8 @@ export const VolunteerReport = () => {
     form.append("description", description);
     form.append("intervention", intervention);
     form.append("agencyId", agency);
-    form.append("nums_women_children_affected", nums_women_children_affected);
+    form.append("nums_women_affected", nums_women_affected);
+    form.append("nums_children_affected", nums_children_affected);
     form.append("numberKilled", numberKilled);
     form.append("numberInjured", numberInjured);
     form.append("address", JSON.stringify(address));
@@ -330,15 +333,10 @@ export const VolunteerReport = () => {
             </div>
           </section>
         
-          <section className="section-box mt-70">
+          <section className="section-box">
             <div className="container">
               <div className="row">
                 <div className="col-lg-12 mb-40">
-                  <h2 className="mt-5 mb-10">Report an incident</h2>
-                  <p className="font-md color-text-paragraph-2">
-                    The fields marked as * are important filelds
-                    <br className="d-none d-lg-block" /> kindly fill all as accurate as possible
-                  </p>
                   <form
                     className="contact-form-style mt-30"
                     id="contact-form"
@@ -362,11 +360,11 @@ export const VolunteerReport = () => {
                             className="font-sm color-text-paragraph-2"
                             name="description"
                             placeholder="Kindly Describe The Incident To The best of Your Ability"
-                            value={formValues.description}
+                            value={formValues?.description}
                             onChange={handleChange}
                             style={{minHeight: '130px'}}
                           />
-                          {submitForm && formValues.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
+                          {submitForm && formValues?.description.length < 1 ? <span className="form_error"> { 'Description is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
@@ -389,7 +387,7 @@ export const VolunteerReport = () => {
                           <input
                             className="font-sm color-text-paragraph-2"
                             name="date"
-                            value={formValues.date}
+                            value={formValues?.date}
                             placeholder="Date of incidence"
                             type="text"
                             onClick={handleClick}
@@ -408,7 +406,7 @@ export const VolunteerReport = () => {
                         <div className="input-style mb-20">
                         <label className="form-label" htmlFor="input-2">Type of Incident *</label>
                           <DropDown label={'Incident Type'} dataToComponent={ handleDataFromDropDown } />
-                          {submitForm && formValues.reportTypeId.length < 1 ? <span className="form_error"> { 'Type of Incident is Mandatory' }</span> : ""}
+                          {submitForm && formValues?.reportTypeId.length < 1 ? <span className="form_error"> { 'Type of Incident is Mandatory' }</span> : ""}
                         </div>
                       
                       </div>
@@ -421,7 +419,7 @@ export const VolunteerReport = () => {
                           <div className="input-style mb-20">
                           <label className="form-label" htmlFor="input-2">State*</label>
                             <StateDropDown label={'State'} dataToComponent={ handleStateData } />
-                            {submitForm && formValues.state.length < 1 ? <span className="form_error"> { 'State is Mandatory' }</span> : ""}
+                            {submitForm && formValues?.state.length < 1 ? <span className="form_error"> { 'State is Mandatory' }</span> : ""}
                           </div>
                         </div>
                       </div>
@@ -431,7 +429,7 @@ export const VolunteerReport = () => {
                           <div className="input-style mb-20">
                           <label className="form-label" htmlFor="input-2">Local Government*</label>
                             <LGADropDown label={'LGA'} lgaData={lga} dataToComponent={ handleStateData } />
-                            {submitForm && formValues.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
+                            {submitForm && formValues?.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
                           </div>
                         </div>
                       </div>
@@ -443,7 +441,7 @@ export const VolunteerReport = () => {
                             <div className="input-style mb-20">
                             <label className="form-label" htmlFor="input-2">Community*</label>
                               <WardDropDown label={'Community'} communityData={communities} dataToComponent={ handleStateData } />
-                              {submitForm && formValues.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
+                              {submitForm && formValues?.localGovt.length < 1 ? <span className="form_error"> { 'Local Government is Mandatory' }</span> : ""}
                             </div>
                           </div>
                         </div>
@@ -457,11 +455,11 @@ export const VolunteerReport = () => {
                             className="font-sm color-text-paragraph-2"
                             name="landMark"
                             onChange={handleChange}
-                            value={formValues.landMark}
+                            value={formValues?.landMark}
                             placeholder="Land Mark"
                             type="text"
                           />
-                          {submitForm && formValues.landMark.length < 1 ? <span className="form_error"> { 'LandMark is Mandatory' }</span> : ""}
+                          {submitForm && formValues?.landMark?.length < 1 ? <span className="form_error"> { 'LandMark is Mandatory' }</span> : ""}
                         </div>
                       </div>
 
@@ -481,6 +479,7 @@ export const VolunteerReport = () => {
                           aria-controls="example-collapse-text"
                           aria-expanded={open}
                           style={{
+                            height: "42px",
                             backgroundColor: "red",
                             borderColor: "red"
                           }}
@@ -492,43 +491,57 @@ export const VolunteerReport = () => {
                           <div id="example-collapse-text">
                             <div className="row">
                               <div style={{marginTop: '20px'}}></div>
-                              <div className="col-lg-4 col-md-4">
+                              <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
                                 <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
                                 <input
                                   className="font-sm color-text-paragraph-2"
                                   name="numberKilled"
                                   onChange={handleChange}
-                                  value={formValues.numberKilled}
+                                  value={formValues?.numberKilled}
                                   placeholder="Numbers Killed"
                                   type="text"
                                 />
                                 </div>
                               </div>
 
-                              <div className="col-lg-4 col-md-4">
+                              <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
                                 <label className="form-label" htmlFor="input-2">Numbers Injured *</label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="numberInjured"
                                     onChange={handleChange}
-                                    value={formValues.numberInjured}
+                                    value={formValues?.numberInjured}
                                     placeholder="Numbers Injured"
                                     type="text"
                                   />
                                 </div>
                               </div>
 
-                              <div className="col-lg-4 col-md-4">
+                              <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Numbers of Women & Children Killed *</label>
+                                <label className="form-label" htmlFor="input-2">Numbers of Women Affected *</label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
-                                    name="nums_women_children_affected"
+                                    name="nums_women_affected"
                                     onChange={handleChange}
-                                    value={formValues.nums_women_children_affected}
-                                    placeholder="Numbers Women & Children Affected"
+                                    value={formValues?.nums_women_affected}
+                                    placeholder="Number of Women Affected"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-lg-3 col-md-4">
+                                <div className="input-style mb-20">
+                                <label className="form-label" htmlFor="input-2">Number of Children Affected *</label>
+                                  <input
+                                    className="font-sm color-text-paragraph-2"
+                                    name="nums_children_affected"
+                                    onChange={handleChange}
+                                    value={formValues?.nums_children_affected}
+                                    placeholder="Number of Children Affected"
                                     type="text"
                                   />
                                 </div>
@@ -578,7 +591,7 @@ export const VolunteerReport = () => {
                             <input
                                 className="font-sm color-text-paragraph-2"
                                 name="mediaLinks"
-                                value={formValues.mediaLinks}
+                                value={formValues?.mediaLinks}
                                 placeholder="Website Link"
                                 type="text"
                                 onChange={handleChange}
