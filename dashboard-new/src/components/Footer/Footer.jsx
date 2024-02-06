@@ -9,7 +9,7 @@ export const Footer = () => {
         <div className="row">
           <div className="col-md-6 col-sm-12 mb-25 text-center text-md-start">
             <p className="font-sm color-text-paragraph-2">© {new Date().getFullYear()} - 
-              <a className="color-brand-2" target="_blank">EWAS </a>Dashboard
+              <a className="color-brand-2" target="_blank">EWERS </a>Dashboard
 
             </p>
           </div>
