@@ -22,20 +22,24 @@ export const Resources = () => {
       setData(data?.data?.data)
     })
   }, [])
-  const navigate = useNavigate();
 
   return (
     <>
       {
         loading ? <PageLoader /> :
         <main className="main">
-          <section className="section-box-2">
+           <section className="section-box">
+          <div className="breacrumb-cover bg-img-about">
             <div className="container">
-              <div className="banner-hero banner-image-single"><img src="/images/RESOURCES.png" alt="jobbox" /></div>
-              <div className="box-company-profile">
+              <div className="row">
+                <div className="col-lg-6">
+                  <h2 className="mb-10">Resources</h2>
+                  
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
           
           <section className="section-box mt-5">
             <div className="section-box wow animate__animated animate__fadeIn">

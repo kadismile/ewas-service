@@ -192,6 +192,7 @@ export const Report = () => {
   }
 
   const handleSubmit = async (event) => {
+    setLoading(true)
     event.preventDefault();
     setSubmitForm(true)
     let {
@@ -334,15 +335,10 @@ export const Report = () => {
             </div>
           </section>
         
-          <section className="section-box mt-70">
+          <section className="section-box">
             <div className="container">
               <div className="row">
                 <div className="col-lg-12 mb-40">
-                  <h2 className="mt-5 mb-10">Report An Incident</h2>
-                  <p className="font-md color-text-paragraph-2">
-                    The fields marked as * are important filelds
-                    <br className="d-none d-lg-block" /> kindly fill all as accurate as possible
-                  </p>
                   <form
                     className="contact-form-style mt-30"
                     id="contact-form"

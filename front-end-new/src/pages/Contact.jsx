@@ -21,12 +21,6 @@ export const Contact = () => {
                   <h2 className="mb-10">Contact Us</h2>
                   <p className="font-lg color-text-paragraph-2">Get in touch with us.</p>
                 </div>
-                <div className="col-lg-6 text-lg-end">
-                  <ul className="breadcrumbs mt-40">
-                    <li><a className="home-icon" href="#">Home</a></li>
-                    <li>Contact</li>
-                  </ul>
-                </div>
               </div>
             </div>
           </div>
@@ -44,7 +38,7 @@ export const Contact = () => {
                 </p>
                 <p className="font-md color-text-paragraph-2">
                   For general questions, information, or anything else you&#39;d like to discuss, please feel free to email us at
-                  <span className="font-md color-brand-2 mt-20 d-inline-block"> info@ewersystems.org. </span> We have a 24/7 team dedicated to responding promptly to your queries..
+                  <span className="font-md color-brand-2 mt-20 d-inline-block"> info@partner-ewers.org </span> We have a 24/7 team dedicated to responding promptly to your queries..
                 </p>
 
                 <br/>
@@ -53,7 +47,7 @@ export const Contact = () => {
                 <h4 className="mt-5 mb-10">User Support</h4>
                 <p className="font-md color-text-paragraph-2">
                   If you&#39;re an existing user and require assistance with using the EWER system, our dedicated support
-                  team is ready to help. Reach out to us at <span className="font-md color-brand-2 mt-20 d-inline-block">support@ewerssytems.org &nbsp;</span>, 
+                  team is ready to help. Reach out to us at <span className="font-md color-brand-2 mt-20 d-inline-block">support@partner-ewers.org &nbsp;</span>, 
                   and we&#39;ll provide the support you
                   need.
                 </p>
