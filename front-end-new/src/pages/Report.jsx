@@ -326,9 +326,6 @@ export const Report = () => {
                 <div className="row">
                   <div className="col-lg-6">
                     <h2 className="mb-10">Report</h2>
-                    <p className="font-lg color-text-paragraph-2">
-                    Help us save lives and properties by reporting what you see and what you hear.
-                    </p>
                   </div>
                 </div>
               </div>

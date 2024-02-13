@@ -44,10 +44,7 @@ export const Resources = () => {
           <section className="section-box mt-5">
             <div className="section-box wow animate__animated animate__fadeIn">
               <div className="container">
-                <div className="text-start">
-                  <h2 className="section-title mb-10 wow animate__animated animate__fadeInUp">Our Resources & Materials</h2>
-                  <div className="border-bottom pt-10 pb-10" />
-                </div>
+                
                 <div className="mt-50">
                   <div className="tab-content" id="myTabContent-1">
                     <div className="tab-pane fade show active" id="tab-job-1" role="tabpanel" aria-labelledby="tab-job-1">
