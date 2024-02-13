@@ -19,13 +19,11 @@ export const Contact = () => {
               <div className="row">
                 <div className="col-lg-6">
                   <h2 className="mb-10">Contact Us</h2>
-                  <p className="font-lg color-text-paragraph-2">Get in touch with us.</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
-       
         <section className="section-box mt-70">
           <div className="container">
             <div className="row">
