@@ -3,7 +3,7 @@ import { reportType, createReporter, loginReporter,
   createReport, getReporters, createAdminReportType, 
   getReports, getOneReport, acceptReport, verifyReport, 
   getAdvanced, editReport, getVerifications, getDraftReport,
-  createReportBySMS, getUserReports
+  createReportBySMS, getSMSReport, getUserReports
 } from '../controllers/report-controller.js';
 import {searchRsource} from '../controllers/search-controller.js';
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js';
@@ -16,6 +16,7 @@ router.post('/type/admin',  createAdminReportType);
 router.get('/type', reportType);
 router.post('/', createReporter);
 router.post('/sms', createReportBySMS);
+router.post('/sms-reports', getSMSReport);
 router.get('/reporter', protectedRoute, authorize(REPORTERS_PERMISSIONS), getReporters);
 router.post('/login', loginReporter);
 

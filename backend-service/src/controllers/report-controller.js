@@ -78,6 +78,19 @@ export const createReportBySMS = async (req, res) => {
   }
 }
 
+export const getSMSReport = async (req, res) => {
+  try {
+    console.log('we got here -------------->>>> ', )
+  const smsReports = await SMSReport.find({});
+  return res.status(200).json({
+    status: 'success',
+    data: smsReports
+  });
+  } catch (error) {
+    console.log('Error', error)
+  }
+}
+
 export const loginReporter = async (req, res) => {
   const body = req.body
   const { email, password } = body;
