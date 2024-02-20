@@ -59,7 +59,6 @@ export const Reports = () => {
     setShowFilterModal(false)
   };
 
-
   const handleSearchText = () => {
     setLoading(true)
     fetchData()
