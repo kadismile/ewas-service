@@ -138,7 +138,11 @@ const reportSchema = new Schema({
     type: String,
     default: 0,
   },
-  nums_women_children_affected: {
+  nums_women_affected: {
+    type: String,
+    default: 0,
+  },
+  nums_children_affected: {
     type: String,
     default: 0,
   },

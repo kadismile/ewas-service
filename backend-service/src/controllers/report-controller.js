@@ -18,6 +18,7 @@ import { sendSMS } from '../helpers/sms-helper.js';
 import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
 import { Verification } from '../models/VerificationModel/VerificationModel.js';
+import { SMSReport } from '../models/ReportModel/SMSReport.js';
 
 
 export const createReporter = async (req, res) => {
@@ -58,6 +59,22 @@ export const createReporter = async (req, res) => {
       status: "error",
       message: e
     });
+  }
+}
+
+export const createReportBySMS = async (req, res) => {
+  try {
+  const { sender, message, ref, date } = req.body
+  const smsReport = new SMSReport({
+    sender, message, ref, date
+  });
+  await smsReport.save();
+  return res.status(200).json({
+    status: 'success',
+    data: req.body,
+  });
+  } catch (error) {
+    console.log('Error', error)
   }
 }
 

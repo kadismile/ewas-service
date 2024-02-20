@@ -36,6 +36,7 @@ export const reportsAfterSave = async (report) => {
     reportUserHistory: null,
     nextActionableDept: CAMS_DEPARTMENT
   };
+  
   const updatedReport = await Report.findOneAndUpdate({ _id: report._id }, {
     actionableUsers,
   },{new: true}).lean()
