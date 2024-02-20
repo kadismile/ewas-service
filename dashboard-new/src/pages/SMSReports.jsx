@@ -2,97 +2,63 @@ import { useEffect, useState } from "react"
 import React from "react"
 import { crudService } from "../services/crudService"
 import moment from "moment";
-import { store } from '../redux/store';
-import { Link } from "react-router-dom";
 import { PageLoader } from "../components/elements/spinners";
-import { Search } from "../components/elements/Search";
-import { FilterModal } from "../modals/FilterModal";
+import { SMSReportModal } from "../modals/SMSreportModal";
 
-export const Reports = () => {
-  let user = store?.getState()?.user?.user
-  if (user) {
-    user = user.user
-  }
+export const SMSReports = () => {
   const [loading, setLoading] = useState(true)
-  const [reports, setReports] = useState([])
-  const [showModal, setShowModal] = useState(false);
-  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [smsReports, setSMSReports] = useState([])
+  const [showSMSModal, setShowSMSModal] = useState(false);
+  const [modalData, setModalData] = useState(undefined)
 
   const fetchData = () => {
     setLoading(true)
-    crudService.getReports().then((res) => {
-      const {
-        data: { data },
-      } = res
-      setReports(data)
+    crudService.getSMSReports().then((res) => {
+      const { data } = res;
+      setSMSReports(data)
       setTimeout(() => setLoading(false), 500)
     })
   }
-
   useEffect(() => {
     fetchData()
   }, [])
 
-  const listItems = reports.map((report, key) => {
+  const handleOpen = (data) => {
+    setShowSMSModal(true);
+    setModalData(data)
+  }
+
+  const listData = smsReports?.map((report, key) => {
     let number = key + 1
     return (
       <tr key={key}>
         <td>{number++}</td>
+        <td>{"+" + report?.sender} </td>
         <td>
-          <Link to={`/report/${report.reportSlug}`}> {report.reportSlug} </Link>{" "}
+          <a href="#/" onClick={ () => handleOpen(report)}
+              type="submit" 
+          > {report?.message.substring(0, 120) + '...'}
+          </a>
         </td>
-        <td>
-          <Link to={`/report/${report.reportSlug}`}>
-            {report.reportTypeId.name}{" "}
-          </Link>{" "}
-        </td>
-        <td>{report.address.state}</td>
-        <td>{report.address.localGovt}</td>
         <td>{moment(report.createdAt).format("MMM D, YYYY")}</td>
       </tr>
     )
   })
 
-
   const handleCloseModal = () => {
-    setShowModal(false);
-    setShowFilterModal(false)
+    setShowSMSModal(false);
   };
-
-
-  const handleSearchText = () => {
-    setLoading(true)
-    fetchData()
-  };
-
-  const handleLoadingChange = (isLoading) => {
-    setLoading(isLoading)
-  };
-
-  const handleDataChange = (data) => {
-    setReports(data);
-  };
-
-  const handleFilterData = (data) => {
-    setLoading(true)
-    if (data.length) {
-      setLoading(false)
-      setReports(data)
-    } else {
-      setLoading(false)
-    }
-  }
 
   return (
     <>
-      <FilterModal show={showFilterModal} onHide={handleCloseModal} dataFromFilter={handleFilterData} />
+      <SMSReportModal show={showSMSModal} onHide={handleCloseModal} data={modalData} />
       {loading ? (
         <PageLoader />
       ) : (
         <div className="box-content">
           <div className="box-heading">
             <div className="box-title">
-              <h3 className="mb-35">Report Management</h3>
+              <h3 className="mb-35">SMS Reports</h3>
             </div>
             <div className="box-breadcrumb">
               <div className="breadcrumbs">
@@ -100,7 +66,7 @@ export const Reports = () => {
                   <li>
                     {" "}
                     <a className="icon-home" href="index.html">
-                      Reports
+                      SMS Reports
                     </a>
                   </li>
                   <li>
@@ -121,23 +87,12 @@ export const Reports = () => {
                         <div className="row">
                           <div className="col-xl-4 col-lg-5">
                             <span className="font-sm text-showing color-text-paragraph">
-                            <Search
-                              loading={loading} 
-                              setLoading={ handleLoadingChange }
-                              setData={ handleDataChange }
-                              searchTextHandler={ handleSearchText }
-                              type={'reports'}
-                            />
+                            
                             </span>
                           </div>
                           <div className="col-xl-8 col-lg-7 text-lg-end mt-sm-15">
-                          <button 
-                            onClick={() => setShowFilterModal(true)}
-                            className="btn btn-default" 
-                            type="submit" 
-                          >
-                            <i class="fa-solid fa-bars"></i> FIlter 
-                          </button>
+                          
+                            
                           </div>
                         </div>
                       </div>
@@ -147,14 +102,12 @@ export const Reports = () => {
                         <thead>
                           <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Report ID</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">State</th>
-                            <th scope="col">Local Govt</th>
+                            <th scope="col">Sender</th>
+                            <th scope="col">Message</th>
                             <th scope="col">Date</th>
                           </tr>
                         </thead>
-                        <tbody>{listItems}</tbody>
+                        <tbody>{listData}</tbody>
                       </table>
                     </div>
                   </div>

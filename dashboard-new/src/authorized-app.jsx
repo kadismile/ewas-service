@@ -11,11 +11,13 @@ import { Reports } from "./pages/Reports";
 import { ReportDetails } from "./pages/ReportDetails";
 import { UserProfile } from "./pages/UserProfile";
 import { Articles } from "./pages/Articles";
+import { SMSReports } from "./pages/SMSReports";
 
 
 export const AuthorizedApp = () => {
   const routes = useRoutes([
     { path: "/", element: <Home roles={'salim'}/> },
+    { path: "/sms-reports", element: <SMSReports /> },
     { path: "/users", element: <Users /> },
     { path: "/user/:userId", element: <UserProfile /> },
     { path: "/department", element: <Department /> },
