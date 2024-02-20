@@ -37,7 +37,7 @@ export const SMSReports = () => {
         <td>
           <a href="#/" onClick={ () => handleOpen(report)}
               type="submit" 
-          > {report?.message.substring(0, 120) + '...'}
+          > {report?.message?.substring(0, 120) + '...'}
           </a>
         </td>
         <td>{moment(report.createdAt).format("MMM D, YYYY")}</td>
