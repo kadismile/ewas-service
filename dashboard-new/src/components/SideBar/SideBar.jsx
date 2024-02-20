@@ -46,6 +46,13 @@ export const SideBar = () => {
                 </Link> 
               </li>
 
+              <li>
+                <Link className={`dashboard2 ${getActiveLink(["/sms-reports"])}`} to="/sms-reports">
+                  <img src="/images/tasks.svg" alt="jobBox" />
+                  <span className="name">SMSReports</span>
+                </Link> 
+              </li>
+
               
               <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
                 <li>

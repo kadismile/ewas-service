@@ -262,7 +262,20 @@ export const crudService =  {
     } catch (e) {
       throw e
     }
-  }
+  },
+
+  getSMSReports: async () => {
+    try {
+      const url = `${serverUrl}/report/sms-reports`
+      const method = 'POST'
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Cannot fetch Complainer");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 
 }
 

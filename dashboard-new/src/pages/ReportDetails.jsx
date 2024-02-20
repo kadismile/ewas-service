@@ -254,7 +254,7 @@ export const ReportDetails = () => {
                     <p> Submitted By: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{capitalize(report?.reporterId)}</b> </p>
                     <p> Date: <b style={{fontWeight: 'bolder', color: '#5e81ff'}}>{moment(report?.createdAt).format('DD MMM, YYYY')}</b> </p>
                     <p> Status: <span style={{color: colorStatus(report?.status), fontSize: '12px'}}>{capitalize(report?.status)}</span> </p>
-                    <p> Reviews: <a href="#/" onClick={() => setCommentModal(true)}> <span style={{color: 'green', fontSize: '12px', fontWeight: 'bolder'}}>View All Reviews</span>  </a></p>
+                    <p> Reviews: <a href="#/" onClick={() => setCommentModal(true)}> <span style={{color: 'green', fontSize: '12px', fontWeight: 'bolder'}}>View Comments</span>  </a></p>
                     <p> Draft: <a href="#/" onClick={() => setDraftModal(true)}> <span style={{color: 'purple', fontSize: '12px', fontWeight: 'bolder'}}>View Draft</span>  </a></p>
                     
                     {displayActionButtons() &&
