@@ -2,7 +2,7 @@ import { newNotificationMessage } from "../../helpers/notification-helpers.js"
 import { Department } from "../DepartmentModel/DepartmentModel.js"
 import { Notification } from "../NotificationModel/NotificationModel.js"
 import { User } from "../UserModel/UserModel.js"
-import { SMSReport } from "./SMSReport.js.js"
+
 
 export const smsReportsAfterSave = async (report) => {
   const CAMS_DEPARTMENT = process.env.CAMS_DEPARTMENT
