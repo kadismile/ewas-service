@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react"
 import React from "react"
+import { store } from '../redux/store';
 import { crudService } from "../services/crudService"
 import moment from "moment";
 import { PageLoader } from "../components/elements/spinners";
 import { SMSReportModal } from "../modals/SMSreportModal";
+import { EditSMSReportModal } from "../modals/EditSMSReportModal";
 
 export const SMSReports = () => {
+  let user = store?.getState()?.user?.user
+  if (user) {
+    user = user.user
+  }
   const [loading, setLoading] = useState(true)
   const [smsReports, setSMSReports] = useState([])
   const [showSMSModal, setShowSMSModal] = useState(false);
   const [modalData, setModalData] = useState(undefined)
+  const [showEditSMSModal, setEditSMSModal] = useState(false);
+
 
   const fetchData = () => {
     setLoading(true)
@@ -28,6 +36,8 @@ export const SMSReports = () => {
     setModalData(data)
   }
 
+  
+
   const listData = smsReports?.map((report, key) => {
     let number = key + 1
     return (
@@ -40,18 +50,29 @@ export const SMSReports = () => {
           > {report?.message?.substring(0, 120) + '...'}
           </a>
         </td>
-        <td>{moment(report.createdAt).format("MMM D, YYYY")}</td>
+        <td>{moment(report.createdAt).format("MMM D, YYYY h:mma")}</td>
+        <td>
+          <button
+            style={{lineHeight: "4px", padding: "7px 15px"}} 
+            onClick={() => setEditSMSModal(true)}
+            class="btn btn-success btn-brand"
+          >
+          <i class="fa-solid fa-edit"></i>
+          </button>
+        </td>
       </tr>
     )
   })
 
   const handleCloseModal = () => {
     setShowSMSModal(false);
+    setEditSMSModal(false);
   };
 
   return (
     <>
       <SMSReportModal show={showSMSModal} onHide={handleCloseModal} data={modalData} />
+      <EditSMSReportModal show={showEditSMSModal} onHide={handleCloseModal} data={modalData} user={ user } />
       {loading ? (
         <PageLoader />
       ) : (
@@ -105,6 +126,7 @@ export const SMSReports = () => {
                             <th scope="col">Sender</th>
                             <th scope="col">Message</th>
                             <th scope="col">Date</th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                         <tbody>{listData}</tbody>
