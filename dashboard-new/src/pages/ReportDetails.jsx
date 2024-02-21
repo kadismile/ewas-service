@@ -15,9 +15,9 @@ import { PageLoader } from "../components/elements/spinners";
 export const ReportDetails = () => {
   const { reportSlug } = useParams();
   let user = store?.getState()?.user?.user
-    if (user) {
-      user = user.user
-    }
+  if (user) {
+    user = user.user
+  }
   const [showModal, setShowModal] = useState(false);
   const [showAssModal, setShowAssModal] = useState(false);
   const [showVerifyModal, setVerifyModal] = useState(false);
