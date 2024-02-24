@@ -191,8 +191,6 @@ export const EditReportModal = (props) => {
             <h2 className="mt-10 mb-5 text-brand-1">Edit Report</h2>
           </div>
 
-
-
           <div className="row">
               <div className="col-lg-12">
                 <div className="row">
@@ -289,7 +287,7 @@ export const EditReportModal = (props) => {
                         value={formValues.description}
                       ></textarea>
                     </div>
-                  </div>
+                </div>
 
                   <div className="form-group">
               
