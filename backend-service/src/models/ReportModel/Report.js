@@ -95,7 +95,6 @@ const reportSchema = new Schema({
   },
   title: {
     type: String,
-    required: [true, 'Add titleof report']
   },
   description: {
     type: String,
@@ -191,6 +190,10 @@ const reportSchema = new Schema({
   isActive : {
     type: Boolean,
     default: true
+  },
+  smsReport : {
+    type: Boolean,
+    default: false
   }
 },
 {timestamps: true, versionKey: false }
