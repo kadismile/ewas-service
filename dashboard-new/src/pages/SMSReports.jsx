@@ -52,13 +52,18 @@ export const SMSReports = () => {
         </td>
         <td>{moment(report.createdAt).format("MMM D, YYYY h:mma")}</td>
         <td>
+          {
+            !report.reportCreated && (
           <button
             style={{lineHeight: "4px", padding: "7px 15px"}} 
-            onClick={() => setEditSMSModal(true)}
+            onClick={() => handleOpenModal(report)}
             class="btn btn-success btn-brand"
           >
           <i class="fa-solid fa-edit"></i>
           </button>
+            )
+          }
+          
         </td>
       </tr>
     )
@@ -67,6 +72,12 @@ export const SMSReports = () => {
   const handleCloseModal = () => {
     setShowSMSModal(false);
     setEditSMSModal(false);
+    fetchData();
+  };
+
+  const handleOpenModal = (report) => {
+    setEditSMSModal(true)
+    setModalData(report)
   };
 
   return (

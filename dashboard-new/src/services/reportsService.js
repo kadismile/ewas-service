@@ -137,7 +137,21 @@ export const reportService =  {
         "date-created": moment(csv.createdAt).format("MMM D, YYYY")
       }
     })
-  }
+  },
+
+  createReports: async (data) => {
+    try {
+      const url = `${serverUrl}/report/create`
+      const method = "POST"
+      const contentType = "true"
+      const response = await client(url, method, data, contentType)
+      if (!response) throw new Error("Cannot Create a reporter")
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
 
   
 }
