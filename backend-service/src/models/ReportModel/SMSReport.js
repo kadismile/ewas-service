@@ -16,6 +16,11 @@ const smsReportSchema = new Schema({
   date: {
     type: String
   },
+
+  reportCreated : {
+    type: Boolean,
+    default: false
+  },
   
   isActive : {
     type: Boolean,
