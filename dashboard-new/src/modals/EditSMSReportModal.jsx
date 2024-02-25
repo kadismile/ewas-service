@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from 'react-bootstrap';
 import { store } from '../redux/store.js';
 import moment from 'moment'
 import DropDown from "../components/DropDown/DropDown.jsx"
 import { CalendarModal } from "../modals/CalendarModal.jsx";
-import Places from '../components/Map/Places.jsx';
 import { LoadingButton } from "../components/elements/Buttons.jsx";
 import { reportService } from "../services/reportsService.js";
 import toastr from 'toastr'
@@ -18,12 +17,11 @@ import WardDropDown from "../components/DropDown/WardDropdown.jsx";
 import { prepareAddresss } from "../utils/address-helper.js";
 export const EditSMSReportModal = (props) => {
   let user = store?.getState()?.user?.user
-  let mapAddress
   if (user) {
-    mapAddress = user.mapAddress
+    user = user.user
   }
+  const { sender, message, _id } = props.data || {}
   const navigate = useNavigate();
-
   useEffect(() => {
     setTimeout(() => setLoading(false), 500)
   })
@@ -102,15 +100,6 @@ export const EditSMSReportModal = (props) => {
     });
   };
 
-  const handlePlacesData = (data) => {
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        userTypedAddress: data.userTypedAddress
-      };
-    });
-  }
-
   const handleChange = (event) => {
     event.preventDefault();
     let { name, value } = event.target;
@@ -166,17 +155,6 @@ export const EditSMSReportModal = (props) => {
     }
   }, [formValues.state, formValues.localGovt])
 
-  const onFileChange = (e) => {
-    const errors = formValues.errors;
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        errors,
-        fileUpload: e.target.files[0],
-      };
-    });
-  };
-
   const handleTimeInput = (time) => {
     const errors = formValues.errors;
     setFormValues((prevState) => {
@@ -193,7 +171,6 @@ export const EditSMSReportModal = (props) => {
     event.preventDefault();
     setSubmitForm(true)
     let {
-      title,
       reportTypeId,
       description,
       rawDate,
@@ -202,14 +179,12 @@ export const EditSMSReportModal = (props) => {
       mediaLinks,
       intervention,
       agency,
-      fileUpload,
       state,
       localGovt,
       community,
       nums_women_children_affected,
       numberKilled,
       numberInjured,
-      userTypedAddress,
       landMark,
       reoccurence,
       resolved
@@ -225,7 +200,7 @@ export const EditSMSReportModal = (props) => {
       return 
     }
 
-    if (!landMark && userTypedAddress) {
+    if (!landMark) {
       setLoading(false);
       return 
     }
@@ -237,7 +212,7 @@ export const EditSMSReportModal = (props) => {
     let address
     if (landMark?.length > 10) {
       try {
-        if (!userTypedAddress && landMark?.length > 2) {
+        if (landMark?.length > 2) {
           const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark)
           address = {
             state: state.state,
@@ -250,18 +225,6 @@ export const EditSMSReportModal = (props) => {
             longitude,
             userTypedAddress: landMark,
           }
-        } else {
-          address = {
-            state: state.state,
-            localGovt,
-            community,
-            country: mapAddress?.country,
-            countryCode: mapAddress?.countryCode,
-            fullAddress: mapAddress?.fullAddress,
-            latitude: mapAddress?.latitude,
-            longitude: mapAddress?.longitude,
-            userTypedAddress: landMark ? landMark : mapAddress?.userTypedAddress,
-          }  
         }
       } catch (error) {
         console.log('Error ===========>>>>>>> ', error)
@@ -271,12 +234,11 @@ export const EditSMSReportModal = (props) => {
     }
   
     setLoading(true);
-    const reporterId = user?.user?._id || 'anonymous'
+    const reporterId = sender
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
 
 
     const form = new FormData();
-    form.append('title', title);
     form.append("reoccurence", reoccurence);
     form.append("resolved", resolved);
     form.append("dateOfIncidence", rawDate);
@@ -291,8 +253,10 @@ export const EditSMSReportModal = (props) => {
     form.append("nums_women_children_affected", nums_women_children_affected);
     form.append("numberKilled", numberKilled);
     form.append("numberInjured", numberInjured);
+    form.append("smsReport", true);
+    form.append("smsReportId", _id);
+    form.append("userId", user._id);
     form.append("address", JSON.stringify(address));
-    form.append("fileUpload", fileUpload);
 
     const response = await reportService.createReports(form)
     const { status} = response
@@ -302,7 +266,7 @@ export const EditSMSReportModal = (props) => {
     } else {
       toastr.success('Thank You, We Have Recieved your Report');
       setTimeout(() => setLoading(false), 1000)
-      navigate('/')
+      navigate('/sms-reports')
     }
   };
 
@@ -319,7 +283,7 @@ export const EditSMSReportModal = (props) => {
       </Modal.Header>
       <Modal.Body style={{padding: '3rem'}}>
         <div className="text-center">
-          <h2 className="mt-10 mb-5 text-brand-1">Edit SMS Report</h2>
+          <h2 className="mt-10 mb-5 text-brand-1">Create SMS Report</h2>
         </div>
 
         <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
@@ -354,7 +318,7 @@ export const EditSMSReportModal = (props) => {
                             className="font-sm color-text-paragraph-2"
                             name="description"
                             placeholder="Kindly Describe The Incident To The best of Your Ability"
-                            value={formValues.description}
+                            value={formValues.description ? formValues.description : message}
                             onChange={handleChange}
                             style={{minHeight: '130px'}}
                           />
@@ -429,7 +393,6 @@ export const EditSMSReportModal = (props) => {
                         </div>
                       }
                       
-  
                       <div className={WardCol}>
                         <div className="form-group">
                           <label className="form-label" htmlFor="input-2">Land Mark*</label>
@@ -445,12 +408,6 @@ export const EditSMSReportModal = (props) => {
                         </div>
                       </div>
 
-                      <div className={WardCol}>
-                        <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Map location</label>
-                          <Places dataToComponent={handlePlacesData}/>
-                        </div>
-                      </div>
 
                       { displayCommunity && <div className="col-lg-1"> </div> }
                     
@@ -470,7 +427,7 @@ export const EditSMSReportModal = (props) => {
                           onClick={ handleSubmit } 
                           style={{width: '100%'}}
                           type="button" 
-                          class="btn btn-block btn-success">Submit Report
+                          class="btn btn-block btn-success">Create Report
                         </button>
                         : <LoadingButton />
                       }
