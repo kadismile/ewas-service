@@ -39,6 +39,7 @@ export const EditSMSReportModal = (props) => {
   }
 
   const [submitForm, setSubmitForm] = useState(false);
+  const [submited, setSubmited] = useState(false);
   const [lga, setLga] = useState(['select a state']);
   const [formCol, setFormCol] = useState('col-lg-6 col-md-12')
   const [WardCol, setWardCol] = useState('col-lg-4 col-md-4')
@@ -167,8 +168,8 @@ export const EditSMSReportModal = (props) => {
   }
 
   const handleSubmit = async (event) => {
-    setLoading(true)
     event.preventDefault();
+    setSubmited(true)
     setSubmitForm(true)
     let {
       reportTypeId,
@@ -191,29 +192,32 @@ export const EditSMSReportModal = (props) => {
     } = formValues;
 
     if (!landMark) {
-      setLoading(false);
+      setSubmited(false);
       return 
     }
 
     if (!reportTypeId) {
-      setLoading(false);
+      setSubmited(false);
       return 
     }
 
     if (!landMark) {
-      setLoading(false);
+      setSubmited(false);
       return 
     }
     if (!localGovt || !state || !description) {
-      setLoading(false);
+      setSubmited(false);
       return 
     }
 
     let address
     if (landMark?.length > 10) {
       try {
-        if (landMark?.length > 2) {
-          const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark)
+        const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark)
+        if (!longitude || !fullAddress || !country) {
+          setSubmited(false)
+          return toastr.error('Kindly Check your Address fields');
+        }
           address = {
             state: state.state,
             localGovt,
@@ -225,19 +229,18 @@ export const EditSMSReportModal = (props) => {
             longitude,
             userTypedAddress: landMark,
           }
-        }
       } catch (error) {
+        setSubmited(false)
         console.log('Error ===========>>>>>>> ', error)
       }
     } else {
-      return toastr.error('Kindly Check your Address fields');
+      setSubmited(false)
+      return toastr.error('your address field is not descriptive enough');
     }
   
     setLoading(true);
     const reporterId = sender
     agency = agency || '6516099fa067bf1e14652276' //small hack fix it later 
-
-
     const form = new FormData();
     form.append("reoccurence", reoccurence);
     form.append("resolved", resolved);
@@ -267,7 +270,7 @@ export const EditSMSReportModal = (props) => {
       props.onHide()
       toastr.success('Thank You, We Have Recieved your Report');
       setTimeout(() => setLoading(false), 1000)
-      navigate('/sms-reports')
+      navigate('/reports')
     }
   };
 
@@ -396,13 +399,13 @@ export const EditSMSReportModal = (props) => {
                       
                       <div className={WardCol}>
                         <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Land Mark*</label>
+                          <label className="form-label" htmlFor="input-2">Address*</label>
                           <input
                             className="font-sm color-text-paragraph-2"
                             name="landMark"
                             onChange={handleChange}
                             value={formValues.landMark}
-                            placeholder="Land Mark"
+                            placeholder="Address"
                             type="text"
                           />
                           {submitForm && formValues.landMark.length < 1 ? <span className="form_error"> { 'LandMark is Mandatory' }</span> : ""}
@@ -423,7 +426,7 @@ export const EditSMSReportModal = (props) => {
                     <div class="row">
                       <div class="col-lg-4"></div>
                       <div class="col-lg-4">{
-                        !loading ?
+                        !submited ?
                         <button 
                           onClick={ handleSubmit } 
                           style={{width: '100%'}}
