@@ -80,8 +80,7 @@ export const createReportBySMS = async (req, res) => {
 
 export const getSMSReport = async (req, res) => {
   try {
-    console.log('we got here -------------->>>> ', )
-  const smsReports = await SMSReport.find({});
+  const smsReports = await SMSReport.find({}).sort({ createdAt: 'desc' })
   return res.status(200).json({
     status: 'success',
     data: smsReports
