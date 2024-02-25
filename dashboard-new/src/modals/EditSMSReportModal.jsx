@@ -264,6 +264,7 @@ export const EditSMSReportModal = (props) => {
       toastr.error('Failed to Submit Report');
       setTimeout(() => setLoading(false), 1000)
     } else {
+      props.onHide()
       toastr.success('Thank You, We Have Recieved your Report');
       setTimeout(() => setLoading(false), 1000)
       navigate('/sms-reports')
