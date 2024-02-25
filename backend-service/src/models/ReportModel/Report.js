@@ -194,7 +194,11 @@ const reportSchema = new Schema({
   smsReport : {
     type: Boolean,
     default: false
-  }
+  },
+  smsReportId : {
+    type: String,
+  },
+  
 },
 {timestamps: true, versionKey: false }
 );

@@ -56,7 +56,7 @@ export const reportsAfterSave = async (report) => {
   // update smsReport if any
   await SMSReport.findOneAndUpdate({ _id: report.smsReportId }, {
       reportCreated: true,
-  },{new: true}).lean();
+  },{new: true});
 
   // add to report history
   const historyData = {
