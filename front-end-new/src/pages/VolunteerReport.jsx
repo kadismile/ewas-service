@@ -69,6 +69,9 @@ export const VolunteerReport = () => {
     community: '',
     nums_women_affected: '',
     nums_children_affected: '',
+    nums_properties_affected: '',
+    nums_children_affected: '',
+    nums_cattle_affected: '',
     numberKilled: '',
     numberInjured: '',
     userTypedAddress: ''
@@ -231,6 +234,8 @@ export const VolunteerReport = () => {
       community,
       nums_women_affected,
       nums_children_affected,
+      nums_cattle_affected,
+      nums_properties_affected,
       numberKilled,
       numberInjured,
       userTypedAddress,
@@ -294,6 +299,8 @@ export const VolunteerReport = () => {
     form.append("agencyId", agency);
     form.append("nums_women_affected", nums_women_affected);
     form.append("nums_children_affected", nums_children_affected);
+    form.append("nums_children_affected", nums_cattle_affected);
+    form.append("nums_children_affected", nums_properties_affected);
     form.append("numberKilled", numberKilled);
     form.append("numberInjured", numberInjured);
     form.append("address", JSON.stringify(address));
@@ -491,6 +498,7 @@ export const VolunteerReport = () => {
                           <div id="example-collapse-text">
                             <div className="row">
                               <div style={{marginTop: '20px'}}></div>
+
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
                                 <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
@@ -542,6 +550,34 @@ export const VolunteerReport = () => {
                                     onChange={handleChange}
                                     value={formValues?.nums_children_affected}
                                     placeholder="Number of Children Affected"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-lg-3 col-md-4">
+                                <div className="input-style mb-20">
+                                <label className="form-label" htmlFor="input-2">Number of Cattles Affected *</label>
+                                  <input
+                                    className="font-sm color-text-paragraph-2"
+                                    name="nums_cattle_affected"
+                                    onChange={handleChange}
+                                    value={formValues?.nums_cattle_affected}
+                                    placeholder="Number of Cattle Affected"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-lg-3 col-md-4">
+                                <div className="input-style mb-20">
+                                <label className="form-label" htmlFor="input-2">Number of Properties Affected *</label>
+                                  <input
+                                    className="font-sm color-text-paragraph-2"
+                                    name="nums_properties_affected"
+                                    onChange={handleChange}
+                                    value={formValues?.nums_properties_affected}
+                                    placeholder="Number of Properties Affected"
                                     type="text"
                                   />
                                 </div>
