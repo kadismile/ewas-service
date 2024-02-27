@@ -145,6 +145,14 @@ const reportSchema = new Schema({
     type: String,
     default: 0,
   },
+  nums_cattle_affected: {
+    type: String,
+    default: 0,
+  },
+  nums_properties_affected: {
+    type: String,
+    default: 0,
+  },
   numberDisplaced: {
     type: String,
     default: 0,
