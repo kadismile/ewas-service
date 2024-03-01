@@ -318,7 +318,6 @@ export const VolunteerReport = () => {
     }
   };
 
-
   return (
     <>
     <CalendarModal show={showModal} onHide={handleCloseModal} data={calendarData}/>
