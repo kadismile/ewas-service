@@ -24,7 +24,7 @@ export const Footer = () => {
               <div className="swiper-wrapper">
 
                 <div className="swiper-slide">
-                  <a href="#"><img src="images/partners/footer logo.png" alt="jobBox" width={'20%'}/></a> &nbsp;&nbsp;&nbsp;&nbsp;
+                  <a href="#"><img src="images/usaid-2.png" alt="jobBox" width={'20%'}/></a> &nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 
               </div>  
