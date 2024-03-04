@@ -70,7 +70,6 @@ export const VolunteerReport = () => {
     nums_women_affected: '',
     nums_children_affected: '',
     nums_properties_affected: '',
-    nums_children_affected: '',
     nums_cattle_affected: '',
     numberKilled: '',
     numberInjured: '',
@@ -293,14 +292,14 @@ export const VolunteerReport = () => {
     form.append("informationSource", informationSource);
     form.append("mediaLinks", mediaLinks);
     form.append("reporterId", reporterId);
-    form.append("reportTypeId", reportTypeId); 
+    form.append("reportTypeId", reportTypeId);
     form.append("description", description);
     form.append("intervention", intervention);
     form.append("agencyId", agency);
     form.append("nums_women_affected", nums_women_affected);
     form.append("nums_children_affected", nums_children_affected);
-    form.append("nums_children_affected", nums_cattle_affected);
-    form.append("nums_children_affected", nums_properties_affected);
+    form.append("nums_cattle_affected", nums_cattle_affected);
+    form.append("nums_properties_affected", nums_properties_affected);
     form.append("numberKilled", numberKilled);
     form.append("numberInjured", numberInjured);
     form.append("address", JSON.stringify(address));
