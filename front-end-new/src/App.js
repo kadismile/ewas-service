@@ -14,6 +14,7 @@ import { UserProfile } from "./pages/User-profile";
 import { Resources } from "./pages/Resources";
 import { ResourceDetils } from "./pages/ResourcesDetails";
 import { VolunteerReport } from "./pages/VolunteerReport";
+import { Terms } from "./pages/Terms";
 
 export const App = () => {
   let user = store?.getState()?.user?.user
@@ -24,6 +25,7 @@ export const App = () => {
   const routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/about", element: <About /> },
+    { path: "/terms-condition", element: <Terms /> },
     { path: "/contact", element: <Contact /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
