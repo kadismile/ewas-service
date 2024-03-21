@@ -163,7 +163,10 @@ export const Header = () => {
                     <li>
                       <Link to="/about" onClick={ () => setMenuVisible(false)} >About Us</Link>
                     </li>
-
+                    
+                    <li>
+                      <Link to="/terms-condition" onClick={ () => setMenuVisible(false)} >Terms</Link>
+                    </li>
                     <li>
                       <Link to="/resources" onClick={ () => setMenuVisible(false)} >Resources</Link>
                     </li>

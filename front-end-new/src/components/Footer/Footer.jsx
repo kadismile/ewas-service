@@ -47,6 +47,9 @@ export const Footer = () => {
                   <Link to="/contact" className="font-xs color-text-paragraph" >
                       Contact
                   </Link> &nbsp; &nbsp; &nbsp;
+                  <Link to="/terms-condition" className="font-xs color-text-paragraph" >
+                      Terms
+                  </Link> &nbsp; &nbsp; &nbsp;
 
                   <a className="font-xs color-text-paragraph mr-30 ml-30" href="#">
                     Copyright © {new Date().getFullYear()}. E.W.E.R.S 
