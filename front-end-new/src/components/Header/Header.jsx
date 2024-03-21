@@ -86,6 +86,12 @@ export const Header = () => {
                     </Link> 
                   </li>
 
+                  <li>
+                    <Link className={`${getActiveLink(["/contact"])}`} to="/terms-condition">
+                      Terms
+                    </Link> 
+                  </li>
+
 
                   {
                     user?.fullName &&
