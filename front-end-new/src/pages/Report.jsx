@@ -241,7 +241,7 @@ export const Report = () => {
     if (landMark?.length > 10) {
       try {
         if (!userTypedAddress && landMark?.length > 2) {
-          const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark)
+          const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark + state + localGovt)
           address = {
             state: state.state,
             localGovt,

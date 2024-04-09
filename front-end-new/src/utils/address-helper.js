@@ -28,6 +28,6 @@ export const prepareAddresss = async (address) => {
       country: 'Nigeria'
     };
   } catch (message) {
-    return console.error(message);
+    console.error("Errorr ---------->>>>.",message);
   }
 }

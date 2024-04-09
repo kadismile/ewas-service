@@ -245,7 +245,7 @@ export const VolunteerReport = () => {
     let address
     if (userTypedAddress?.length > 2) {
       if (mapAddress?.latitude || mapAddress?.longitude) {
-        const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(userTypedAddress)
+        const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(userTypedAddress + state + localGovt)
         address = {
           state: state.state,
           localGovt,
