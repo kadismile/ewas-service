@@ -7,7 +7,7 @@ import cors from "cors";
 import routerConfig from './routes/config.js'
 import { DBconnection } from './config/database.js'
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
