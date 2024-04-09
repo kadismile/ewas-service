@@ -1,7 +1,6 @@
 import libPhone from 'google-libphonenumber';
 import { User } from '../models/UserModel/UserModel.js';
 const { PhoneNumberUtil } = libPhone;
-import { queueHelper } from '../helpers/queue-helper.js';
 import { MailHelper } from '../helpers/mail-helper.js';
 
 export const validatePhoneNumber = (phoneNumber) => {
@@ -30,8 +29,7 @@ export const sendResetPasswordToken = async (user) => {
     name: user.fullName,
     year: new Date().getFullYear(),
   }
-  queueHelper(type, 'high', data)
-  await MailHelper.sendMail(type, 'forgot-password-token');
+  await MailHelper.sendMail(type, 'forgot-password-token', data);
   return true;
 };
 
@@ -44,7 +42,6 @@ export const sendInviteEmail = async (email, invite) => {
     invitationUrl,
     year: new Date().getFullYear(),
   }
-  queueHelper(type, 'high', data)
-  await MailHelper.sendMail(type, 'user-invitational-email');
+  await MailHelper.sendMail(type, 'user-invitational-email', data);
   return true;
 };

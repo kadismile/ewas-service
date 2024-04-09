@@ -1,9 +1,9 @@
 import path from 'path';
+import { Queue, Worker } from "bullmq";
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import handlebars from 'handlebars';
 import nodemailer from "nodemailer";
-import { queueHelper } from '../helpers/queue-helper.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,16 +29,19 @@ class Mailer {
   });
 
 
-  async sendMail(type , templateName) {
+  async sendMail(type , templateName, data) {
     const self = this
     const filePath = path.join(__dirname, `../email-templates/${templateName}.hbs`);
     const source = fs.readFileSync(filePath, 'utf-8');
     const emailTemplate = handlebars.compile(source);
     try {
-      let queue = queueHelper(type, 'high')
-      queue.process(type, function (job, done) {
-        const emailData = job.data
-        emailData.year =  new Date().getFullYear()
+      const jobData = JSON.stringify(data);
+      const imageQueue = new Queue(type, { connection: redisConnection });
+      imageQueue.add(type, jobData);
+
+      const worker = new Worker(type, (job) => {
+        const emailData = JSON.parse(job.data)
+        emailData.year =  new Date().getFullYear();
         const message = {
           from: `${self.FROM_NAME} <${self.FROM_EMAIL}>`,
           to: emailData.email,
@@ -46,8 +49,13 @@ class Mailer {
           html: emailTemplate(emailData)
         };
         self.transporter.sendMail(message);
-        done()
-      })
+      }, {
+        connection: redisConnection,
+      });
+  
+    worker.on("failed", (job, err) => {
+      console.error(`Image upload job failed for job ${job.id}:`, err);
+    });
     } catch (e) {
       throw e
     }

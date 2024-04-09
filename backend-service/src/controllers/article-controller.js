@@ -68,7 +68,7 @@ export const createArticle = async (req, res) => {
       } else {
         for (let file of req.files) {
           const { path, filename } = file
-          await manageFileUpload(path, filename, article, Article)
+          await manageFileUpload(path, filename, article, 'articles')
         }
       }
       res.status(201).json({

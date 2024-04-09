@@ -1,5 +1,6 @@
 import twilio from 'twilio';
-import { queueHelper } from './queue-helper.js';
+import { Queue, Worker } from "bullmq";
+import { redisConnection } from '../lib/redis-connection.js';
 
 
 const accountSid = process.env.TWILIO_ACCOUNT_ID;
@@ -7,26 +8,31 @@ const authToken = process.env.TWILIO_ACCOUNT_TOKEN;
 const client = twilio(accountSid, authToken);
 
 export const sendSMS = async (body, recipients) => {
-  const type = 'sendSms'; 
-  let queue = queueHelper(type, 'high')
-  queue.process(type, async function (job, done) {
-    try {
-      for (let phoneNumber of recipients) {
-        await client.messages
-        .create({
-          body,
-          from: '+15005550006',
-          to: '+2347067875047'
-        })
-        done(null);
-      }
-    } catch (error) {
-      console.error('Error processing job:', error);
-      done(error);
-    }
-  }) 
+  const jobName = 'sendSms-job'; 
+  const jobData = JSON.stringify({ body, recipients });
+  const imageQueue = new Queue(jobName, { connection: redisConnection });
+  imageQueue.add(jobName, jobData);
 
-  queue.on('job complete', async function (id) {
+  const worker = new Worker(jobName, async (job) => {
+    const { body, recipients } = JSON.parse(job.data)
+    for (let phoneNumber of recipients) {
+      await client.messages
+      .create({
+        body,
+        from: '+15005550006',
+        to: '+2347067875047'
+      })
+      done(null);
+    }
+  }, {
+    connection: redisConnection,
+  });
+
+  worker.on("failed", (job, err) => {
+    console.error(`Image upload job failed for job ${job.id}:`, err);
+  });
+
+  worker.on('complete', async function (id) {
     console.log(`Job ${id} SMS sent:`);
   });
 
