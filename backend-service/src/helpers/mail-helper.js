@@ -4,6 +4,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import handlebars from 'handlebars';
 import nodemailer from "nodemailer";
+import { redisConnection } from '../lib/redis-connection.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
