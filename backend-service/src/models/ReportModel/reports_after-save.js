@@ -10,14 +10,14 @@ import { SMSReport } from "./SMSReport.js"
 export const reportsAfterSave = async (report) => {
   const smsReport = report.smsReport
   const CAMS_DEPARTMENT = process.env.CAMS_DEPARTMENT
-  const SSS_DEPARTMENT = process.env.SSS_DEPARTMENT
+  const CPS_DEPARTMENT = process.env.CPS_DEPARTMENT
 
-  const department = await Department.findOne({ _id: smsReport ? SSS_DEPARTMENT : CAMS_DEPARTMENT })
+  const department = await Department.findOne({ _id: smsReport ? CPS_DEPARTMENT : CAMS_DEPARTMENT })
   if (department) {
-    const users = await User.find({ department: smsReport ? SSS_DEPARTMENT : CAMS_DEPARTMENT })
+    const users = await User.find({ department: smsReport ? CPS_DEPARTMENT : CAMS_DEPARTMENT })
     await Report.findOneAndUpdate(
       { _id: report._id },
-      { departmentId: smsReport ? SSS_DEPARTMENT : CAMS_DEPARTMENT }
+      { departmentId: smsReport ? CPS_DEPARTMENT : CAMS_DEPARTMENT }
     )
     for (const userData of users) {
       try {
@@ -35,9 +35,9 @@ export const reportsAfterSave = async (report) => {
 
   const actionableUsers = {
     currentUser: null,
-    currentDepartment: smsReport ? SSS_DEPARTMENT : CAMS_DEPARTMENT,
+    currentDepartment: smsReport ? CPS_DEPARTMENT : CAMS_DEPARTMENT,
     reportUserHistory: null,
-    nextActionableDept: smsReport ? SSS_DEPARTMENT : CAMS_DEPARTMENT
+    nextActionableDept: smsReport ? CPS_DEPARTMENT : CAMS_DEPARTMENT
   };
   
   const updatedReport = await Report.findOneAndUpdate({ _id: report._id }, {
@@ -70,7 +70,7 @@ export const reportsAfterSave = async (report) => {
 
 const comment = (smsReport) => {
   if (smsReport) {
-    return "a new report as just been created and moved to SSS department"
+    return "a new report as just been created and moved to CPS department"
   } else {
     return "a new report as just been created and moved to CAMS department"
   }
