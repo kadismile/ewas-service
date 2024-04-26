@@ -551,20 +551,20 @@ const createVerification = async (user, reportId, verificationMethod, comments) 
 
 const getNextActionableDept = async (acronym, responder) => {
   if (acronym === 'CAMS') {
-    const dept = await Department.findOne({acronym: 'SSS'}) 
+    const dept = await Department.findOne({acronym: 'CPS'}) 
     if (dept) {
       return dept._id
     }
   }
 
-  if (acronym === 'SSS') {
+  if (acronym === 'CPS') {
     const agency = await Agency.findOne({ _id: responder })
     if (agency) {
       return agency._id
     }
   }
 
-  if (responder && acronym === 'SSS') {
+  if (responder && acronym === 'CPS') {
     return responder
   }
 }
