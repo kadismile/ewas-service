@@ -146,7 +146,7 @@ export const VerifyReportModal = (props) => {
       }
     }
 
-    if (props.depAcronym === 'SSS') {
+    if (props.depAcronym === 'CPS') {
       if (comments?.length < 10 ||  !responder) {
         return true
       }
@@ -283,7 +283,7 @@ export const VerifyReportModal = (props) => {
               </div>
             </div>
 
-            { props.depAcronym === 'SSS' &&
+            { props.depAcronym === 'CPS' &&
             <>
               <RespondersDropDown dataToComponent={handleMethodClick} label={"Responders"}/>
               { formErrorMessage('responder', formValues, submitForm)}

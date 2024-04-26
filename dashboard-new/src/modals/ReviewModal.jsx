@@ -3,7 +3,7 @@ import { store } from '../redux/store';
 import { Modal } from 'react-bootstrap';
 import { reportService } from '../services/reportsService';
 import moment from 'moment';
-import { Responder, SSS } from '../constants';
+import { Responder, CPS } from '../constants';
 
 
 export const ReviewModal = (props) => {
@@ -75,7 +75,7 @@ export const ReviewModal = (props) => {
           { 
             reportComments?.map((rHistory) => {
               /* {
-                (!isResponder || (isResponder && rHistory.currentDepartment.acronym === "SSS")) &&
+                (!isResponder || (isResponder && rHistory.currentDepartment.acronym === "CPS")) &&
                 reporHistoryItems(rHistory)
               } */
                 return (
@@ -85,7 +85,7 @@ export const ReviewModal = (props) => {
                       reporHistoryItems(rHistory)
                 } */}
                 {/* {
-                  isResponder && rHistory?.currentDepartment?.acronym === SSS && 
+                  isResponder && rHistory?.currentDepartment?.acronym === CPS && 
                       reporHistoryItems(rHistory)
                 } */}
                 {

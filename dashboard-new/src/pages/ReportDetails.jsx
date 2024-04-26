@@ -164,7 +164,7 @@ export const ReportDetails = () => {
   }
 
   const getByTitle = () => {
-    if (user?.department?.acronym === 'SSS') {
+    if (user?.department?.acronym === 'CPS') {
       return 'Assign to Responders'
     }
 
@@ -178,7 +178,7 @@ export const ReportDetails = () => {
   }
 
   const showActionName = () => {
-    if (user?.department?.acronym === 'SSS') {
+    if (user?.department?.acronym === 'CPS') {
       return 'Assign Report'
     }
     if (user?.department?.acronym === 'Responder') {
