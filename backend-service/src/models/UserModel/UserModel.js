@@ -14,6 +14,10 @@ const invitationSchema = new Schema({
     type: String,
     ref: 'Department',
     required: [true, 'department is missing']
+  },
+  agency: {
+    type: String,
+    ref: 'Agency',
   }
 },
 {timestamps: true, versionKey: false }

@@ -286,7 +286,7 @@ export const resetPassword = async (req, res) => {
 
 export const inviteUser = async (req, res) => {
   const body = req.body
-  const { department, email } = body;
+  const { department, email, agency } = body;
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -295,7 +295,8 @@ export const inviteUser = async (req, res) => {
       });
     } else {
       const invite = new Invitation({
-        email, department
+        email, department, 
+        agency: agency || null 
       });
       await invite.save();
 
@@ -317,7 +318,7 @@ export const inviteUser = async (req, res) => {
 export const getInvitation = async (req, res) => {
   try {
     const { invitationalId } = req.query
-    const invitation = await Invitation.findOne({ _id:  invitationalId }).populate('department');
+    const invitation = await Invitation.findOne({ _id:  invitationalId }).populate('department').populate('agency');
     res.status(200).json({
       status: "success",
       data: invitation
