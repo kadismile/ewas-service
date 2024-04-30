@@ -9,9 +9,9 @@ export const DepartmentDropDown = ({ dataToComponent }) => {
   const [reportTypes, setReportTypes] = useState([])
 
   const handleClick = async (data) => {
-    const { value } = data
+    const { value, label } = data
     setSelectedOption(value)
-    dataToComponent({value})
+    dataToComponent({value, label})
   }
 
   useEffect(() => {

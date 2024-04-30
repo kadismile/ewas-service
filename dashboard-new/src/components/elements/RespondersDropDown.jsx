@@ -47,7 +47,7 @@ export const RespondersDropDown = ({ dataToComponent, label }) => {
   return (
     <Select
         styles={customStyles}
-        defaultValue={{ label: 'Responsders', value: selectedOption }}
+        defaultValue={{ label: 'Responder', value: selectedOption }}
         onChange={ handleClick }
         options={ options() }
         className={'select-react'}

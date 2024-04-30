@@ -19,7 +19,9 @@ export const InvitedUser = () => {
             ...preVal,
             email: data.email,
             departmentName: data.department.acronym,
-            department: data.department._id
+            department: data.department._id,
+            agencyName: data.agency.name,
+            agency: data.agency._id,
           }
         })
       } else {
@@ -34,6 +36,8 @@ export const InvitedUser = () => {
     phoneNumber: '',
     department: '',
     departmentName: '',
+    agency: '',
+    agencyName: '',
     fullName: '',
     password: '',
     repeatPassword: '',
@@ -100,12 +104,12 @@ export const InvitedUser = () => {
     setLoading(true);
     const { 
       fullName, email, phoneNumber, 
-      password, department, role='user' 
+      password, department, agency, role='user' 
     } = formValues;
 
     const response = await userService.registerUser({
       fullName, email, phoneNumber, password, 
-      department, role })
+      department, role, responder: agency })
     const { status, message } = response
     if (status === 'failed') {
       toastr.error(message);
@@ -178,6 +182,23 @@ export const InvitedUser = () => {
                                   value={formValues.departmentName}
                                 />
                               </div>
+                              {
+                                formValues.agency.length > 2 && 
+                                <div className="form-group">
+                                <label className="form-label" htmlFor="input-1">Agency</label>
+                                <input 
+                                  className="form-control" 
+                                  id="input-1" 
+                                  type="text" 
+                                  name="agency" 
+                                  readOnly
+                                  placeholder="Agency"
+                                  onChange={handleChange}
+                                  value={formValues.agencyName}
+                                />
+                              </div>
+                              }
+                              
 
                               <div className="form-group">
                                 <label className="form-label" htmlFor="input-1">Phone Number *</label>
