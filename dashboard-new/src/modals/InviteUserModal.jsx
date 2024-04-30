@@ -6,13 +6,16 @@ import '../styles/custom.css';
 import { DepartmentDropDown } from '../components/elements/DepartmentDropDown';
 import { userService } from '../services/userService';
 import isEmail from 'validator/lib/isEmail';
+import { RespondersDropDown } from '../components/elements/RespondersDropDown';
 export const InviteUserModal = (props) => {
   const formFields = {
     email: '',
     department: '',
+    agency: ''
   };
 
   const [submitForm, setSubmitForm] = useState(false);
+  const [showAgency, setShowAgency] = useState(false)
 
   const [formValues, setFormValues] = useState({
     ...formFields,
@@ -80,10 +83,15 @@ export const InviteUserModal = (props) => {
   };
 
   const handleDataFromDropDown = (data) => {
+    const {label, value } = data
+    if (label === 'Responder') {
+      setShowAgency(true)
+    }
     setFormValues((prevState) => {
       return {
         ...prevState,
-        department: data.value,
+        department: label !== 'Responder'  ? value : formValues.department,
+        agency: label === 'Responder' ? value : formValues.agency,
       };
     });
   }
@@ -129,6 +137,20 @@ export const InviteUserModal = (props) => {
               />
               { <span className="form_errors"> { formErrorMessage('department') } </span>}
             </div>
+
+            {
+              showAgency &&
+              <div className="form-group">
+              <label className="form-label" htmlFor="input-1">
+                Agency
+              </label>
+              <RespondersDropDown
+                  label={"Agency"}
+                  dataToComponent={handleDataFromDropDown}
+              />
+              { <span className="form_errors"> { formErrorMessage('agency') } </span>}
+            </div> 
+            }
             
             <div className="form-group">
               { !loading ? (
