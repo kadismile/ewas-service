@@ -17,11 +17,11 @@ export const InvitedUser = () => {
         setFormValues((preVal) => {
           return {
             ...preVal,
-            email: data.email,
-            departmentName: data.department.acronym,
-            department: data.department._id,
-            agencyName: data.agency.name,
-            agency: data.agency._id,
+            email: data?.email,
+            departmentName: data?.department?.acronym,
+            department: data?.department?._id,
+            agencyName: data?.agency?.name || '',
+            agency: data?.agency._id,
           }
         })
       } else {
