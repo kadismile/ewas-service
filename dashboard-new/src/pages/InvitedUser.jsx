@@ -183,7 +183,7 @@ export const InvitedUser = () => {
                                 />
                               </div>
                               {
-                                formValues.agency.length > 2 && 
+                                formValues?.agency?.length > 2 && 
                                 <div className="form-group">
                                 <label className="form-label" htmlFor="input-1">Agency</label>
                                 <input 
@@ -194,7 +194,7 @@ export const InvitedUser = () => {
                                   readOnly
                                   placeholder="Agency"
                                   onChange={handleChange}
-                                  value={formValues.agencyName}
+                                  value={formValues?.agencyName}
                                 />
                               </div>
                               }
