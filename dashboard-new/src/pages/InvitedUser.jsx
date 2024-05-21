@@ -21,7 +21,7 @@ export const InvitedUser = () => {
             departmentName: data?.department?.acronym,
             department: data?.department?._id,
             agencyName: data?.agency?.name || '',
-            agency: data?.agency._id,
+            agency: data?.agency?._id,
           }
         })
       } else {
