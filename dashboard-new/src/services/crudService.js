@@ -138,6 +138,12 @@ export const crudService =  {
       const url = buildUrl(baseUrl, queryParams);
       const method = 'GET'
       const response = await client(url, method);
+      if (response.error === 'No permissons to access this route') {
+        return {
+          data: [],
+          error: "No permissons to access this route"
+        }
+      }
       if (!response)
         throw new Error("Cannot fetch Complainer");
       return response

@@ -7,7 +7,9 @@ import { DepartmentDropDown } from '../components/elements/DepartmentDropDown';
 import { userService } from '../services/userService';
 import isEmail from 'validator/lib/isEmail';
 import { RespondersDropDown } from '../components/elements/RespondersDropDown';
+
 export const InviteUserModal = (props) => {
+  const RESPONDER_DEPARTMENT = process.env.REACT_APP_RESPONDER_DEPARTMENT
   const formFields = {
     email: '',
     department: '',
@@ -69,8 +71,9 @@ export const InviteUserModal = (props) => {
     event.preventDefault();
     if (failedValidation()) return
     setLoading(true);
-    const { email, department } = formValues;
-    const response = await userService.inviteUser({ email, department })
+    console.log('Agency ============>>>>>> ', formValues);
+    const { email, department, agency } = formValues;
+    const response = await userService.inviteUser({ email, department, agency })
     const { status } = response
     if (status === 'failed') {
       toastr.error('Cannot Invite User');
@@ -90,8 +93,8 @@ export const InviteUserModal = (props) => {
     setFormValues((prevState) => {
       return {
         ...prevState,
-        department: label !== 'Responder'  ? value : formValues.department,
-        agency: label === 'Responder' ? value : formValues.agency,
+        department: label !== 'Responder' && label !== 'Agency'  ? value : formValues.department || RESPONDER_DEPARTMENT,
+        agency: label === 'Agency' ? value : formValues.agency,
       };
     });
   }

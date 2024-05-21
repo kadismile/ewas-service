@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { PageLoader } from "../components/elements/spinners";
 import { Search } from "../components/elements/Search";
 import { FilterModal } from "../modals/FilterModal";
+import toastr from 'toastr'
 
 export const Reports = () => {
   let user = store?.getState()?.user?.user
@@ -22,10 +23,14 @@ export const Reports = () => {
     setLoading(true)
     crudService.getReports().then((res) => {
       const {
-        data: { data },
+        data: { data, error },
       } = res
-      setReports(data)
-      setTimeout(() => setLoading(false), 500)
+      if (error) {
+       toastr.success('Hello baby bonku')
+      } else {
+        setReports(data)
+        setTimeout(() => setLoading(false), 500)
+      }
     })
   }
 
@@ -33,21 +38,21 @@ export const Reports = () => {
     fetchData()
   }, [])
 
-  const listItems = reports.map((report, key) => {
+  const listItems = reports?.map((report, key) => {
     let number = key + 1
     return (
       <tr key={key}>
         <td>{number++}</td>
         <td>
-          <Link to={`/report/${report.reportSlug}`}> {report.reportSlug} </Link>{" "}
+          <Link to={`/report/${report?.reportSlug}`}> {report?.reportSlug} </Link>{" "}
         </td>
         <td>
-          <Link to={`/report/${report.reportSlug}`}>
-            {report.reportTypeId.name}{" "}
+          <Link to={`/report/${report?.reportSlug}`}>
+            {report?.reportTypeId?.name}{" "}
           </Link>{" "}
         </td>
-        <td>{report.address.state}</td>
-        <td>{report.address.localGovt}</td>
+        <td>{report?.address?.state}</td>
+        <td>{report?.address?.localGovt}</td>
         <td>{moment(report.createdAt).format("MMM D, YYYY")}</td>
       </tr>
     )
@@ -74,7 +79,7 @@ export const Reports = () => {
 
   const handleFilterData = (data) => {
     setLoading(true)
-    if (data.length) {
+    if (data?.length) {
       setLoading(false)
       setReports(data)
     } else {
@@ -84,10 +89,12 @@ export const Reports = () => {
 
   return (
     <>
-      <FilterModal show={showFilterModal} onHide={handleCloseModal} dataFromFilter={handleFilterData} />
       {loading ? (
         <PageLoader />
       ) : (
+        !reports?.length ? <h2 className="mt-100 ml-200"> kindly Meet Admin For Permissions</h2> :
+        <>
+        <FilterModal show={showFilterModal} onHide={handleCloseModal} dataFromFilter={handleFilterData} />
         <div className="box-content">
           <div className="box-heading">
             <div className="box-title">
@@ -153,7 +160,7 @@ export const Reports = () => {
                             <th scope="col">Date</th>
                           </tr>
                         </thead>
-                        <tbody>{listItems}</tbody>
+                        <tbody>{ reports?.length ? listItems : ''}</tbody>
                       </table>
                     </div>
                   </div>
@@ -162,6 +169,7 @@ export const Reports = () => {
             </div>
           </div>
         </div>
+        </>
       )}
     </>
   )
