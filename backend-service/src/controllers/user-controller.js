@@ -295,8 +295,8 @@ export const inviteUser = async (req, res) => {
       });
     } else {
       const invite = new Invitation({
-        email, department, 
-        agency: agency || null 
+        email, department,
+        agency: agency || null
       });
       await invite.save();
 

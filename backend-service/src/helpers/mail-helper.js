@@ -36,7 +36,14 @@ class Mailer {
     const source = fs.readFileSync(filePath, 'utf-8');
     const emailTemplate = handlebars.compile(source);
     try {
-      const jobData = JSON.stringify(data);
+      const message = {
+        from: `${self.FROM_NAME} <${self.FROM_EMAIL}>`,
+        to: data.email,
+        subject: data.subject,
+        html: emailTemplate(data)
+      };
+      self.transporter.sendMail(message);
+      /* const jobData = JSON.stringify(data);
       const imageQueue = new Queue(type, { connection: redisConnection });
       imageQueue.add(type, jobData);
 
@@ -56,7 +63,7 @@ class Mailer {
   
     worker.on("failed", (job, err) => {
       console.error(`Image upload job failed for job ${job.id}:`, err);
-    });
+    }); */
     } catch (e) {
       throw e
     }
