@@ -92,6 +92,12 @@ export const Header = () => {
                     </Link> 
                   </li>
 
+                  <li>
+                    <a href="https://www.ewers-ipcr.org.ng" target="blank">
+                      IPCR
+                    </a> 
+                  </li>
+
 
                   {
                     user?.fullName &&
