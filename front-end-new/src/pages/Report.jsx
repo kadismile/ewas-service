@@ -29,7 +29,7 @@ export const Report = () => {
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500)
-  })
+  },[])
 
   const calendarData = (calData) => {
     const errors = formValues.errors;
@@ -305,14 +305,13 @@ export const Report = () => {
     } else {
       toastr.success('Thank You, We Have Recieved your Report');
       setTimeout(() => setLoading(false), 1000)
-      navigate('/')
+      return navigate('/')
     }
   };
 
   useEffect(() => {
     scroll.scrollTo(420)
   }, []);
-
 
   return (
     <>

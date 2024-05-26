@@ -30,7 +30,7 @@ export const VolunteerReport = () => {
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500)
-  })
+  }, [])
 
   const calendarData = (calData) => {
     const errors = formValues?.errors;
