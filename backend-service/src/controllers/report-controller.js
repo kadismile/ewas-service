@@ -187,7 +187,7 @@ export const createReport = async (req, res) => {
         await manageFileUpload(path, filename, report, 'reports')
       }
     }
-    res.status(201).json({
+    return res.status(201).json({
       status: 'success',
       data: report
     });
