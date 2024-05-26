@@ -8,7 +8,7 @@ import {v2 as cloudinary} from 'cloudinary';
 import { Attachment } from '../models/AttachmentModel/AttachmentModel.js';
 import { Report } from '../models/ReportModel/Report.js';
 import { Article } from '../models/ArticleModel/ArticleModel.js';
-import { redisConnection } from '../lib/redis-connection.js';
+import Agenda from 'agenda';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -50,29 +50,39 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 export const manageFileUpload = async (filePath, fileName, data, model) => {
   try {
-    const jobData = JSON.stringify({ filePath, fileName, data, model });
-    const jobName = 'image-upload';
-    const imageQueue = new Queue(jobName, { connection: redisConnection });
-    imageQueue.add(jobName, jobData);
+    const mongoConnectionString = process.env.MONGODB_URL;
+    if (!mongoConnectionString) {
+      throw new Error('MONGODB_URL is not defined');
+    }
 
-    const worker = new Worker(jobName, uploadToCloudinary, {
-      connection: redisConnection,
-    });
-  
-    worker.on("failed", (job, err) => {
-      console.error(`Image upload job failed for job ${job.id}:`, err);
+    const agenda = new Agenda({
+      db: { address: mongoConnectionString, collection: 'jobCollection' },
     });
 
+    agenda.define('Upload Images', async (job) => {
+      const { filePath, fileName, data, model } = job.attrs.data;
+      await uploadToCloudinary({ filePath, fileName, data, model });
+    });
+
+    await agenda.start();
+
+    await agenda.schedule('in 20 seconds', 'Upload Images', {
+      filePath,
+      fileName,
+      data,
+      model
+    });
+
+    console.log('Agenda started and job scheduled');
   } catch (error) {
-    console.log('Error ', error)
+    console.error('Error:', error);
   }
 }
 
 const uploadToCloudinary = async (job) => {
-  const { fileName, filePath, data, model } = JSON.parse(job.data)
+  const { fileName, filePath, data, model } = job
   let Model = model === 'articles' ? Article : model === 'reports' ? Report : undefined
   try {
     const result = await cloudinary.uploader.upload(filePath, {

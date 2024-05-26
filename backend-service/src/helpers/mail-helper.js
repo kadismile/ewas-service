@@ -4,7 +4,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import handlebars from 'handlebars';
 import nodemailer from "nodemailer";
-import { redisConnection } from '../lib/redis-connection.js';
+import Agenda from 'agenda';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -42,28 +42,30 @@ class Mailer {
         subject: data.subject,
         html: emailTemplate(data)
       };
-      self.transporter.sendMail(message);
-      /* const jobData = JSON.stringify(data);
-      const imageQueue = new Queue(type, { connection: redisConnection });
-      imageQueue.add(type, jobData);
 
-      const worker = new Worker(type, (job) => {
-        const emailData = JSON.parse(job.data)
-        emailData.year =  new Date().getFullYear();
-        const message = {
-          from: `${self.FROM_NAME} <${self.FROM_EMAIL}>`,
-          to: emailData.email,
-          subject: emailData.subject,
-          html: emailTemplate(emailData)
-        };
-        self.transporter.sendMail(message);
-      }, {
-        connection: redisConnection,
-      });
-  
-    worker.on("failed", (job, err) => {
-      console.error(`Image upload job failed for job ${job.id}:`, err);
-    }); */
+    const mongoConnectionString = process.env.MONGODB_URL;
+    if (!mongoConnectionString) {
+      throw new Error('MONGODB_URL is not defined');
+    }
+
+    const agenda = new Agenda({
+      db: { address: mongoConnectionString, collection: 'jobCollection' },
+    });
+
+
+    agenda.define('Send Mail', async (job) => {
+      const { message } = job.attrs.data;
+      await triggerMail(message);
+    });
+    await agenda.start();
+
+    await agenda.schedule('in 20 seconds', 'Send Mail', message);
+
+    console.log('Agenda started and job scheduled');
+
+    const triggerMail = async () => {
+      self.transporter.sendMail(message);
+    }
     } catch (e) {
       throw e
     }
