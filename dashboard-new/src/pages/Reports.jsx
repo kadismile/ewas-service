@@ -34,6 +34,10 @@ export const Reports = () => {
     })
   }
 
+  const unattendedReport = (report) => {
+    return report?.actionableUsers?.reportUserHistory ? '' : 'red'
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -41,14 +45,14 @@ export const Reports = () => {
   const listItems = reports?.map((report, key) => {
     let number = key + 1
     return (
-      <tr key={key}>
+      <tr key={key} style={{color: unattendedReport(report)}}>
         <td>{number++}</td>
         <td>
-          <Link to={`/report/${report?.reportSlug}`}> {report?.reportSlug} </Link>{" "}
+          <Link to={`/report/${report?.reportSlug}`}> <span style={{color: unattendedReport(report)}}>{report?.reportSlug}</span> </Link>{" "}
         </td>
         <td>
           <Link to={`/report/${report?.reportSlug}`}>
-            {report?.reportTypeId?.name}{" "}
+          <span style={{color: unattendedReport(report)}}>{report?.reportTypeId?.name}{" "}</span>
           </Link>{" "}
         </td>
         <td>{report?.address?.state}</td>

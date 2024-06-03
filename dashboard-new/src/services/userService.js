@@ -76,6 +76,19 @@ export const userService =  {
     }
   },
 
+  deleteUser:async (userId) => {
+    try {
+      const url = `${serverUrl}/auth/user/delete`
+      const method = 'POST'
+      const response = await client(url, method, { ...userId });
+      if (!response)
+        throw new Error("Not Authorized");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   addPermissions:async ({ userId, permissions }) => {
     try {
       const url = `${serverUrl}/auth/add-user-permissions`
