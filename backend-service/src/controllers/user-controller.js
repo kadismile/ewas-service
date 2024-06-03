@@ -11,7 +11,7 @@ export const createUser = async (req, res) => {
   const body = req.body
   const {
     fullName, email, phoneNumber, password, 
-    department, role, responder
+    department, role, responder, invitationalId
   } = body
   try {
     const { error } = user_create_validation.validate(body);
@@ -34,6 +34,11 @@ export const createUser = async (req, res) => {
     });
 
     await user.save();
+
+    if (invitationalId) {
+      await Invitation.findOneAndDelete({ _id: invitationalId });
+    }
+    
     if (user) {
       return res.status(201).json({
         status: 'success',
@@ -206,6 +211,35 @@ export const suspendUser = async (req, res) => {
       return res.status(401).json({
         status: "failed",
         message: 'No permissions to Suspended This User'
+      });
+    }
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
+
+export const deleteUser = async (req, res) => {
+  try {
+    const adminUser = req.user
+    const { userId } = req.body;
+    const commonUser = await User.findOne({ _id: userId })
+    if (adminUser.role === 'superAdmin' || commonUser.department === adminUser.department) {
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { isActive: false },
+      );
+      return res.status(200).json({
+        status: "success",
+        message: 'User has been Deleted Temporarily'
+      });
+    } else {
+      return res.status(401).json({
+        status: "failed",
+        message: 'No permissions to Delete This User'
       });
     }
   } catch (error) {

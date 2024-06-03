@@ -40,7 +40,7 @@ const retrieve = (Model, populateFields, page, limit, sort) => {
     query = query.populate(field[0]);
   });
   query.sort(sort ? (sort === 'desc' ? { createdAt: -1 } : { createdAt: 1 }) : { createdAt: -1 })
-  query.limit(parseInt(limit, 10) || 10)
+  query.limit(parseInt(limit, 10) || 100)
   query.skip(parseInt(page * limit, 10) || 0); 
   return query
 }

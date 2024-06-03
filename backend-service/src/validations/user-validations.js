@@ -11,6 +11,7 @@ export const user_create_validation = Joi.object({
   role: Joi.string().required(),
   responder: Joi.string(),
   agency: Joi.string(),
+  invitationalId: Joi.string(),
 });
 
 export const user_login_validation = Joi.object({
