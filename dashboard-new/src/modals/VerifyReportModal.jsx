@@ -5,8 +5,8 @@ import { SubmitButton } from '../components/elements/Buttons';
 import { reportService } from '../services/reportsService';
 import toastr from 'toastr';
 import Select from 'react-select';
-import { RespondersDropDown } from '../components/elements/RespondersDropDown';
 import { formErrorMessage } from '../helpers/form-error-messages';
+import { MultiRespondersDropDown } from '../components/elements/MultiResponders';
 
 
 export const VerifyReportModal = (props) => {
@@ -285,7 +285,7 @@ export const VerifyReportModal = (props) => {
 
             { props.depAcronym === 'CPS' &&
             <>
-              <RespondersDropDown dataToComponent={handleMethodClick} label={"Responders"}/>
+              <MultiRespondersDropDown dataToComponent={handleMethodClick} label={"Responders"}/>
               { formErrorMessage('responder', formValues, submitForm)}
             </>
             }

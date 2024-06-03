@@ -5,12 +5,18 @@ import { MiniSpinner } from "../components/elements/spinners";
 import { PageLoader } from "../components/elements/spinners";
 import { Search } from "../components/elements/Search";
 import { InviteUserModal } from "../modals/InviteUserModal"
+import AWN from "awesome-notifications";
+import toastr from 'toastr'
+import { WithPermissions } from "../components/elements/WithPermissions";
+import { SUSPEND_USER_PERMISSIONS } from "../utils/permissions.js"
 
 export const Users = (props) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setdata] = useState([]);
+  const [newData, setNewData] = useState(false)
   const [showInviteModal, setInviteModal] = useState(false);
+  let notifier = new AWN();
 
   const fetchData = () => {
     userService.getUsers().then((res) => {
@@ -24,7 +30,29 @@ export const Users = (props) => {
 
    useEffect(() => {
     fetchData()
-  }, []);
+  }, [newData]);
+
+  const deleteUser = (user) => {
+    let onOk = async () => {
+      const data = {
+        userId: user._id,
+        isActive: user.isActive
+      }
+      const response = await userService.deleteUser(data);
+      const {status, message} = response
+      if (status === 'success')
+      setNewData(!newData)
+      toastr.success(message);
+    };
+    let onCancel = () => {
+      return;
+    };
+    notifier.confirm("Are you sure you want to go ahead with this?", onOk, onCancel, {
+      labels: {
+        confirm: `Delete ${user.fullName} ?`,
+      },
+    });
+  }
 
   const listItems = data.map((user, key) => {
     let number = key + 1;
@@ -39,6 +67,12 @@ export const Users = (props) => {
           <i class="fa fa-edit" aria-hidden="true"></i> 
           </a> 
         </td>
+        <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
+          <td> <a href="#/" onClick={() => deleteUser(user)} className="paint-red" title="delete" >
+            <i class="fa fa-trash" aria-hidden="true"></i> 
+            </a> 
+          </td>             
+        </WithPermissions>
       </tr>
     );
   });
@@ -129,6 +163,7 @@ export const Users = (props) => {
                             <th scope="col">Phone Number</th>
                             <th scope="col">Email</th>
                             <th scope="col">Department</th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                           </tr>
                         </thead>

@@ -415,10 +415,9 @@ export const ReportDetails = () => {
             </div>
           </div>
         </div>
-      
       </div>
-   
+
     }
-     </>
+    </>
   )
 }
