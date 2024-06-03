@@ -67,3 +67,20 @@ export const agencyResource = async (req, res) => {
     });
   }
 }
+
+
+/* {
+  "_id":{"$oid":"65af876b8c29850614306573"},
+  "email":"west@ewas.com",
+  "fullName":"west",
+  "password":"$2b$10$eQ.GQGCbzrjV2kAqkLGlnuhxmuRfI.Ic9OqjoOGIAEZbb.CVdZkxq",
+  "department":"656b6560e8ac8c29ddb9ffd2",
+  "phoneNumber":"07067525016",
+  "role":"responder",
+  "isActive":true,
+  "suspended":false,
+  "responder":"657036d7279c63715fbdea72",
+  "permissions":["can-manage-reports","can-manage-responders"],
+  "createdAt":{"$date":{"$numberLong":"1706002283621"}},
+  "updatedAt":{"$date":{"$numberLong":"1706002519606"}}
+} */
