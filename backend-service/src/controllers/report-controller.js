@@ -19,6 +19,7 @@ import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
 import { Verification } from '../models/VerificationModel/VerificationModel.js';
 import { SMSReport } from '../models/ReportModel/SMSReport.js';
+import { sendReportsToAgenciesEmail } from '../helpers/user-helper.js';
 
 
 export const createReporter = async (req, res) => {
@@ -400,10 +401,11 @@ export const verifyReport = async (req, res) => {
       }
       
       if (responder?.length) {
-        const agency = await Agency.findOne({ _id: responder })
-        if (agency.name) {
+        const agencies = await Agency.find({ _id: { $in: responder } })
+        if (agencies.length) {
           const body = 'An SMS is sent your way kindly read it '
           // await sendSMS(body, agency?.phoneNumbers)
+          await sendReportsToAgenciesEmail(agencies, report.reportSlug)
         }
       }
 
@@ -440,7 +442,6 @@ export const getAdvanced = async (req, res) => {
     });
   }
   const reports = await advancedResults(req, Report, populate, select);
-  console.log('reports ==============>>>>> ', 'Hello --------')
   return res.status(200).json({
     status: "success",
     data: reports
