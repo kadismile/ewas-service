@@ -270,6 +270,7 @@ export const Report = () => {
         console.log('Error ===========>>>>>>> ', error)
       }
     } else {
+      setLoading(false)
       return toastr.error('Kindly Check your Address fields');
     }
   

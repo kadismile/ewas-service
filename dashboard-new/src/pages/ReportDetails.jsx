@@ -82,7 +82,6 @@ export const ReportDetails = () => {
 
   const handleShowModal = () => {
     setShowModal(true);
-    // setUrl(file)
   };
 
   const handleCloseModal = (data) => {
@@ -149,8 +148,8 @@ export const ReportDetails = () => {
       return false;
     }
     const actionableUser = report?.actionableUsers;
-    return actionableUser?.nextActionableDept === user.department._id || 
-            actionableUser?.nextActionableDept === user.responder
+    return actionableUser?.nextActionableDept === user.department._id ||
+          actionableUser?.agencyId.includes(user.responder)
   }
 
   const handleVerifyModal = (data) => {
@@ -186,6 +185,7 @@ export const ReportDetails = () => {
     }
     return 'Verify Report'
   }
+  
 
   return (
     <>

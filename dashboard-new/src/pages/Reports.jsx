@@ -14,6 +14,7 @@ export const Reports = () => {
   if (user) {
     user = user.user
   }
+
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
   const [showModal, setShowModal] = useState(false);
@@ -26,7 +27,7 @@ export const Reports = () => {
         data: { data, error },
       } = res
       if (error) {
-       toastr.success('Hello baby bonku')
+        toastr.success('Error Occured')
       } else {
         setReports(data)
         setTimeout(() => setLoading(false), 500)
@@ -41,6 +42,11 @@ export const Reports = () => {
   useEffect(() => {
     fetchData()
   }, [])
+
+  const checkReportPermissions = () => {
+    if (!user.permissions.length) return false
+    user.permissions.find((u) => u.permissions === "can-manage-reports")
+  }
 
   const listItems = reports?.map((report, key) => {
     let number = key + 1
@@ -91,12 +97,16 @@ export const Reports = () => {
     }
   }
 
+
+  console.log('Reports =================>>>>>> ', reports)
+  console.log('User =================>>>>>> ', user)
+
   return (
     <>
       {loading ? (
         <PageLoader />
       ) : (
-        !reports?.length ? <h2 className="mt-100 ml-200"> kindly Meet Admin For Permissions</h2> :
+        checkReportPermissions() === false ? <h2 className="mt-100 ml-200"> kindly Meet Admin For Permissions</h2> :
         <>
         <FilterModal show={showFilterModal} onHide={handleCloseModal} dataFromFilter={handleFilterData} />
         <div className="box-content">

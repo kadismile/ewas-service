@@ -18,3 +18,7 @@ export const RESPONDER_PERMISSIONS = [
 export const ARTICLE_PERMISSIONS = [
   'can-manage-articles'
 ]
+
+export const REPORTS_PERMISSIONS = [
+  'can-manage-reporters'
+]

@@ -27,6 +27,7 @@ export const SMSReports = () => {
       setTimeout(() => setLoading(false), 500)
     })
   }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -36,6 +37,10 @@ export const SMSReports = () => {
     setModalData(data)
   }
 
+  const checkReportPermissions = () => {
+    if (!user.permissions.length) return false
+    user.permissions.find((u) => u.permissions === "can-manage-reports")
+  }
   
 
   const listData = smsReports?.map((report, key) => {
@@ -87,6 +92,7 @@ export const SMSReports = () => {
       {loading ? (
         <PageLoader />
       ) : (
+        checkReportPermissions() === false ? <h2 className="mt-100 ml-200"> kindly Meet Admin For Permissions</h2> :
         <div className="box-content">
           <div className="box-heading">
             <div className="box-title">
@@ -149,6 +155,7 @@ export const SMSReports = () => {
             </div>
           </div>
         </div>
+      
       )}
     </>
   )

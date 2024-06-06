@@ -22,7 +22,7 @@ export const Home = (props) => {
 
   const handleFilterData = (data) => {
     setLoading(true)
-    if (data.length) {
+    if (data?.length) {
       setLoading(false)
       setReports(data)
     } else {

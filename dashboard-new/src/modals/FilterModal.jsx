@@ -43,7 +43,7 @@ export const FilterModal = (props) => {
 
   const prepareCoordinates = (reports) => {
     let coordinates = []
-    if (reports.length) {
+    if (reports?.length) {
       for (let report of reports) {
         coordinates.push(report)
       }

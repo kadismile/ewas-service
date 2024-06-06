@@ -114,7 +114,7 @@ export const InvitedUser = () => {
     setLoading(true);
     const { 
       fullName, email, phoneNumber, 
-      password, department, agency, role='user', invitationalId
+      password, department, agency, role='responder', invitationalId
     } = formValues;
 
     const response = await userService.registerUser({

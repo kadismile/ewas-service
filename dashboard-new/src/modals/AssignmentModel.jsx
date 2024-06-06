@@ -13,7 +13,8 @@ export const AssignmentModal = (props) => {
   const handleSubmit = async () => {
     const data = {
       reportId: props.data,
-      userId: user._id
+      userId: user._id,
+      responder: user?.responder ? [user.responder] : undefined
     }
     const response = await reportService.acceptReport(data)
     const { message } = response
