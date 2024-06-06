@@ -45,3 +45,18 @@ export const sendInviteEmail = async (email, invite) => {
   await MailHelper.sendMail(type, 'user-invitational-email', data);
   return true;
 };
+
+export const sendReportsToAgenciesEmail = async (agencies, reportSlug) => {
+  const reportUrl = `${process.env.DASHBOARD_URL}report/${reportSlug}`
+  agencies.forEach( async (agency) => {
+    const data = {
+      email: agency.email,
+      subject: 'Please Respond to Report',
+      reportUrl,
+      year: new Date().getFullYear(),
+    }
+    const type = 'agency-report';
+    await MailHelper.sendMail(type, 'agency-report-email', data);
+  });
+  return true;
+};
