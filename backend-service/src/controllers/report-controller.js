@@ -302,7 +302,6 @@ export const getOneReport = async (req, res) => {
 
 export const acceptReport = async (req, res) => {
   try {
-    console.log("Request ==================>>>>>>", req.body)
     const{ reportId, userId, responder } = req.body;
     const user = req.user
     const report = await Report.findOne({ _id: reportId }).lean();
@@ -441,6 +440,7 @@ export const getAdvanced = async (req, res) => {
     });
   }
   const reports = await advancedResults(req, Report, populate, select);
+  console.log('reports ==============>>>>> ', 'Hello --------')
   return res.status(200).json({
     status: "success",
     data: reports
