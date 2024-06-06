@@ -103,6 +103,11 @@ export const InvitedUser = () => {
     }
   }
 
+  const getRole = () => {
+    const userType = formValues?.agencyName ? 'responder' : 'user';
+    return userType;
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitForm(true);
@@ -114,7 +119,7 @@ export const InvitedUser = () => {
     setLoading(true);
     const { 
       fullName, email, phoneNumber, 
-      password, department, agency, role='responder', invitationalId
+      password, department, agency, role=getRole(), invitationalId
     } = formValues;
 
     const response = await userService.registerUser({
