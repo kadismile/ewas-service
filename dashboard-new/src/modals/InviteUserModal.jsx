@@ -71,7 +71,6 @@ export const InviteUserModal = (props) => {
     event.preventDefault();
     if (failedValidation()) return
     setLoading(true);
-    console.log('Agency ============>>>>>> ', formValues);
     const { email, department, agency } = formValues;
     const response = await userService.inviteUser({ email, department, agency })
     const { status } = response

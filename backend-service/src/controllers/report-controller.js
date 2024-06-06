@@ -13,7 +13,7 @@ import { ReportHistory } from '../models/ReportHistoryModel/ReportHistoryModel.j
 import { User } from '../models/UserModel/UserModel.js';
 import { Agency } from '../models/AgencyModel/AgencyModel.js';
 import { Department } from '../models/DepartmentModel/DepartmentModel.js';
-import { sendSSSnotification, sendResponderNotification } from '../helpers/notification-helpers.js';
+import { sendNotification } from '../helpers/notification-helpers.js';
 import { sendSMS } from '../helpers/sms-helper.js';
 import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
@@ -270,13 +270,20 @@ export const getUserReports = async (req, res) => {
 export const getOneReport = async (req, res) => {
   try {
     const reportSlug = req.query.reportSlug
-    const report = await Report.findOne({ reportSlug })
-    .populate('attachments')
-    .populate('agencyId')
-    .populate('reportTypeId')
-    .populate('userId')
-    .populate('actionableUsers.currentUser')
-    .populate('actionableUsers.currentDepartment');
+    let report
+    if (req.user.role === 'responder') {
+      const agencies = await Agency.find({})
+      const agencyIds = agencies.map( agency => agency.id )
+      report = await Report.findOne({ 'actionableUsers.agencyId': { $in: agencyIds }, reportSlug })
+    } else {
+      report = await Report.findOne({ reportSlug })
+    }
+    await report.populate('attachments')
+    await report.populate('agencyId')
+    await report.populate('reportTypeId')
+    await report.populate('userId')
+    await report.populate('actionableUsers.currentUser')
+    await report.populate('actionableUsers.currentDepartment');
 
     const reportHistory = await ReportHistory.find({reportId: report?._id}).sort({ createdAt: -1 })
     const draftReport = await DraftReport.findOne({reportId: report?._id})
@@ -295,7 +302,8 @@ export const getOneReport = async (req, res) => {
 
 export const acceptReport = async (req, res) => {
   try {
-    const{ reportId, userId } = req.body;
+    console.log("Request ==================>>>>>>", req.body)
+    const{ reportId, userId, responder } = req.body;
     const user = req.user
     const report = await Report.findOne({ _id: reportId }).lean();
     if (report?.actionableUsers?.curentUser?.length) {
@@ -309,7 +317,7 @@ export const acceptReport = async (req, res) => {
         });
       }
     } else {
-      await updateActonableUser(userId, user.department, report, user.department)
+      await updateActonableUser(userId, user.department, report, user.department, false, responder)
 
       const comment =  `report assigned to ${user.fullName}`
       await addHistory(user, report, comment)
@@ -382,9 +390,7 @@ export const verifyReport = async (req, res) => {
       const { acronym } = department
 
       const nextActionableDept = await getNextActionableDept(acronym, responder)
-      // we are adding this if statement here because we dont want to update the actionable user for a responder so the report can be tied
-      // to the responder for ever, it might change in the future though.
-      // the {responderVeriMethod} and {reportStatus} comes from the reponders alone 
+
       if (!responderVeriMethod || !reportStatus) {
         await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
         const comment =  `report verified by ${user.fullName} of ${acronym} Department`
@@ -421,12 +427,11 @@ export const verifyReport = async (req, res) => {
 export const getAdvanced = async (req, res) => {
   const { populate, select } = req.query;
   if (req.user.role === 'responder') {
-    const reports = await Report.find({
-      $or: [
-        { 'actionableUsers.currentDepartment': req.user.department},
-        { 'actionableUsers.nextActionableDept': req.user.responder},
-      ]
-    }).sort({ createdAt: 'desc' })
+    const agencies = await Agency.find({})
+    const agencyIds = agencies.map( agency => agency.id )
+    const reports = await Report.find({ 'actionableUsers.agencyId': { $in: agencyIds } })
+    .sort({ createdAt: 'desc' })
+
     return res.status(200).json({
       status: "success",
       data: {
@@ -497,12 +502,18 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
 };
 
 const createNotification = async (report, departmentAcronym) => {
+  const CAMS_DEPT = process.env.CAMS_DEPARTMENT
+  const CPS_DEPT = process.env.CPS_DEPARTMENT
+  const SSS_DEPT = process.env.SSS_DEPARTMENT
   switch (departmentAcronym) {
     case "CAMS":
-      await sendSSSnotification(report)
+      await sendNotification(report, CAMS_DEPT)
       break;
+    case "CPS":
+      await sendNotification(report, CPS_DEPT)
+        break;  
     case "SSS":
-      await sendResponderNotification(report)
+      await sendNotification(report, SSS_DEPT)
       break;
     default:
       break;
@@ -522,13 +533,14 @@ const addHistory = async (user, report, comment) => {
 }
 
 const updateActonableUser = async (userId, department, report, nextActionableDept, unassign, responder) => {
+
   const actionableUsers = {
     currentUser: unassign ? null : userId,
     currentDepartment: unassign ? null : department,
     reportUserHistory: report.reportUserHistory?.length ? 
       report.actionableUsers?.reportUserHistory?.push(userId) : [userId],
     nextActionableDept: nextActionableDept, 
-    agencyId: responder ? responder : undefined,
+    agencyId: responder?.length ? responder : [],
   };
   await Report.findOneAndUpdate({ _id: report._id }, {
     actionableUsers
@@ -550,8 +562,9 @@ const createVerification = async (user, reportId, verificationMethod, comments) 
 }
 
 const getNextActionableDept = async (acronym, responder) => {
+
   if (acronym === 'CAMS') {
-    const dept = await Department.findOne({acronym: 'CPS'}) 
+    const dept = await Department.findOne({ acronym: 'CPS'}) 
     if (dept) {
       return dept._id
     }
@@ -561,6 +574,13 @@ const getNextActionableDept = async (acronym, responder) => {
     const agency = await Agency.findOne({ _id: responder })
     if (agency) {
       return agency._id
+    }
+  }
+
+  if (acronym === 'Responder') {
+    const dept = await Department.findOne({ acronym: 'CIDS'})
+    if (dept) {
+      return dept._id
     }
   }
 
