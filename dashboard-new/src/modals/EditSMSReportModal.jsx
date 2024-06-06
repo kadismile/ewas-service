@@ -214,7 +214,6 @@ export const EditSMSReportModal = (props) => {
     if (landMark?.length > 10) {
       try {
         const { longitude, latitude, countryCode, fullAddress, country } = await prepareAddresss(landMark)
-        console.log('Testing microphone ------------->>>>>>>>>>>> ', await prepareAddresss(landMark))
         if (!longitude || !fullAddress || !country) {
           setSubmited(false)
           return toastr.error('Kindly Check your Address fields');

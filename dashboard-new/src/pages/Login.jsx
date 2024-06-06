@@ -96,7 +96,6 @@ export const Login = () => {
     setLoading(true);
     const { email, password } = formValues;
     const response = await userService.loginUser(email, password)
-    console.log('Response --------------->>>>>>> ', response)
     const { status } = response
     if (status === 'failed') {
       toastr.error('Invalid Login Details');

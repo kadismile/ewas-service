@@ -97,10 +97,6 @@ export const Reports = () => {
     }
   }
 
-
-  console.log('Reports =================>>>>>> ', reports)
-  console.log('User =================>>>>>> ', user)
-
   return (
     <>
       {loading ? (
