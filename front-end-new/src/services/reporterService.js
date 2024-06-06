@@ -99,7 +99,6 @@ export const reportService = {
   getOneRosource: async (articleId) => {
     try {
       const url = `${serverUrl}/article/one?articleId=${articleId}`
-      console.log('URL ------>>>>>>>>>>> ', url)
       const method = 'GET'
       const response = await client(url, method);
       if (!response)
