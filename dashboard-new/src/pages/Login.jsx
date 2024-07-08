@@ -155,10 +155,10 @@ export const Login = () => {
                               />
                               </div>
                               <div className="login_footer form-group d-flex justify-content-between">
-                                <label className="cb-container">
-                                  <input type="checkbox" /><span className="text-small">Remember me</span><span className="checkmark" />
-                                </label>
-                                <Link className='text-muted' to="/forgot-password">
+                                <Link className='text-muted' to="/user/register">
+                                    Register
+                                </Link> 
+                                <Link className='text-muted'  to="/forgot-password">
                                     Forgot Password
                                 </Link> 
                               </div>
