@@ -5,9 +5,10 @@ import { userService } from '../services/userService'
 import toastr from 'toastr'
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/user-slice";
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const formFields = {
     email: "",

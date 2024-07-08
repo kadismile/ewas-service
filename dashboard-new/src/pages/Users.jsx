@@ -9,6 +9,7 @@ import AWN from "awesome-notifications";
 import toastr from 'toastr'
 import { WithPermissions } from "../components/elements/WithPermissions";
 import { SUSPEND_USER_PERMISSIONS } from "../utils/permissions.js"
+import { Link } from "react-router-dom";
 
 export const Users = (props) => {
   const navigate = useNavigate();
@@ -146,9 +147,13 @@ export const Users = (props) => {
                     />
                     <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownMenu2" >
                       <li>
-                        <a className="dropdown-item active" href="#" onClick={() => setInviteModal(true)}>
+                        {/* <a className="dropdown-item active" href="#" onClick={() => setInviteModal(true)}>
                           Invite User
-                        </a>
+                        </a> */}
+
+                        <Link className="dropdown-item active" to="/user/register">
+                            Register User
+                        </Link> 
                       </li>
                     </ul>
                   </div>

@@ -12,6 +12,7 @@ import { ReportDetails } from "./pages/ReportDetails";
 import { UserProfile } from "./pages/UserProfile";
 import { Articles } from "./pages/Articles";
 import { SMSReports } from "./pages/SMSReports";
+import { RegisterNewUser } from "./pages/RegisterNewUser";
 
 
 export const AuthorizedApp = () => {
@@ -26,7 +27,8 @@ export const AuthorizedApp = () => {
     { path: "*", element: <Home /> },
     { path: "/reports", element: <Reports /> },
     { path: "/report/:reportSlug", element: <ReportDetails /> },
-    { path: "/articles", element: <Articles /> }
+    { path: "/articles", element: <Articles /> },
+    { path: "/user/register", element: <RegisterNewUser /> }
   ]);
 
   return (
