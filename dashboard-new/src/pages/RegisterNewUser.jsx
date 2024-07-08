@@ -128,7 +128,7 @@ export const RegisterNewUser = () => {
     } else {
       toastr.success('New user have been Registered Succesfully');
       setLoading(false)
-      return navigate('/users')
+      return navigate('/login')
     }
   };
 
