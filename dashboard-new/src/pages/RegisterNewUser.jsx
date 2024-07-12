@@ -5,10 +5,12 @@ import toastr from 'toastr'
 import { PageLoader } from "../components/elements/spinners";
 import { useNavigate } from 'react-router-dom';
 import { DepartmentDropDown } from "../components/elements/DepartmentDropDown";
+import { RespondersDropDown } from "../components/elements/RespondersDropDown";
 
 export const RegisterNewUser = () => {
   const navigate = useNavigate();
   const [submitForm, setSubmitForm] = useState(true);
+  const [isResponder, setIsResponder] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(()=> {
@@ -19,6 +21,7 @@ export const RegisterNewUser = () => {
     email: '',
     phoneNumber: '',
     department: '',
+    agency: undefined,
     fullName: '',
     password: '',
     repeatPassword: '',
@@ -90,11 +93,26 @@ export const RegisterNewUser = () => {
   }
 
   const handleDataFromDropDown = (data) => {
-    const { value } = data
+    const { value, label } = data
+    if (label === 'Responder') {
+      setIsResponder(true)
+    } else {
+      setIsResponder(false)
+    }
     setFormValues((prevState) => {
       return {
         ...prevState,
         department: value,
+      };
+    });
+  }
+
+  const handleDataFromAgency = (data) => {
+    const { value } = data
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        agency: value,
       };
     });
   }
@@ -114,12 +132,18 @@ export const RegisterNewUser = () => {
     }
     setLoading(true);
     const { 
-      fullName, email, phoneNumber, 
+      fullName, email, phoneNumber, agency,
       password, department, role=getRole(),
     } = formValues;
 
+    if (isResponder && !agency) {
+      toastr.error('Kindly Choose a Responder');
+      setLoading(false);
+      return 
+    }
+
     const response = await userService.registerUser({
-      fullName, email, phoneNumber, password, 
+      fullName, email, phoneNumber, password, agency,
       department, role })
     const { status, message } = response
     if (status === 'failed') {
@@ -188,9 +212,19 @@ export const RegisterNewUser = () => {
                                 />
                                 { formErrorMessage('department')?.length && <span className="form_errors"> { formErrorMessage('department') } </span>}
                               </div>
-                              
-                              
 
+                              {
+                                isResponder &&
+                                <>
+                                <RespondersDropDown
+                                    label={"Agency"}
+                                    dataToComponent={handleDataFromAgency}
+                                  />
+                                  <br/>
+                                </>
+                              }
+                              
+                              
                               <div className="form-group">
                                 <label className="form-label" htmlFor="input-1">Phone Number *</label>
                                 <input 
