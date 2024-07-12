@@ -8,8 +8,13 @@ import { PageLoader } from "../components/elements/spinners";
 import { Search } from "../components/elements/Search";
 import { FilterModal } from "../modals/FilterModal";
 import toastr from 'toastr'
+import AWN from "awesome-notifications";
+import { reportService } from "../services/reportsService";
+import { WithPermissions } from "../components/elements/WithPermissions";
+import { DELETE_REPORTS_PERMISSIONS } from "../utils/permissions";
 
 export const Reports = () => {
+  let notifier = new AWN();
   let user = store?.getState()?.user?.user
   if (user) {
     user = user.user
@@ -33,6 +38,24 @@ export const Reports = () => {
         setTimeout(() => setLoading(false), 500)
       }
     })
+  }
+
+  const deleteReport = (data) => {
+    let onOk = async () => {
+      const response = await reportService.delReport(data);
+      const {status, message} = response
+      if (status === 'success')
+      toastr.success(message);
+      fetchData()
+    };
+    let onCancel = () => {
+      return;
+    };
+    notifier.confirm("Are you sure?", onOk, onCancel, {
+      labels: {
+        confirm: `Delete ${data?.reportSlug}`,
+      },
+    });
   }
 
   const unattendedReport = (report) => {
@@ -64,6 +87,9 @@ export const Reports = () => {
         <td>{report?.address?.state}</td>
         <td>{report?.address?.localGovt}</td>
         <td>{moment(report.createdAt).format("MMM D, YYYY")}</td>
+        <WithPermissions permitedPermissions={DELETE_REPORTS_PERMISSIONS}>
+          <td> <a href="#/" className="paint-red" title="delete" onClick={() => deleteReport(report)}> <i class="fa fa-trash" aria-hidden="true"></i> </a> </td>
+        </WithPermissions>
       </tr>
     )
   })
@@ -168,6 +194,7 @@ export const Reports = () => {
                             <th scope="col">State</th>
                             <th scope="col">Local Govt</th>
                             <th scope="col">Date</th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                         <tbody>{ reports?.length ? listItems : ''}</tbody>

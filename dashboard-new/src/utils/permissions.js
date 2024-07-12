@@ -22,3 +22,7 @@ export const ARTICLE_PERMISSIONS = [
 export const REPORTS_PERMISSIONS = [
   'can-manage-reporters'
 ]
+
+export const DELETE_REPORTS_PERMISSIONS = [
+  'can-delete-reports'
+]

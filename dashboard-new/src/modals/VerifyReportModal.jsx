@@ -23,6 +23,7 @@ export const VerifyReportModal = (props) => {
       camsVeriMethod: undefined,
       camsVeriOptions: undefined,
       responder: undefined,
+      addminReportType: undefined,
   });
 
   const verificationOptions = () => {
@@ -41,6 +42,19 @@ export const VerifyReportModal = (props) => {
       }
     ]
   }
+
+  const reportType = () => {
+    return [
+    {
+      value: 'incident',
+      label: 'incident'
+    },
+    {
+      value: 'conflict',
+      label: 'conflict'
+    },
+  ]
+}
 
   const verificationMethods = () => {
     return [
@@ -120,7 +134,7 @@ export const VerifyReportModal = (props) => {
   };
 
   const handleMethodClick = async (data) => {
-    const { verMethod, camsVeriMethod, camsVeriOptions, reportStatus, responder } = formValues
+    const { verMethod, camsVeriMethod, camsVeriOptions, reportStatus, responder, addminReportType } = formValues
     const { value, label } = data
     setFormValues((prevState) => {
       return {
@@ -130,6 +144,7 @@ export const VerifyReportModal = (props) => {
         camsVeriMethod: label === 'sms' || label === 'phone calls' || label === 'emails' ? value : camsVeriMethod,
         camsVeriOptions: label === 'verified' || label === 'false-report' || label === 'returned' ? value : camsVeriOptions,
         responder: label === 'Responders' ? value : responder,
+        addminReportType: label === 'Verify Report' ? value : addminReportType,
       };
     });
   }
@@ -173,7 +188,8 @@ export const VerifyReportModal = (props) => {
       camsVeriMethod, 
       verMethod, 
       reportStatus, 
-      camsVeriOptions
+      camsVeriOptions,
+      addminReportType
     } = formValues
 
     const data = {
@@ -184,7 +200,8 @@ export const VerifyReportModal = (props) => {
       comments,
       responderVeriMethod: verMethod,
       reportStatus,
-      responder
+      responder,
+      addminReportType
     }
     const response = await reportService.verifyReport(data)
     const { message } = response
@@ -232,6 +249,17 @@ export const VerifyReportModal = (props) => {
                 defaultValue={{ label: 'Verify Report', value: '' }}
                 onChange={ handleMethodClick }
                 options={ verificationOptions() }
+                className={'select-react'}
+              />
+              { formErrorMessage('camsVeriOptions', formValues, submitForm) }
+              <br/>
+              <br/>
+
+              <Select
+                styles={customStyles}
+                defaultValue={{ label: 'Verify Report', value: '' }}
+                onChange={ handleMethodClick }
+                options={ reportType() }
                 className={'select-react'}
               />
               { formErrorMessage('camsVeriOptions', formValues, submitForm) }

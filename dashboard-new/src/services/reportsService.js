@@ -152,6 +152,18 @@ export const reportService =  {
     }
   },
 
+  delReport: async (data) => {
+    try {
+      const url = `${serverUrl}/report`
+      const method = 'DELETE'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Delete Report");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 
   
 }
