@@ -489,6 +489,26 @@ export const getDraftReport = async (req, res) => {
   }
 }
 
+export const deleteReport = async (req, res) => {
+  const { _id } = req.body
+  const report = await Report.find({_id})
+  if (report) {
+    await Report.findOneAndUpdate({ _id }, {
+      isActive: false
+    })
+    res.status(200).json({
+      status: 'success',
+      message: 'Article Deleted'
+    });
+  } else {
+    res.status(401).json({
+      status: 'failed',
+      message: 'Cannot Deleted Department '
+    });
+  }
+}
+
+
 
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   const reporter = await Reporter.findOne({
