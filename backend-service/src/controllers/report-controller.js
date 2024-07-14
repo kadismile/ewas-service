@@ -19,7 +19,7 @@ import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
 import { Verification } from '../models/VerificationModel/VerificationModel.js';
 import { SMSReport } from '../models/ReportModel/SMSReport.js';
-import { sendReportsToAgenciesEmail } from '../helpers/user-helper.js';
+import { sendReportsToAgenciesEmail, sendReportsToDepartmentEmail } from '../helpers/user-helper.js';
 
 
 export const createReporter = async (req, res) => {
@@ -398,6 +398,7 @@ export const verifyReport = async (req, res) => {
   
         await createVerification(user, reportId, verificationMethod, comments)
         await createNotification(report, acronym)
+        await sendReportsToDepartmentEmail(department._id, report.reportSlug)
       }
       
       if (responder?.length) {
