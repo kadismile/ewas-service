@@ -60,3 +60,19 @@ export const sendReportsToAgenciesEmail = async (agencies, reportSlug) => {
   });
   return true;
 };
+
+export const sendReportsToDepartmentEmail = async (departmentID, reportSlug) => {
+  const reportUrl = `${process.env.DASHBOARD_URL}report/${reportSlug}`
+  const users = await User.find({ department: departmentID })
+  users.forEach( async (user) => {
+    const data = {
+      email: user.email,
+      subject: 'Please Respond to Report',
+      reportUrl,
+      year: new Date().getFullYear(),
+    }
+    const type = 'agency-report';
+    await MailHelper.sendMail(type, 'agency-report-email', data);
+  });
+  return true;
+};
