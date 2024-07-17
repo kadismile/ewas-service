@@ -380,7 +380,7 @@ export const editReport = async (req, res) => {
 
 export const verifyReport = async (req, res) => {
   try {
-    const { comments, reportId, verificationMethod,
+    const { comments, reportId, verificationMethod, addminReportType,
             responder, userId, reportStatus, responderVeriMethod } = req.body
     const report = await Report.findOne({ _id: reportId }).lean()
     const user = req.user;
@@ -388,8 +388,8 @@ export const verifyReport = async (req, res) => {
     if (report && report?.actionableUsers?.currentUser === userId) {
       const department = await Department.findOne({ _id: req.user.department })
       const { acronym } = department
-
-      const nextActionableDept = await getNextActionableDept(acronym, responder)
+      const reportType = await AdminReportType.findOne({ _id: addminReportType })
+      const nextActionableDept = await getNextActionableDept(acronym, responder, reportType)
 
       if (!responderVeriMethod || !reportStatus) {
         await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
@@ -428,21 +428,22 @@ export const verifyReport = async (req, res) => {
 
 export const getAdvanced = async (req, res) => {
   const { populate, select } = req.query;
+
+  const department = await Department.findOne({ _id: req.user.department })
+  const { CIDS_DEPARTMENT, CPS_DEPARTMENT } = process.env;
+
+  let reports
+
   if (req.user.role === 'responder') {
     const agencies = await Agency.find({})
     const agencyIds = agencies.map( agency => agency.id )
-    const reports = await Report.find({ 'actionableUsers.agencyId': { $in: agencyIds } })
-    .sort({ createdAt: 'desc' })
-
-    return res.status(200).json({
-      status: "success",
-      data: {
-        count: reports.length,
-        data: reports,
-      }
-    });
+    reports = await Report.find({ 'actionableUsers.agencyId': { $in: agencyIds } }).sort({ createdAt: 'desc' })
+  } else if (department.id == CPS_DEPARTMENT || department.id == CIDS_DEPARTMENT) {
+    reports = await Report.find({ 'actionableUsers.currentDepartment': department._id }).sort({ createdAt: 'desc' })
+  } else {
+    reports = await advancedResults(req, Report, populate, select);
   }
-  const reports = await advancedResults(req, Report, populate, select);
+  
   return res.status(200).json({
     status: "success",
     data: reports
@@ -583,9 +584,15 @@ const createVerification = async (user, reportId, verificationMethod, comments) 
   return 
 }
 
-const getNextActionableDept = async (acronym, responder) => {
+const getNextActionableDept = async (acronym, responder, reportType) => {
 
   if (acronym === 'CAMS') {
+    if (reportType?.name == 'incident') {
+      const dept = await Department.findOne({ acronym: 'CIDS'}) 
+      if (dept) {
+        return dept._id
+      }
+    }
     const dept = await Department.findOne({ acronym: 'CPS'}) 
     if (dept) {
       return dept._id
