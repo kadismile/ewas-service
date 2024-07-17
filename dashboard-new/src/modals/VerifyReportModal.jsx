@@ -144,7 +144,7 @@ export const VerifyReportModal = (props) => {
         camsVeriMethod: label === 'sms' || label === 'phone calls' || label === 'emails' ? value : camsVeriMethod,
         camsVeriOptions: label === 'verified' || label === 'false-report' || label === 'returned' ? value : camsVeriOptions,
         responder: label === 'Responders' ? value : responder,
-        addminReportType: label === 'Verify Report' ? value : addminReportType,
+        addminReportType: label === 'Type of Report' ? value : addminReportType,
       };
     });
   }
@@ -257,7 +257,7 @@ export const VerifyReportModal = (props) => {
 
               <Select
                 styles={customStyles}
-                defaultValue={{ label: 'Verify Report', value: '' }}
+                defaultValue={{ label: 'Type of Report', value: '' }}
                 onChange={ handleMethodClick }
                 options={ reportType() }
                 className={'select-react'}
@@ -273,7 +273,7 @@ export const VerifyReportModal = (props) => {
             <>
               <Select
                 styles={customStyles}
-                defaultValue={{ label: 'Verification Method', value: '' }}
+                defaultValue={{ label: 'Response Method', value: '' }}
                 onChange={ handleMethodClick }
                 options={ responderVerificationMethods() }
                 className={'select-react'}
