@@ -156,7 +156,6 @@ export const RegisterNewUser = () => {
     }
   };
 
-
   return (
     <>
     {
