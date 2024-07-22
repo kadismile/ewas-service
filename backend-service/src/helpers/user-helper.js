@@ -62,6 +62,8 @@ export const sendReportsToAgenciesEmail = async (agencies, reportSlug) => {
 };
 
 export const sendReportsToDepartmentEmail = async (departmentID, reportSlug) => {
+  console.log("Pls Send this Mail ASAP ==================", reportSlug)
+  console.log("Pls Send this Mail ASAP ==================", departmentID)
   const reportUrl = `${process.env.DASHBOARD_URL}report/${reportSlug}`
   const users = await User.find({ department: departmentID })
   users.forEach( async (user) => {

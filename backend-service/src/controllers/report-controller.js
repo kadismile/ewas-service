@@ -176,6 +176,7 @@ export const createReport = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     } */
 
+  const CAMS_DEPARTMENT = process.env.CAMS_DEPARTMENT  
   const report = new Report(body);
   await report.save();
 
@@ -188,6 +189,7 @@ export const createReport = async (req, res) => {
         await manageFileUpload(path, filename, report, 'reports')
       }
     }
+    await sendReportsToDepartmentEmail(CAMS_DEPARTMENT, report.reportSlug)
     return res.status(201).json({
       status: 'success',
       data: report
@@ -384,11 +386,11 @@ export const verifyReport = async (req, res) => {
             responder, userId, reportStatus, responderVeriMethod } = req.body
     const report = await Report.findOne({ _id: reportId }).lean()
     const user = req.user;
-    
+
     if (report && report?.actionableUsers?.currentUser === userId) {
       const department = await Department.findOne({ _id: req.user.department })
       const { acronym } = department
-      const reportType = await AdminReportType.findOne({ _id: addminReportType })
+      const reportType = await AdminReportType.findOne({ name: addminReportType })
       const nextActionableDept = await getNextActionableDept(acronym, responder, reportType)
 
       if (!responderVeriMethod || !reportStatus) {
@@ -398,7 +400,6 @@ export const verifyReport = async (req, res) => {
   
         await createVerification(user, reportId, verificationMethod, comments)
         await createNotification(report, acronym)
-        await sendReportsToDepartmentEmail(department._id, report.reportSlug)
       }
       
       if (responder?.length) {
@@ -438,8 +439,10 @@ export const getAdvanced = async (req, res) => {
     const agencies = await Agency.find({})
     const agencyIds = agencies.map( agency => agency.id )
     reports = await Report.find({ 'actionableUsers.agencyId': { $in: agencyIds } }).sort({ createdAt: 'desc' })
+    reports = { data: reports }
   } else if (department.id == CPS_DEPARTMENT || department.id == CIDS_DEPARTMENT) {
-    reports = await Report.find({ 'actionableUsers.currentDepartment': department._id }).sort({ createdAt: 'desc' })
+    reports = await Report.find({ 'actionableUsers.nextActionableDept': department._id }).sort({ createdAt: 'desc' })
+    reports = { data: reports }
   } else {
     reports = await advancedResults(req, Report, populate, select);
   }
@@ -500,7 +503,7 @@ export const deleteReport = async (req, res) => {
     })
     res.status(200).json({
       status: 'success',
-      message: 'Article Deleted'
+      message: 'Report Deleted'
     });
   } else {
     res.status(401).json({
@@ -568,6 +571,7 @@ const updateActonableUser = async (userId, department, report, nextActionableDep
   await Report.findOneAndUpdate({ _id: report._id }, {
     actionableUsers
   })
+  await sendReportsToDepartmentEmail(nextActionableDept, report.reportSlug)
   return 
 }
 
@@ -590,26 +594,26 @@ const getNextActionableDept = async (acronym, responder, reportType) => {
     if (reportType?.name == 'incident') {
       const dept = await Department.findOne({ acronym: 'CIDS'}) 
       if (dept) {
-        return dept._id
+        return dept.id
       }
     }
     const dept = await Department.findOne({ acronym: 'CPS'}) 
     if (dept) {
-      return dept._id
+      return dept.id
     }
   }
 
   if (acronym === 'CPS') {
     const agency = await Agency.findOne({ _id: responder })
     if (agency) {
-      return agency._id
+      return agency.id
     }
   }
 
   if (acronym === 'Responder') {
     const dept = await Department.findOne({ acronym: 'CIDS'})
     if (dept) {
-      return dept._id
+      return dept.id
     }
   }
 
