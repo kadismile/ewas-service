@@ -28,6 +28,7 @@ export const AuthorizedApp = () => {
     { path: "/reports", element: <Reports /> },
     { path: "/report/:reportSlug", element: <ReportDetails /> },
     { path: "/articles", element: <Articles /> },
+    { path: "/user/register", element: <RegisterNewUser /> },
   ]);
 
   return (
