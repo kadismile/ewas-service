@@ -144,7 +144,7 @@ export const VerifyReportModal = (props) => {
         camsVeriMethod: label === 'sms' || label === 'phone calls' || label === 'emails' ? value : camsVeriMethod,
         camsVeriOptions: label === 'verified' || label === 'false-report' || label === 'returned' ? value : camsVeriOptions,
         responder: label === 'Responders' ? value : responder,
-        addminReportType: label === 'Type of Report' ? value : addminReportType,
+        addminReportType: label === 'incident' ? value : addminReportType,
       };
     });
   }

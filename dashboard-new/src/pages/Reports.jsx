@@ -28,6 +28,7 @@ export const Reports = () => {
   const fetchData = () => {
     setLoading(true)
     crudService.getReports().then((res) => {
+      console.log('Response ========================', res)
       const {
         data: { data, error },
       } = res
