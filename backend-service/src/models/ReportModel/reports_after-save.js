@@ -6,6 +6,7 @@ import { User } from "../UserModel/UserModel.js"
 import { Report } from "../ReportModel/Report.js"
 import { DraftReport } from "./DraftReport.js"
 import { SMSReport } from "./SMSReport.js"
+import { sendReportsToDepartmentEmail } from "../../helpers/user-helper.js"
 
 export const reportsAfterSave = async (report) => {
   const smsReport = report.smsReport
@@ -42,7 +43,9 @@ export const reportsAfterSave = async (report) => {
   
   const updatedReport = await Report.findOneAndUpdate({ _id: report._id }, {
     actionableUsers,
-  },{new: true}).lean()
+  },{ new: true }).lean()
+
+  await sendReportsToDepartmentEmail(updatedReport.actionableUsers.currentDepartment, report.reportSlug)
 
   if (!smsReport) {
     const drafReport = await DraftReport.findOne({ reportId: report._id}) 
