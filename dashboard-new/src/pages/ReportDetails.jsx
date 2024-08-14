@@ -271,6 +271,7 @@ export const ReportDetails = () => {
                     }
                     
                   </div>
+                  
                     <div className="row mt-30">
                       <div className="col-lg-12">
                         <div className="row">

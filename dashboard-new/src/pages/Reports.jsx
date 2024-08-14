@@ -174,13 +174,13 @@ export const Reports = () => {
                             </span>
                           </div>
                           <div className="col-xl-8 col-lg-7 text-lg-end mt-sm-15">
-                          <button 
-                            onClick={() => setShowFilterModal(true)}
-                            className="btn btn-default" 
-                            type="submit" 
-                          >
-                            <i class="fa-solid fa-bars"></i> FIlter 
-                          </button>
+                            <button 
+                              onClick={() => setShowFilterModal(true)}
+                              className="btn btn-default" 
+                              type="submit" 
+                            >
+                              <i class="fa-solid fa-bars"></i> FIlter 
+                            </button>
                           </div>
                         </div>
                       </div>
