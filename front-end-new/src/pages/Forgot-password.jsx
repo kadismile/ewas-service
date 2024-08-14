@@ -49,7 +49,8 @@ export const ForgotPassword = () => {
     }
     setButtonLoading(true)
     const { email } = formValues;
-    const response = await reportService.forgotPasswordEmail({ email });
+    const frontEnd = true
+    const response = await reportService.forgotPasswordEmail({ email, frontEnd });
     const { status, message } = response;
     if (status === 'failed') {
       setButtonLoading(false)
