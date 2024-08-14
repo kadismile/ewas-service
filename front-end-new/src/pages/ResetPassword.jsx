@@ -2,23 +2,19 @@
 import { reportService } from '../services/reporterService.js'
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/user-slice.js";
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
 import { PageLoader } from '../components/elements/spinners.jsx';
 import { formErrorMessage } from '../utils/form-error-messages.js';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 
-export const Login = () => {
-  const dispatch = useDispatch();
+export const ResetPassword = () => {
   const navigate = useNavigate();
   const from = useLocation()?.state?.state?.from || {};
 
   const [submitForm, setSubmitForm] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",
-    password: "",
   });
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -27,8 +23,8 @@ export const Login = () => {
   })
 
   const failedValidation = () => {
-    const {email, password} = formValues
-    if (!email.length || !password.length) {
+    const {email} = formValues
+    if (!email.length) {
       return true
     }
     return undefined
@@ -52,21 +48,19 @@ export const Login = () => {
       return;
     }
     setButtonLoading(true)
-    const { email, password } = formValues;
-    const response = await reportService.loginReporter({ email, password });
-    const { status, message, data, token } = response;
-    
+    const { email } = formValues;
+    const response = await reportService.resetPasswordEmail({ email });
+    const { status, message } = response;
     if (status === 'failed') {
       setButtonLoading(false)
       setSubmitForm(false)
       NotificationManager.error(`${message}`, '', 3000);
     } else {
       setLoading(true);
-      NotificationManager.success('Login Successful', '', 3000);
+      NotificationManager.success('A mail has been sent to reset your password', '', 3000);
       setTimeout(() => setLoading(false), 1000);
-      dispatch(setUser({ user: data, token }));
       if (from) {
-        navigate('/volunteer-report')
+        navigate('/login')
       } else 
       navigate('/user-profile')
     }
@@ -100,19 +94,6 @@ return (
                   />
                   { formErrorMessage('email', formValues, submitForm)}
                 </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="input-4">Password *</label>
-                  <input 
-                    className="form-control" 
-                    type="password" 
-                    onChange={handleChange}
-                    name="password"
-                    value={formValues.password}
-                    placeholder="************"
-                  />
-                  { formErrorMessage('password', formValues, submitForm) }
-                </div>
               
                 <div className="form-group">
                   {
@@ -128,7 +109,7 @@ return (
                   <Link to="/register"> Sign Up</Link>
                 </div>
                 <div className="text-muted text-center"> Forgot Pasword ? 
-                  <Link to="/password-forgot"> Forgot Password</Link>
+                  <Link to="/forgot-password"> Forgot Password</Link>
                 </div>
               </form>
             </div>
