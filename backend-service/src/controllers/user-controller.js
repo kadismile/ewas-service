@@ -253,10 +253,10 @@ export const deleteUser = async (req, res) => {
 
 export const sendResetPassEmail = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, frontEnd } = req.body;
     const user = await User.findOne({ email });
     if (user) {
-      await sendResetPasswordToken(user);
+      await sendResetPasswordToken(user, frontEnd);
       return res.status(200).json({
         status: "success",
         message: 'A password reset link as been sent to your email'
