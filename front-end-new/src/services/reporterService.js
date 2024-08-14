@@ -131,4 +131,15 @@ export const reportService = {
       throw e
     }
   },
+
+  verifyPasswordToken:async (passwordToken) => {
+    try {
+      const url = `${serverUrl}/auth/verify-passwordToken`
+      const method = 'POST'
+      const response = await client(url, method, { passwordToken });
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 }

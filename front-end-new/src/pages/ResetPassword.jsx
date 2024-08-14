@@ -1,126 +1,202 @@
-"use client"; 
-import { reportService } from '../services/reporterService.js'
 import { useState, useEffect } from "react";
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
-import { PageLoader } from '../components/elements/spinners.jsx';
-import { formErrorMessage } from '../utils/form-error-messages.js';
+import { Link, useParams } from "react-router-dom";
+import { DisabledButton, LoadingButton, SubmitButton } from "../components/elements/Buttons"
+import { reportService } from '../services/reporterService'
+import toastr from 'toastr'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
-
 export const ResetPassword = () => {
-  const navigate = useNavigate();
-  const from = useLocation()?.state?.state?.from || {};
+  const { resetToken } = useParams();
+  const [user, setuser] = useState(undefined)
+
+  useEffect(() => {
+    reportService.verifyPasswordToken(resetToken)
+    .then((res) => {
+      const {status, data} = res
+      if (status === 'success') {
+        setuser(data)
+      } else {
+        NotificationManager.error(`Invalid Password Reset Token`, '', 10000);
+      }
+    })
+  }, [])
+
+  const formFields = {
+    newPassword: "",
+    repeatPassword: "",
+  };
 
   const [submitForm, setSubmitForm] = useState(false);
-  const [formValues, setFormValues] = useState({
-    email: "",
-  });
-  const [loading, setLoading] = useState(true);
-  const [buttonLoading, setButtonLoading] = useState(false);
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 500)
-  })
 
-  const failedValidation = () => {
-    const {email} = formValues
-    if (!email.length) {
-      return true
+  const [formValues, setFormValues] = useState({
+    ...formFields,
+    errors: formFields,
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const disableForm = () => {
+    const newValues = { ...formValues };
+    let isError = false;
+    for (let val of Object.values(newValues)) {
+      if (val === "") {
+        isError = true;
+      }
     }
-    return undefined
-  }
+    if (isError && submitForm) {
+      return true;
+    }
+    if (!isError && !submitForm) {
+      return true;
+    }
+    if (isError && !submitForm) {
+      return true;
+    }
+    if (!isError && !submitForm) {
+      return false;
+    }
+  };
+
+  const validateForm = (name, errors, value) => {
+    switch (name) {
+      case "newPassword":
+        errors.newPassword = "";
+        if (!value.length && value.length < 5) {
+          errors.newPassword = "pls add password";
+          setSubmitForm(false);
+        } else {
+          setSubmitForm(true);
+        }
+        return errors.newPassword;
+        
+      case "repeatPassword":
+        errors.repeatPassword = "";
+        if (!value.length && value.length < 5) {
+          errors.repeatPassword = "pls add password";
+          setSubmitForm(false);
+        } else if (value !== formValues.newPassword) {
+          errors.repeatPassword = "password mismatch";
+        } else {
+          setSubmitForm(true);
+        }
+        return errors.repeatPassword;
+      default:
+        setSubmitForm(false);
+        break;
+    }
+  };
 
   const handleChange = (event) => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
+      event.preventDefault();
+      let { name, value } = event.target;
+      let errors = formValues.errors;
+      validateForm(name, errors, value);
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          errors,
+          [name]: value,
+        };
+      });
+      for (let val of Object.values(formValues.errors)) {
+        if (val !== "") {
+          setSubmitForm(false);
+        }
+      }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmitForm(true)
-    if (failedValidation()) {
-      return;
-    }
-    setButtonLoading(true)
-    const { email } = formValues;
-    const response = await reportService.resetPassword({ email, frontEnd: true });
-    const { status, message } = response;
+    setLoading(true);
+    const { newPassword } = formValues;
+    const { email } = user;
+    const response = await reportService.resetPassword({email, newPassword})
+    const { status, message } = response
     if (status === 'failed') {
-      setButtonLoading(false)
-      setSubmitForm(false)
-      NotificationManager.error(`${message}`, '', 3000);
+      toastr.error(message);
+      setTimeout(() => setLoading(false), 1000)
     } else {
-      setLoading(true);
-      NotificationManager.success('A mail has been sent to reset your password', '', 3000);
-      setTimeout(() => setLoading(false), 1000);
-      if (from) {
-        navigate('/login')
-      } else 
-      navigate('/user-profile')
+      toastr.success(message);
+      setTimeout(() => setLoading(false), 1000)
+      window.location.replace("/");
     }
   };
 
-return (
-  <>
-  {
-    loading ? <PageLoader /> : 
-    <main className="main">
-      <NotificationContainer/>
-      <section className="pt-100 login-register">
-        <div className="container"> 
-          <div className="row login-register-cover">
-            <div className="col-lg-6 col-md-6 col-sm-12 mx-auto">
-              <div className="text-center">
-                <h2 className="mt-10 mb-5 text-brand-1"> Sign In</h2>
+
+  return (
+    <>
+      <div className="box-content">
+        <NotificationContainer />
+        <div className="row"> 
+          <div className="col-lg-12"> 
+            <div className="section-box">
+              <div className="container"> 
+                <div className="panel-white mb-30">
+                  <div className="box-padding">               
+                    <div className="login-register"> 
+                      <div className="row login-register-cover pb-250">
+                        <div className="col-lg-4 col-md-6 col-sm-12 mx-auto">
+                          <div className="form-login-cover">
+                            <div className="text-center">
+                              <h3 className="mt-10 mb-5 text-brand-1">Reset Your Password</h3>
+                            </div>
+                            <form className="login-register text-start mt-20" action="#">
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="input-1">New Password *</label>
+                                <input 
+                                  className="form-control" 
+                                  id="input-1" type="password" 
+                                  name="newPassword" 
+                                  placeholder="***********"
+                                  onChange={handleChange}
+                                  value={formValues.newPassword}
+                                />
+                              </div>
+
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="input-1">Confirm New Password *</label>
+                                <input 
+                                  className="form-control" 
+                                  id="input-1" type="password" 
+                                  name="repeatPassword" 
+                                  placeholder="***********"
+                                  onChange={handleChange}
+                                  value={formValues.repeatPassword}
+                                />
+                              </div>
+                              
+                              <div className="form-group">
+                              {
+                                disableForm() ? (
+                                  <DisabledButton title={'Submit'} className={'btn btn-brand-1 w-100'}/>
+                                ) : !loading ? (
+                                  <SubmitButton onClick={ handleSubmit } title={'Submit'} className={'btn btn-brand-1 w-100'}/>
+                                ) : (
+                                  <LoadingButton />
+                                )
+                              }
+                              </div>
+                              <div className="login_footer form-group d-flex justify-content-between">
+                                
+                                <Link className='text-muted' to="/login">
+                                    Back to Login
+                                </Link> 
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <form className="login-register text-start mt-20" action="#">
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="input-2">Email *</label>
-                  <input 
-                    className="form-control"
-                    type="email" 
-                    placeholder="your email" 
-                    onChange={handleChange}
-                    name="email"
-                    value={formValues.email}
-                    required
-                  />
-                  { formErrorMessage('email', formValues, submitForm)}
-                </div>
-              
-                <div className="form-group">
-                  {
-                    buttonLoading ? (
-                      <LoadingButton />
-                    ) : (
-                      <SubmitButton onClick={ handleSubmit } title={'Login'} className={'btn btn-brand-1 hover-up w-100'}/>
-                    )
-                  }
-                </div>
-
-                <div className="text-muted text-center"> don't have an account? Register?  
-                  <Link to="/register"> Sign Up</Link>
-                </div>
-                <div className="text-muted text-center"> Forgot Pasword ? 
-                  <Link to="/forgot-password"> Forgot Password</Link>
-                </div>
-              </form>
             </div>
-           
           </div>
         </div>
-      </section>
-    </main>
-  }
-    
-  </>
-  
-)
+        
+      
+      
+      </div>
+    </>
+  )
 }
