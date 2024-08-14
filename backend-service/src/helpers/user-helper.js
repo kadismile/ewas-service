@@ -15,12 +15,13 @@ export const validatePhoneNumber = (phoneNumber) => {
   }
 };
 
-export const sendResetPasswordToken = async (user) => {
+export const sendResetPasswordToken = async (user, frontEnd) => {
   const passwordToken = Math.floor(100000 + Math.random() * 9000000000000) 
   await User.findOneAndUpdate({email: user.email}, {
     passwordToken
   })
-  const resetPasswordUrl = `${process.env.DASHBOARD_URL}reset-password/${passwordToken}`
+  const baseUrl = frontEnd ? process.env.FRONTEND_URL : process.env.DASHBOARD_URL;
+  const resetPasswordUrl = `${baseUrl}reset-password/${passwordToken}`
   const type = 'forgotPasswordToken';
   const data = {
     email: user.email,
