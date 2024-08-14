@@ -101,11 +101,8 @@ return (
                   }
                 </div>
 
-                <div className="text-muted text-center"> don't have an account? Register?  
+                <div className="text-muted text-center"> don't have an account?  
                   <Link to="/register"> Sign Up</Link>
-                </div>
-                <div className="text-muted text-center"> Forgot Pasword ? 
-                  <Link to="/forgot-password"> Forgot Password</Link>
                 </div>
               </form>
             </div>

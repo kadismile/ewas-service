@@ -128,7 +128,7 @@ return (
                   <Link to="/register"> Sign Up</Link>
                 </div>
                 <div className="text-muted text-center"> Forgot Pasword ? 
-                  <Link to="/password-forgot"> Forgot Password</Link>
+                  <Link to="/password-forgot">click here</Link>
                 </div>
               </form>
             </div>
