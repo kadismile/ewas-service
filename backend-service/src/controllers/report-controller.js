@@ -1,10 +1,8 @@
 
 import { Report } from '../models/ReportModel/Report.js';
-import { create_reporter_validation } from '../validations/reporter-validations.js'
 import { ReportType } from '../models/ReportTypeModel/ReportTypeModel.js';
 import { agency_validation } from '../validations/crud-validations.js'
 import { user_login_validation } from '../validations/user-validations.js'
-import { create_report_validation } from '../validations/reporter-validations.js'
 import { Reporter } from '../models/ReportModel/ReporterModel.js';
 import { Paginator } from '../helpers/paginator-helper.js';
 import { AdminReportType } from '../models/ReportTypeModel/AdminReportTypeModel.js';
@@ -15,7 +13,6 @@ import { Agency } from '../models/AgencyModel/AgencyModel.js';
 import { Department } from '../models/DepartmentModel/DepartmentModel.js';
 import { sendNotification } from '../helpers/notification-helpers.js';
 import { sendSMS } from '../helpers/sms-helper.js';
-import {advancedResults} from "../helpers/advanced-results.js";
 import { DraftReport } from '../models/ReportModel/DraftReport.js';
 import { Verification } from '../models/VerificationModel/VerificationModel.js';
 import { SMSReport } from '../models/ReportModel/SMSReport.js';

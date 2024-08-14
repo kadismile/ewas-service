@@ -1,5 +1,5 @@
 {
-  "name": "backend-service",
+  "name": "backend_service",
   "version": "1.0.0",
   "engines": {
     "node": "18.12.1"
@@ -12,7 +12,7 @@
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "kadismile",
   "license": "ISC",
   "dependencies": {
     "agenda": "^5.0.0",
