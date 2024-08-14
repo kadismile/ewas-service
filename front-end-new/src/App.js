@@ -31,7 +31,7 @@ export const App = () => {
     { path: "/contact", element: <Contact /> },
     { path: "/login", element: <Login /> },
     { path: "/password-forgot", element: <ForgotPassword /> },
-    { path: "/reset-password/:resetToken", element: <ResetPassword /> },
+    { path: "/reset-password/:passwordToken", element: <ResetPassword /> },
     { path: "/register", element: <Register /> },
     { path: "/report", element: !user ? <Report/> : <VolunteerReport /> },
     { path: "/volunteer-report", element: user ? <VolunteerReport /> : <Report/> },

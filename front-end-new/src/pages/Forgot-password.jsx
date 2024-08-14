@@ -1,7 +1,7 @@
 "use client"; 
 import { reportService } from '../services/reporterService.js'
 import { useState, useEffect } from "react";
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { LoadingButton, SubmitButton } from "../components/elements/Buttons.jsx";
 import { PageLoader } from '../components/elements/spinners.jsx';
 import { formErrorMessage } from '../utils/form-error-messages.js';
@@ -9,9 +9,6 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 
 export const ForgotPassword = () => {
-  const navigate = useNavigate();
-  const from = useLocation()?.state?.state?.from || {};
-
   const [submitForm, setSubmitForm] = useState(false);
   const [formValues, setFormValues] = useState({
     email: "",

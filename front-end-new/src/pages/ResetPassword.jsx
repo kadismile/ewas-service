@@ -6,11 +6,12 @@ import toastr from 'toastr'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 export const ResetPassword = () => {
-  const { resetToken } = useParams();
+  const { passwordToken } = useParams();
   const [user, setuser] = useState(undefined)
 
   useEffect(() => {
-    reportService.verifyPasswordToken(resetToken)
+    const frontEnd = true
+    reportService.verifyPasswordToken({ passwordToken, frontEnd})
     .then((res) => {
       const {status, data} = res
       if (status === 'success') {
@@ -110,7 +111,8 @@ export const ResetPassword = () => {
     setLoading(true);
     const { newPassword } = formValues;
     const { email } = user;
-    const response = await reportService.resetPassword({email, newPassword})
+    const frontEnd = true
+    const response = await reportService.resetPassword({ email, newPassword, frontEnd})
     const { status, message } = response
     if (status === 'failed') {
       toastr.error(message);

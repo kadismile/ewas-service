@@ -2,6 +2,7 @@ import libPhone from 'google-libphonenumber';
 import { User } from '../models/UserModel/UserModel.js';
 const { PhoneNumberUtil } = libPhone;
 import { MailHelper } from '../helpers/mail-helper.js';
+import { Reporter } from '../models/ReportModel/ReporterModel.js';
 
 export const validatePhoneNumber = (phoneNumber) => {
   try {
@@ -17,9 +18,16 @@ export const validatePhoneNumber = (phoneNumber) => {
 
 export const sendResetPasswordToken = async (user, frontEnd) => {
   const passwordToken = Math.floor(100000 + Math.random() * 9000000000000) 
-  await User.findOneAndUpdate({email: user.email}, {
-    passwordToken
-  })
+  if (frontEnd) {
+    await Reporter.findOneAndUpdate({ email: user.email}, {
+      passwordToken
+    })
+  } else {
+    await User.findOneAndUpdate({email: user.email}, {
+      passwordToken
+    })
+  }
+  
   const baseUrl = frontEnd ? process.env.FRONTEND_URL : process.env.DASHBOARD_URL;
   const resetPasswordUrl = `${baseUrl}reset-password/${passwordToken}`
   const type = 'forgotPasswordToken';
