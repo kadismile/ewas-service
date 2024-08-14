@@ -50,6 +50,9 @@ const userSchema = new Schema({
   passwordToken: {
     type: Number,
   },
+  resetPasswordToken: {
+    type: String,
+  },
   role: {
     type: String,
     enum: ['user', 'admin', 'responder','superAdmin'],

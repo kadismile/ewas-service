@@ -1,5 +1,4 @@
 import multer from 'multer';
-import { Queue, Worker } from "bullmq";
 import { uuid } from 'uuidv4';
 import path from 'path';
 import { fileURLToPath } from 'url';
