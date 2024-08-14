@@ -15,6 +15,8 @@ import { Resources } from "./pages/Resources";
 import { ResourceDetils } from "./pages/ResourcesDetails";
 import { VolunteerReport } from "./pages/VolunteerReport";
 import { Terms } from "./pages/Terms";
+import { ForgotPassword } from "./pages/Forgot-password";
+import { ResetPassword } from "./pages/ResetPassword";
 
 export const App = () => {
   let user = store?.getState()?.user?.user
@@ -28,6 +30,8 @@ export const App = () => {
     { path: "/terms-condition", element: <Terms /> },
     { path: "/contact", element: <Contact /> },
     { path: "/login", element: <Login /> },
+    { path: "/password-forgot", element: <ForgotPassword /> },
+    { path: "/reset-password/:resetToken", element: <ResetPassword /> },
     { path: "/register", element: <Register /> },
     { path: "/report", element: !user ? <Report/> : <VolunteerReport /> },
     { path: "/volunteer-report", element: user ? <VolunteerReport /> : <Report/> },

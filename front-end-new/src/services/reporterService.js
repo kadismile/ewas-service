@@ -107,5 +107,28 @@ export const reportService = {
     } catch (e) {
       throw e
     }
-  }
+  },
+
+  forgotPasswordEmail : async (data) => {
+    try {
+      const url = `${serverUrl}/auth/send-reset-password-email`
+      const method = "POST"
+      const response = await client(url, method, data)
+      if (!response) throw new Error("password Rset Failed")
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  resetPassword :async (data) => {
+    try {
+      const url = `${serverUrl}/auth/reset-password`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 }
