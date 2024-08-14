@@ -44,6 +44,9 @@ const reporterSchema = new Schema({
     type: String,
     required: [true, 'Please Add password']
   },
+  passwordToken: {
+    type: Number,
+  },
   address: {
     type: addressSchema,
     required: [true, 'Please Add Address']

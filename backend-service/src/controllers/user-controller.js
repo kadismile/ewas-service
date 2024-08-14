@@ -5,6 +5,7 @@ import { sendInviteEmail, sendResetPasswordToken } from '../helpers/user-helper.
 import { User, Invitation } from '../models/UserModel//UserModel.js';
 import { user_create_validation, user_login_validation, change_password_validation } from '../validations/user-validations.js'
 import { Permission } from '../models/PermissionModel/PermissionModel.js';
+import { Reporter } from '../models/ReportModel/ReporterModel.js';
 
 
 export const createUser = async (req, res) => {
@@ -254,9 +255,14 @@ export const deleteUser = async (req, res) => {
 export const sendResetPassEmail = async (req, res) => {
   try {
     const { email, frontEnd } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-      await sendResetPasswordToken(user, frontEnd);
+    let entity;
+    if (frontEnd) {
+      entity = await Reporter.findOne({ email });
+    } else {
+      entity = await User.findOne({ email });
+    }
+    if (entity) {
+      await sendResetPasswordToken(entity, frontEnd);
       return res.status(200).json({
         status: "success",
         message: 'A password reset link as been sent to your email'
@@ -274,12 +280,18 @@ export const sendResetPassEmail = async (req, res) => {
 
 export const verifyPassToken = async (req, res) => {
   try {
-    const { passwordToken } = req.body;
-    const user = await User.findOne({ passwordToken });
-    if (user) {
+    const { passwordToken, frontEnd } = req.body;
+    let entity
+    if (frontEnd) {
+      entity = await Reporter.findOne({ passwordToken });
+    } else {
+      entity = await User.findOne({ passwordToken });
+    }
+   
+    if (entity) {
       return res.status(200).json({
         status: "success",
-        data: user
+        data: entity
       });
     } else {
       return res.status(404).json({
@@ -294,16 +306,22 @@ export const verifyPassToken = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   const body = req.body
-  const { newPassword, email } = body;
+  const { newPassword, email, frontEnd } = body;
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
+    let entity
+    if (frontEnd) {
+      entity = await Reporter.findOne({ email });
+    } else {
+      entity = await User.findOne({ email });
+    }
+    
+    if (!entity) {
       return res.status(401).json({  status: "failed", error: "invalid credentials"});
     }
 
-    user.password = newPassword;
-    user.passwordToken = null
-    await user.save();
+    entity.password = newPassword;
+    entity.passwordToken = null
+    await entity.save();
 
     return res.status(200).json({
       status: "success",
