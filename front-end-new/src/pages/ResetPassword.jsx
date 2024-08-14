@@ -49,7 +49,7 @@ export const ResetPassword = () => {
     }
     setButtonLoading(true)
     const { email } = formValues;
-    const response = await reportService.resetPasswordEmail({ email });
+    const response = await reportService.resetPassword({ email, frontEnd: true });
     const { status, message } = response;
     if (status === 'failed') {
       setButtonLoading(false)
