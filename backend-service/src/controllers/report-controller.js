@@ -17,6 +17,7 @@ import { DraftReport } from '../models/ReportModel/DraftReport.js';
 import { Verification } from '../models/VerificationModel/VerificationModel.js';
 import { SMSReport } from '../models/ReportModel/SMSReport.js';
 import { sendReportsToAgenciesEmail, sendReportsToDepartmentEmail } from '../helpers/user-helper.js';
+import { advancedResults } from '../helpers/advanced-results.js';
 
 
 export const createReporter = async (req, res) => {
