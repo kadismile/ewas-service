@@ -153,7 +153,7 @@ export const FilterModal = (props) => {
                 onClick={() => setShowModal(true)}
                 value={formValues.date}
                 readOnly
-              />
+            />
               <br/>
               <div className="display-flex2">
               <button 

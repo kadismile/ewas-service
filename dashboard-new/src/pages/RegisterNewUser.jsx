@@ -118,7 +118,7 @@ export const RegisterNewUser = () => {
   }
 
   const getRole = () => {
-    const userType = formValues?.agencyName ? 'responder' : 'user';
+    const userType = formValues?.agency ? 'responder' : 'user';
     return userType;
   }
 
