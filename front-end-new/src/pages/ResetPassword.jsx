@@ -8,6 +8,8 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 export const ResetPassword = () => {
   const { passwordToken } = useParams();
   const [user, setuser] = useState(undefined)
+  const [showPassword, setShowPassword] = useState(false);
+  const inputType = showPassword ? 'text' : 'password';
 
   useEffect(() => {
     const frontEnd = true
@@ -124,6 +126,9 @@ export const ResetPassword = () => {
     }
   };
 
+  const handleToggle = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
@@ -147,12 +152,14 @@ export const ResetPassword = () => {
                                 <label className="form-label" htmlFor="input-1">New Password *</label>
                                 <input 
                                   className="form-control" 
-                                  id="input-1" type="password" 
+                                  id="input-1" 
+                                  type={inputType}
                                   name="newPassword" 
                                   placeholder="***********"
                                   onChange={handleChange}
                                   value={formValues.newPassword}
                                 />
+                                { formValues.newPassword ? <i className="fa fa-eye ml-2" onClick={handleToggle} style={{top: '70%', left: '90%' }}></i> : ''}
                               </div>
 
                               <div className="form-group">
@@ -165,6 +172,7 @@ export const ResetPassword = () => {
                                   onChange={handleChange}
                                   value={formValues.repeatPassword}
                                 />
+                                { formValues.repeatPassword ? <i className="fa fa-eye ml-2" onClick={handleToggle} style={{top: '70%', left: '90%' }}></i> : ''}
                               </div>
                               
                               <div className="form-group">
