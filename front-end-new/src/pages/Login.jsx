@@ -20,6 +20,8 @@ export const Login = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const inputType = showPassword ? 'text' : 'password';
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   useEffect(() => {
@@ -72,6 +74,10 @@ export const Login = () => {
     }
   };
 
+  const handleToggle = () => {
+    setShowPassword(!showPassword);
+  };
+
 return (
   <>
   {
@@ -105,13 +111,14 @@ return (
                   <label className="form-label" htmlFor="input-4">Password *</label>
                   <input 
                     className="form-control" 
-                    type="password" 
+                    type={inputType}
                     onChange={handleChange}
                     name="password"
                     value={formValues.password}
                     placeholder="************"
                   />
                   { formErrorMessage('password', formValues, submitForm) }
+                  { formValues.password ? <i className="fa fa-eye ml-2" onClick={handleToggle} style={{top: '70%', left: '90%' }}></i> : ''}
                 </div>
               
                 <div className="form-group">
