@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { crudService } from "../services/crudService";
 import { MiniSpinner } from "../components/elements/spinners";
 import { PageLoader } from "../components/elements/spinners";
+import AWN from "awesome-notifications";
+import toastr from 'toastr'
+import { reportService } from "../services/reportsService";
 
 export const Reporters = (props) => {
+  const notifier = new AWN();
   const [loading, setLoading] = useState(true);
   const [data, setdata] = useState([]);
 
@@ -21,6 +25,24 @@ export const Reporters = (props) => {
     fetchData()
   }, []);
 
+  const deleteReporter = (data) => {
+    let onOk = async () => {
+      const response = await reportService.deleteReporters(data);
+      const {status, message} = response
+      if (status === 'success')
+      toastr.success(message);
+      fetchData();
+    };
+    let onCancel = () => {
+      return;
+    };
+    notifier.confirm("Are you sure?", onOk, onCancel, {
+      labels: {
+        confirm: `Delete ${data.fullName}`,
+      },
+    });
+  }
+
   const listItems = data.map((user, key) => {
     let number = key + 1;
     return (
@@ -29,7 +51,7 @@ export const Reporters = (props) => {
         <td>{user.fullName}</td>
         <td>{user.phoneNumber}</td>
         <td>{user.email}</td>
-        <td>{'300'}</td>
+        <td> <a href="#/" className="paint-red" title="delete" onClick={() => deleteReporter(user)}> <i class="fa fa-trash" aria-hidden="true"></i> </a> </td>
         
       </tr>
     );
@@ -101,7 +123,7 @@ export const Reporters = (props) => {
                             <th scope="col">Full Name</th>
                             <th scope="col">Phone Number</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Report Count</th>
+                            <th scope="col"></th>
                           </tr>
                         </thead>
                         <tbody>

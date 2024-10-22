@@ -86,6 +86,19 @@ export const reportService =  {
     }
   },
 
+  getReportStats: async () => {
+    try {
+      const url = `${serverUrl}/report/get-stats`;
+      const method = 'GET';
+      const response = await client(url, method);
+      if (!response)
+        throw new Error("Cannot Retrieve Report Statistics");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   getReportComments:async (reportId) => {
     if (!reportId ) 
     return {
@@ -165,5 +178,17 @@ export const reportService =  {
     }
   },
 
-  
+  deleteReporters: async (data) => {
+    try {
+      const url = `${serverUrl}/report/reporters`
+      const method = 'DELETE'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Delete Reporter");
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
+
 }

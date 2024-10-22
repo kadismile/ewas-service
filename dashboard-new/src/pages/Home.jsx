@@ -8,10 +8,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { LineChart } from "../components/charts/LineChart.jsx";
 import { VerticalBarChart } from "../components/charts/VerticalBarChat.jsx";
 import { FilterModal } from "../modals/FilterModal.jsx";
+import { reportService } from "../services/reportsService.js";
 
 export const Home = (props) => {
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
+  const [reportStats, setReportStats] = useState([])
   const [selectedMarker, setSelectedMarker] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
 
@@ -29,6 +31,14 @@ export const Home = (props) => {
       setLoading(false)
     }
   }
+
+  useEffect(()=> {
+    reportService.getReportStats().then((res) => {
+      const { data } = res;
+      setReportStats(data)
+      console.log("Data ==============>>>>>>>>>>>>> ", data)
+    });
+  }, [])
 
   return (
     <>
@@ -74,7 +84,7 @@ export const Home = (props) => {
                       <div className="card-info">
                         <div className="card-title">
                           <h3>
-                            {reports.length}
+                            {reportStats.totalReports}
                             <span className="font-sm status up">
                               <span></span>
                             </span>
@@ -93,7 +103,7 @@ export const Home = (props) => {
                       <div className="card-info">
                         <div className="card-title">
                           <h3>
-                            0
+                            {reportStats.totalIncidents}
                             <span className="font-sm status up">
                               <span></span>
                             </span>
@@ -110,7 +120,7 @@ export const Home = (props) => {
                       <div className="card-image"> <img src="/images/lamp.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
                         <div className="card-title">
-                          <h3>0<span className="font-sm status up"><span></span></span>
+                          <h3> {reportStats.totalConflicts}<span className="font-sm status up"><span></span></span>
                           </h3>
                         </div>
                         <p className="color-text-paragraph-2">Total Conflicts</p>
@@ -122,7 +132,7 @@ export const Home = (props) => {
                       <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
                         <div className="card-title">
-                          <h3>0<span className="font-sm status up"><span></span></span>
+                          <h3>{reportStats.totalResolved}<span className="font-sm status up"><span></span></span>
                           </h3>
                         </div>
                         <p className="color-text-paragraph-2">Total Resolved</p>
@@ -134,7 +144,7 @@ export const Home = (props) => {
                       <div className="card-image"> <img src="/images/look.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
                         <div className="card-title">
-                          <h3>0<span className="font-sm status up"><span></span></span>
+                          <h3>{reportStats.totalUnresolved}<span className="font-sm status up"><span></span></span>
                           </h3>
                         </div>
                         <p className="color-text-paragraph-2">Total Un Resolved</p>
@@ -146,7 +156,7 @@ export const Home = (props) => {
                       <div className="card-image"> <img src="/images/doc.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
                         <div className="card-title">
-                          <h3>0<span className="font-sm status up"><span></span></span>
+                          <h3>{reportStats.totalFalseReports}<span className="font-sm status up"><span></span></span>
                           </h3>
                         </div>
                         <p className="color-text-paragraph-2">Total False Report</p>
