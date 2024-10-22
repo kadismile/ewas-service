@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 const reportTypeSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Please Add Full Name']
+    required: [true, 'Please Add Name of report']
   },
   isActive : {
     type: Boolean,
