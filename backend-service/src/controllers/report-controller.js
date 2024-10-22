@@ -511,6 +511,90 @@ export const deleteReport = async (req, res) => {
   }
 }
 
+export const getReportStats = async (req, res) => {
+    const reportStats = await Report.aggregate([
+      {
+        $facet: {
+          totalReports: [{ $count: 'count' }],
+          totalIncidents: [
+            {
+              $match: {
+                type: 'incident',
+              },
+            },
+            { $count: 'count' },
+          ],
+          totalConflicts: [
+            {
+              $match: {
+                type: 'conflict',
+              },
+            },
+            { $count: 'count' },
+          ],
+          totalResolved: [
+            {
+              $match: {
+                status: 'resolved',
+              },
+            },
+            { $count: 'count' },
+          ],
+          totalUnresolved: [
+            {
+              $match: {
+                status: 'unresolved',
+              },
+            },
+            { $count: 'count' },
+          ],
+          totalFalseReports: [
+            {
+              $match: {
+                verified: 'false-report',
+              },
+            },
+            { $count: 'count' },
+          ],
+        },
+      },
+      {
+        $project: {
+          totalReports: { $ifNull: [{ $arrayElemAt: ['$totalReports.count', 0] }, 0] },
+          totalIncidents: { $ifNull: [{ $arrayElemAt: ['$totalIncidents.count', 0] }, 0] },
+          totalConflicts: { $ifNull: [{ $arrayElemAt: ['$totalConflicts.count', 0] }, 0] },
+          totalResolved: { $ifNull: [{ $arrayElemAt: ['$totalResolved.count', 0] }, 0] },
+          totalUnresolved: { $ifNull: [{ $arrayElemAt: ['$totalUnresolved.count', 0] }, 0] },
+          totalFalseReports: { $ifNull: [{ $arrayElemAt: ['$totalFalseReports.count', 0] }, 0] },
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: reportStats[0]
+    });
+}
+
+export const deleteReporter = async (req, res) => {
+  const { _id } = req.body
+  const reporter = await Reporter.find({_id})
+  if (reporter) {
+    await Reporter.findOneAndUpdate({ _id }, {
+      isActive: false
+    })
+    res.status(200).json({
+      status: 'success',
+      message: 'Reporter Deleted'
+    });
+  } else {
+    res.status(401).json({
+      status: 'failed',
+      message: 'Cannot Deleted Reporter '
+    });
+  }
+}
+
 
 
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
