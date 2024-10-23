@@ -13,6 +13,7 @@ export const smsReportsAfterSave = async (report) => {
       try {
         const notifData = {
           userId: userData._id,
+          reportId: report._id,
           message: newNotificationMessage(report),
         }
         const notification = new Notification(notifData)

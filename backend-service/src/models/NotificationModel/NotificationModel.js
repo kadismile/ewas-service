@@ -7,7 +7,12 @@ const notificationSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: [true, 'Please Add userId']
   },
-
+  reportId: {
+    type: String,
+    ref: 'Report',
+    type: Schema.Types.ObjectId,
+    required: [true, 'Please Add ReportId']
+  },
   message: {
     type: String,
     required: [true, 'Please Add noticiation message']
