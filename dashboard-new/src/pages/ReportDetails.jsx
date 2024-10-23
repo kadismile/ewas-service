@@ -45,7 +45,7 @@ export const ReportDetails = () => {
           setReport(report)
           setreportHistory(reportHistory)
           setDraftReport(draftReport)
-          updateNotification({ userId: user._id, reportSlug })
+          updateNotification({ userId: user._id, _id: report._id })
         }
       })
     } else {

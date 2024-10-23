@@ -52,7 +52,6 @@ export const Header = () => {
   };
 
   const toggleMenu = () => {
-    console.log('menuOpen --------->>>>>', menuOpen)
     setMenuOpen(!menuOpen); // Toggle mobile menu state
   };
 

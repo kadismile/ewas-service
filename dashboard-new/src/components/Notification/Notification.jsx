@@ -12,6 +12,11 @@ export const Notifications = () => {
     });
   }, [])
 
+  const filterNotification = () => {
+    const notification =  data.filter( not => not.isRead === 'not-read')
+    return notification 
+  }
+
   const notificationStyles = {
     background: 'url(../images/notify.svg) no-repeat center',
     display: 'inline-block',
@@ -51,11 +56,11 @@ export const Notifications = () => {
       <span style={checkNotStatus()}></span>
         <ul className="dropdown-menu dropdown-menu-light dropdown-menu-end" aria-labelledby="dropdownNotify">
           {
-          data.map((not, key)=> {
+          filterNotification().map((notification, key)=> {
             return (
               <li key={key}>
                 <a href="/#" className="dropdown-item active">
-                  { parse(not.message) }
+                  { parse(notification.message) }
                   </a>
             </li>
             )
