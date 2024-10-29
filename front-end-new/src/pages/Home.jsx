@@ -52,15 +52,14 @@ export const Home = ()=> {
                 <div className="row">
                   <div className="col-xl-7 col-lg-12">
                     <div className="block-banner">
-                    Institute for Peace & Conflict Resolution 
-                    Early Warning Early Response System
-                      <h1 className="heading-banner wow animate__animated animate__fadeInUp">Institute for Peace & Conflict Resolution &nbsp;<br className="d-none d-lg-block" />Early Warning Early Response System</h1>
+                    <h1 className="heading-banner wow animate__animated animate__fadeInUp">Institute for Peace and Conflict Resolution
+                      &nbsp;<br className="d-none d-lg-block" />Conflict Early Warning Early Response System</h1>
                       <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
                       Use this site to send an early warning, to enable an early response and prevent incidents and conflicts from escalating.</div>
                       <div className="mt-30"> 
 
                     {/*   <Link to='/report' className="btn btn-default mr-15"> REPORT INCIDENCT </Link> */}
-                    <a onClick={handleShowModal} className="btn btn-default mr-15">REPORT INCIDENT</a>
+                    <a onClick={handleShowModal} className="btn btn-default mr-15">REPORT INCIDENT/INDICATOR</a>
                     <ReportDialogModal show={showModal} onHide={handleCloseModal} />
 
                     </div>
