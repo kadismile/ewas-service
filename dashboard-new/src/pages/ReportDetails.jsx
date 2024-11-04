@@ -185,8 +185,15 @@ export const ReportDetails = () => {
     }
     return 'Verify Report'
   }
-  
 
+  const displayPrintButton = () => {
+    return user?.department?.acronym === "CAMS"
+  }
+
+  const handlePrint = () => {
+    window.print();
+  };
+  
   return (
     <>
     {
@@ -269,6 +276,19 @@ export const ReportDetails = () => {
                         </button>
                       </p> : ""
                     }
+                    
+                    {
+                      displayPrintButton() ? 
+                      <button 
+                      onClick={handlePrint}
+                      className="btn btn-default btn-sm" 
+                      type="submit" 
+                      style={{padding: '6px 15px'}}
+                    >
+                      <i class="fa-solid fa-print"></i> Print Report
+                    </button> : ""
+                    }
+                    
                     
                   </div>
                   
