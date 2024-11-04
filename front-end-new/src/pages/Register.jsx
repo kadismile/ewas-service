@@ -9,6 +9,7 @@ import Places from '../components/Map/Places.jsx';
 import { PageLoader } from '../components/elements/spinners.jsx';
 import { formErrorMessage } from '../utils/form-error-messages.js';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import GenderDropDown from '../components/DropDown/GenderDropDown.jsx';
 
 
 
@@ -25,6 +26,7 @@ export const Register = () => {
     repeatPassword: "",
     phoneNumber: "",
     address: "",
+    gender: "",
   });
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(true);
@@ -61,10 +63,10 @@ export const Register = () => {
       return;
     }
     setButtonLoading(true)
-    const { email, password, fullName, phoneNumber } = formValues;
+    const { email, password, fullName, phoneNumber, gender } = formValues;
     const address = mapAddress
     const response = await reportService.registerReporter({
-      email,fullName,password,phoneNumber, address,
+      email,fullName,password,phoneNumber, address,gender
     })
     
     const { status, message, token, data } = response
@@ -96,6 +98,16 @@ export const Register = () => {
   const handleToggle = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleDataFromDropDown = (data) => {
+    const { value } = data 
+    setFormValues((preVal)=> {
+      return {
+        ...preVal,
+        gender: value
+      }
+    })
+  }
 
   return (
     <>
@@ -134,6 +146,12 @@ export const Register = () => {
                       value={formValues.email}
                       required
                     />
+                    { formErrorMessage('email', formValues, submitForm)}
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="input-2">Gender *</label>
+                    <GenderDropDown label={'Gender'} dataToComponent={ handleDataFromDropDown }/>
                     { formErrorMessage('email', formValues, submitForm)}
                   </div>
 

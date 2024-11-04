@@ -499,7 +499,7 @@ export const VolunteerReport = () => {
 
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Numbers Killed *</label>
+                                <label className="form-label" htmlFor="input-2">Numbers Killed</label>
                                 <input
                                   className="font-sm color-text-paragraph-2"
                                   name="numberKilled"
@@ -513,7 +513,7 @@ export const VolunteerReport = () => {
 
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Numbers Injured *</label>
+                                <label className="form-label" htmlFor="input-2">Numbers Injured</label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="numberInjured"
@@ -527,7 +527,7 @@ export const VolunteerReport = () => {
 
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Numbers of Women Affected *</label>
+                                <label className="form-label" htmlFor="input-2">Numbers of Women Affected </label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="nums_women_affected"
@@ -541,7 +541,7 @@ export const VolunteerReport = () => {
 
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Number of Children Affected *</label>
+                                <label className="form-label" htmlFor="input-2">Number of Children Affected </label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="nums_children_affected"
@@ -555,7 +555,7 @@ export const VolunteerReport = () => {
 
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Number of Cattles Affected *</label>
+                                <label className="form-label" htmlFor="input-2">Number of Cattles Affected </label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="nums_cattle_affected"
@@ -569,7 +569,7 @@ export const VolunteerReport = () => {
 
                               <div className="col-lg-3 col-md-4">
                                 <div className="input-style mb-20">
-                                <label className="form-label" htmlFor="input-2">Number of Properties Affected *</label>
+                                <label className="form-label" htmlFor="input-2">Number of Properties Affected </label>
                                   <input
                                     className="font-sm color-text-paragraph-2"
                                     name="nums_properties_affected"

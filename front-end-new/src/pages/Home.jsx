@@ -68,8 +68,8 @@ export const Home = ()=> {
                           <div className="box-swiper">
                           <div className="swiper-container swiper-group-4-banner swiper">
                               <div className="swiper-wrapper">
-                                <a href="#"><img src="images/partners/usaid.png" alt="jobBox" /></a> &nbsp;&nbsp;&nbsp;
-                                <a href="#"><img src="images/partners/MERCY-CORP.png" alt="jobBox"/></a> &nbsp;&nbsp;&nbsp;
+                                <a href="#"><img src="/images/partners/usaid.png" alt="jobBox" /></a> &nbsp;&nbsp;&nbsp;
+                                <a href="#"><img src="/images/partners/MERCY-CORP.png" alt="jobBox"/></a> &nbsp;&nbsp;&nbsp;
                                 
                                 {/* <div className="swiper-slide"><a href="#"><img src="images/agency/T3.png" alt="jobBox" /></a></div>
                                 <div className="swiper-slide"><a href="#"><img src="images/agency/T4.png" alt="jobBox" /></a></div>

@@ -51,6 +51,11 @@ const reporterSchema = new Schema({
     type: addressSchema,
     required: [true, 'Please Add Address']
   },
+  gender: {
+    type: String,
+    enum: ['Male', 'Female'],
+    required: [true, 'Please Add Address']
+  },
   phoneNumber: {
     type: String,
     required: [true, 'Please Add Phone']

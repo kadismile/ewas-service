@@ -63,6 +63,15 @@ export const SideBar = () => {
                 </li>
               </WithPermissions>
 
+              <WithPermissions permitedPermissions={ SUSPEND_USER_PERMISSIONS }>
+                <li>
+                  <Link className={`dashboard2 ${getActiveLink(["/report/types"])}`} to="/report/types">
+                    <img src="/images/profiles.svg" alt="jobBox" />
+                    <span className="name">Report Types</span>
+                  </Link> 
+                </li>
+              </WithPermissions>
+
               
               <WithPermissions permitedPermissions={ DEPARTMENT_PERMISSIONS }>
                 <li>

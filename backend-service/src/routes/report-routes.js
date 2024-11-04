@@ -4,7 +4,9 @@ import { reportType, createReporter, loginReporter,
   getReports, getOneReport, acceptReport, verifyReport, 
   getAdvanced, editReport, getVerifications, getDraftReport,
   createReportBySMS, getSMSReport, getUserReports, deleteReport,getReportStats,
-  deleteReporter
+  deleteReporter,
+  editReportType,
+  deleteReportType
 } from '../controllers/report-controller.js';
 import {searchRsource} from '../controllers/search-controller.js';
 import { protectedRoute, authorize } from '../middlewares/auth-middleware.js';
@@ -15,6 +17,8 @@ const router = express.Router();
 router.post('/type',  reportType);
 router.post('/type/admin',  createAdminReportType);
 router.get('/type', reportType);
+router.patch('/type/edit', editReportType);
+router.delete('/reportType/delete', deleteReportType);
 router.post('/', createReporter);
 router.post('/sms', createReportBySMS);
 router.post('/sms-reports', getSMSReport);
