@@ -13,6 +13,7 @@ import { UserProfile } from "./pages/UserProfile";
 import { Articles } from "./pages/Articles";
 import { SMSReports } from "./pages/SMSReports";
 import { RegisterNewUser } from "./pages/RegisterNewUser";
+import { IncidentTypes } from "./pages/IncidentTypes";
 
 
 export const AuthorizedApp = () => {
@@ -24,6 +25,7 @@ export const AuthorizedApp = () => {
     { path: "/department", element: <Department /> },
     { path: "/responder", element: <Responder /> },
     { path: "/reporters", element: <Reporters /> },
+    { path: "/report/types", element: <IncidentTypes /> },
     { path: "*", element: <Home /> },
     { path: "/reports", element: <Reports /> },
     { path: "/report/:reportSlug", element: <ReportDetails /> },

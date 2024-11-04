@@ -86,6 +86,32 @@ export const reportService =  {
     }
   },
 
+  editReportTypes:async (data) => {
+    try {
+      const url = `${serverUrl}/report/type/edit`
+      const method = 'PATCH'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Aeditdd Report Type");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
+  addReportType: async (data) => {
+    try {
+      const url = `${serverUrl}/report/type`
+      const method = 'POST'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Add Report Type");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   getReportStats: async () => {
     try {
       const url = `${serverUrl}/report/get-stats`;
@@ -189,6 +215,19 @@ export const reportService =  {
     } catch (e) {
       throw e
     }
-  }
+  },
+
+  delReportTypes: async (data) => {
+    try {
+      const url = `${serverUrl}/report/reportType/delete`
+      const method = 'DELETE'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Delete Report Type");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
 
 }

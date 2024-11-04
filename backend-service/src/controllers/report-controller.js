@@ -27,7 +27,7 @@ export const createReporter = async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   } */
-  let { fullName, phoneNumber, email, password, address, } = req.body;
+  let { fullName, phoneNumber, email, password, address, gender } = req.body;
   let reporter = await findReporterByEmailOrPhone(phoneNumber, email);
 
 
@@ -39,7 +39,8 @@ export const createReporter = async (req, res) => {
   }
 
   reporter = new Reporter({
-    email, fullName, phoneNumber, password,address,
+    email, fullName, phoneNumber,
+    password,address, gender
   });
 
   const token = reporter.getSignedJwtToken();
@@ -137,6 +138,7 @@ export const loginReporter = async (req, res) => {
 
 export const reportType = async (req, res) => {
   const body = req.body
+  console.log("we are here -----------------------")
   if (req.method == 'GET') {
     const reportType = await ReportType.find({})
     return res.status(200).json({
@@ -144,6 +146,7 @@ export const reportType = async (req, res) => {
       data: reportType
     });
   }
+
   
   try {
     const reportType = new ReportType(body);
@@ -595,7 +598,44 @@ export const deleteReporter = async (req, res) => {
   }
 }
 
+export const editReportType = async (req, res) => {
+  try {
+    const{ 
+      name, _id
+    } = req.body;
+    
+    let report = await ReportType.findOne({ _id }).lean() ;
+    if (report) {
+      await ReportType.findOneAndUpdate({ _id },{ name } )
+  
+      res.status(200).json({
+        status: "success",
+      });
+    } else {
+      res.status(404).json({
+        status: "failed",
+        message: 'reporttype not found'
+      });
+    }
+  } catch (error) {
+    console.log('Error ------', error)
+    return res.status(500).json({
+      status: "failed",
+      error
+    });
+  }
+}
 
+export const deleteReportType = async (req, res) => {
+  const body = req.body
+  const reportType = await ReportType.findOne({ _id: body._id })
+  if (reportType) {
+    await ReportType.deleteOne({ _id: reportType._id })
+  }
+  return res.status(200).json({
+    status: 'success',
+  });
+}
 
 const findReporterByEmailOrPhone = async (phoneNumber, email) => {
   const reporter = await Reporter.findOne({
