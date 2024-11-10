@@ -194,6 +194,7 @@ export const ReportDetails = () => {
     window.print();
   };
   
+  console.log("Report --------->>>>>>>", report)
   return (
     <>
     {
@@ -263,7 +264,11 @@ export const ReportDetails = () => {
                     <p> Longitude: <b style={{fontWeight: 'bolder', color: '#7C8BAA'}}>{report?.address?.longitude }</b> </p>
                     <p> Latitude: <b style={{fontWeight: 'bolder', color: '#7C8BAA'}}>{report?.address?.latitude }</b> </p>
                     <p> Status: <span style={{color: colorStatus(report?.status), fontSize: '12px'}}>{capitalize(report?.status)}</span> </p>
-                    <p> Reviews: <a href="#/" onClick={() => setCommentModal(true)}> <span style={{color: 'green', fontSize: '12px', fontWeight: 'bolder'}}>View Comments</span>  </a></p>
+
+                   { report?.actionableUsers?.reportUserHistory?.length ?
+                   <p> Reviews: <a href="#/" onClick={() => setCommentModal(true)}> <span style={{color: 'green', fontSize: '12px', fontWeight: 'bolder'}}>View Comments</span>  </a></p> : ''
+                  }
+
                     <p> Draft: <a href="#/" onClick={() => setDraftModal(true)}> <span style={{color: 'purple', fontSize: '12px', fontWeight: 'bolder'}}>View Draft</span>  </a></p>
                     
                     {displayActionButtons() &&
@@ -276,6 +281,7 @@ export const ReportDetails = () => {
                         </button>
                       </p> : ""
                     }
+                    <br/>
                     
                     {
                       displayPrintButton() ? 
