@@ -28,7 +28,7 @@ export const Home = ()=> {
 
   const displayArticleImage = (article) => {
     if (article.attachments.length) {
-      return <img src={`${article.attachments[0].secure_url}`} alt="jobBox" /> 
+      return <img src={`${article.attachments[(article.attachments.length)-1].secure_url}`} alt="jobBox" /> 
     }
     return  <img src="/images/resources-place-holder.png" alt="jobBox" />
   }
