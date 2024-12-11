@@ -270,6 +270,19 @@ export const crudService =  {
     }
   },
 
+  delArticle: async (data) => {
+    try {
+      const url = `${serverUrl}/article`
+      const method = 'DELETE'
+      const response = await client(url, method, { ...data });
+      if (!response)
+        throw new Error("Cannot Delete Article");
+      return response
+    } catch (e) {
+      throw e
+    }
+  },
+
   getSMSReports: async () => {
     try {
       const url = `${serverUrl}/report/sms-reports`
