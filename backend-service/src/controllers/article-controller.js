@@ -25,6 +25,14 @@ export const articleResource = async (req, res) => {
     const article = await Article.find({_id})
     if (article) {
       await Article.findByIdAndUpdate({ _id }, req.body);
+      if (req?.file) {
+        req.files = [req.file]
+      } else {
+        for (let file of req.files) {
+          const { path, filename } = file
+          await manageFileUpload(path, filename, article, 'articles')
+        }
+      }
       return res.status(200).json({
         status: 'success',
         message: 'Article Updated'
@@ -92,7 +100,7 @@ export const editArticle = async (req, res) => {
       } else {
         for (let file of req.files) {
           const { path, filename } = file
-          await manageFileUpload(path, filename, article, Article)
+          await manageFileUpload(path, filename, article, 'articles')
         }
       }
       res.status(201).json({
