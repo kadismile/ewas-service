@@ -59,9 +59,10 @@ export const Home = ()=> {
                 <div className="row">
                   <div className="col-xl-7 col-lg-12">
                     <div className="block-banner">
-                    <h1 className="heading-banner wow animate__animated animate__fadeInUp">Institute for Peace and Conflict Resolution
-                      &nbsp;<br className="d-none d-lg-block" />
-                      <span style={{ color:'#d01f2d'}}>Conflict Early Warning Early Response System</span></h1>
+                    <h2 className="heading-banner wow animate__animated animate__fadeInUp">Institute for Peace and Conflict Resolution
+                      &nbsp;
+                     </h2>
+                     <h1 className='heading-banner wow animate__animated animate__fadeInUp'> <span style={{ color:'#d01f2d', fontSize: '27px'}}>Conflict Early Warning Early Response System</span></h1>
                       <div className="banner-description mt-20 wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
                       Use this site to send an early warning, to enable an early response and prevent incidents and conflicts from escalating.</div>
                       <div className="mt-30"> 
