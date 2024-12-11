@@ -321,7 +321,7 @@ export const ReportDetails = () => {
                           </div>
                           <div className="col-lg-3 col-md-6">
                             <div className="form-group mb-30"> 
-                              <label className="font-sm color-text-mutted mb-10">Srcurity Agency </label>
+                              <label className="font-sm color-text-mutted mb-10">Security Agency </label>
                               <input className="form-control" type="text" readOnly value={capitalize(report?.agencyId?.name)} />
                             </div>
                           </div>

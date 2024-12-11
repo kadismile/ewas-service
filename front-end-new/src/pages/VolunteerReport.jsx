@@ -451,8 +451,14 @@ export const VolunteerReport = () => {
                           </div>
                         </div>
                       }
-                      
-  
+
+                      <div className={WardCol}>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="input-2">Map location*</label>
+                          <Places dataToComponent={handlePlacesData}/>
+                        </div>
+                      </div>
+
                       <div className={WardCol}>
                         <div className="form-group">
                           <label className="form-label" htmlFor="input-2">Land Mark*</label>
@@ -465,13 +471,6 @@ export const VolunteerReport = () => {
                             type="text"
                           />
                           {submitForm && formValues?.landMark?.length < 1 ? <span className="form_error"> { 'LandMark is Mandatory' }</span> : ""}
-                        </div>
-                      </div>
-
-                      <div className={WardCol}>
-                        <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Map location</label>
-                          <Places dataToComponent={handlePlacesData}/>
                         </div>
                       </div>
 

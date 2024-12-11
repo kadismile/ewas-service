@@ -446,6 +446,12 @@ export const Report = () => {
                         </div>
                       }
                       
+                      <div className={WardCol}>
+                        <div className="form-group">
+                          <label className="form-label" htmlFor="input-2">Map location*</label>
+                          <Places dataToComponent={handlePlacesData}/>
+                        </div>
+                      </div>
   
                       <div className={WardCol}>
                         <div className="form-group">
@@ -462,12 +468,7 @@ export const Report = () => {
                         </div>
                       </div>
 
-                      <div className={WardCol}>
-                        <div className="form-group">
-                          <label className="form-label" htmlFor="input-2">Map location</label>
-                          <Places dataToComponent={handlePlacesData}/>
-                        </div>
-                      </div>
+                      
 
                       { displayCommunity && <div className="col-lg-1"> </div> }
                     
