@@ -26,6 +26,13 @@ export const Home = ()=> {
     })
   }, [])
 
+  const displayArticleImage = (article) => {
+    if (article.attachments.length) {
+      return <img src={`${article.attachments[0].secure_url}`} alt="jobBox" /> 
+    }
+    return  <img src="/images/resources-place-holder.png" alt="jobBox" />
+  }
+
   return (
     <>
     { loading ? <PageLoader /> : 
@@ -121,7 +128,9 @@ export const Home = ()=> {
                                 <div className="card-grid-2-image"><span className="lbl-hot bg-green"><span>Article</span></span>
                                   <div className="image-box">
                                   <Link to={ `/article/${article._id}` } > 
-                                    <figure><img src="/images/resources-place-holder.png" alt="jobBox" /></figure> 
+                                    <figure>
+                                      {displayArticleImage(article)}
+                                    </figure> 
                                   </Link>
                                   </div>
                                 </div>

@@ -12,10 +12,10 @@ export const articleResource = async (req, res) => {
       ['user'],
       ['attachments'],
     ]
-    const article = await Paginator({...req.query}, Article, populate);
+    const articles = await Paginator({...req.query}, Article, populate);
     return res.status(200).json({
       status: 'success',
-      data: article
+      data: articles
     });
   }
 
