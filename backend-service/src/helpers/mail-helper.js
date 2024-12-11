@@ -49,7 +49,14 @@ class Mailer {
       }
 
       const agenda = new Agenda({
-        db: { address: mongoConnectionString, collection: 'jobCollection' },
+        db: { 
+          address: mongoConnectionString, 
+          collection: 'jobCollection',
+          options: {
+            ssl: true,
+            tls: true,
+          },
+        },
       });
 
 

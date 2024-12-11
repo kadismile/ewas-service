@@ -7,7 +7,9 @@ export const DBconnection = async () => {
     user: process.env.MONGODB_USER,
     pass: process.env.MONGODB_PASS,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    ssl: true,
+    tls: true,
   };
 
   if (options.user === '') delete options.user;
