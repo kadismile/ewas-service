@@ -193,7 +193,7 @@ export const VerifyReportModal = (props) => {
     } = formValues
 
     const data = {
-      reportId: props.data,
+      reportId: props.data._id,
       verified: camsVeriMethod,
       userId: user._id,
       verificationMethod: camsVeriOptions,

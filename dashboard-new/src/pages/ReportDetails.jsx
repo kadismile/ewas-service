@@ -187,14 +187,13 @@ export const ReportDetails = () => {
   }
 
   const displayPrintButton = () => {
-    return user?.department?.acronym === "CAMS"
+    return user?.department?.acronym === "CAMS" || user?.department?.acronym === 'CIDS'
   }
 
   const handlePrint = () => {
     window.print();
   };
   
-  console.log("Report --------->>>>>>>", report)
   return (
     <>
     {
@@ -208,7 +207,7 @@ export const ReportDetails = () => {
         <VerifyReportModal 
           show={showVerifyModal} 
           onHide={handleCloseModal} 
-          data={assData} 
+          data={report} 
           depAcronym={user.department.acronym}
           title={getByTitle()}
         />

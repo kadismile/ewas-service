@@ -14,7 +14,7 @@ export const sendNotification = async (report, department) => {
       try {
         const notifData = {
           userId: userData._id,
-          report: report._id,
+          reportId: report._id,
           message
         };
         const notification = new Notification(notifData);
