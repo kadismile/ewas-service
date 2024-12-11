@@ -57,7 +57,14 @@ export const manageFileUpload = async (filePath, fileName, data, model) => {
     }
 
     const agenda = new Agenda({
-      db: { address: mongoConnectionString, collection: 'jobCollection' },
+      db: { 
+        address: mongoConnectionString, 
+        collection: 'jobCollection',
+        options: {
+          ssl: true,
+          tls: true,
+        },
+      },
     });
 
     agenda.define('Upload Images', async (job) => {
