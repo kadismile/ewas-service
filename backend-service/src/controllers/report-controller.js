@@ -275,13 +275,13 @@ export const getOneReport = async (req, res) => {
   try {
     const reportSlug = req.query.reportSlug
     let report
-    if (req.user.role === 'responder') {
+    /* if (req.user.role === 'responder') {
       const agencies = await Agency.find({})
       const agencyIds = agencies.map( agency => agency.id )
       report = await Report.findOne({ 'actionableUsers.agencyId': { $in: agencyIds }, reportSlug })
-    } else {
+    } else { */
       report = await Report.findOne({ reportSlug })
-    }
+    //}
     await report.populate('attachments')
     await report.populate('agencyId')
     await report.populate('reportTypeId')
@@ -394,14 +394,13 @@ export const verifyReport = async (req, res) => {
       const reportType = await AdminReportType.findOne({ name: addminReportType })
       const nextActionableDept = await getNextActionableDept(acronym, responder, reportType)
 
-      if (!responderVeriMethod || !reportStatus) {
-        await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
-        const comment =  `report verified by ${user.fullName} of ${acronym} Department`
-        await addHistory(user, report, comment)
-  
-        await createVerification(user, reportId, verificationMethod, comments)
-        await createNotification(report, acronym)
-      }
+      await updateActonableUser(userId, department._id, report, nextActionableDept, true, responder)
+      const comment =  `report verified by ${user.fullName} of ${acronym} Department`
+      await addHistory(user, report, comment)
+
+      await createVerification(user, reportId, verificationMethod, comments)
+      await createNotification(report, acronym)
+    
       
       if (responder?.length) {
         const agencies = await Agency.find({ _id: { $in: responder } })
@@ -652,7 +651,7 @@ const findReporterByEmailOrPhone = async (phoneNumber, email) => {
 const createNotification = async (report, departmentAcronym) => {
   const CAMS_DEPT = process.env.CAMS_DEPARTMENT
   const CPS_DEPT = process.env.CPS_DEPARTMENT
-  const SSS_DEPT = process.env.SSS_DEPARTMENT
+  const RESPONDER_DEPT = process.env.RESPONDER_DEPT
   switch (departmentAcronym) {
     case "CAMS":
       await sendNotification(report, CAMS_DEPT)
@@ -660,8 +659,8 @@ const createNotification = async (report, departmentAcronym) => {
     case "CPS":
       await sendNotification(report, CPS_DEPT)
         break;  
-    case "SSS":
-      await sendNotification(report, SSS_DEPT)
+    case "Responder":
+      await sendNotification(report, RESPONDER_DEPT)
       break;
     default:
       break;

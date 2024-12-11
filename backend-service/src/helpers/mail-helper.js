@@ -43,31 +43,31 @@ class Mailer {
         html: emailTemplate(data)
       };
 
-    const mongoConnectionString = process.env.MONGODB_URL;
-    if (!mongoConnectionString) {
-      throw new Error('MONGODB_URL is not defined');
-    }
+      const mongoConnectionString = process.env.MONGODB_URL;
+      if (!mongoConnectionString) {
+        throw new Error('MONGODB_URL is not defined');
+      }
 
-    const agenda = new Agenda({
-      db: { address: mongoConnectionString, collection: 'jobCollection' },
-    });
+      const agenda = new Agenda({
+        db: { address: mongoConnectionString, collection: 'jobCollection' },
+      });
 
 
-    agenda.define('Send Mail', async (job) => {
-      const { message } = job.attrs.data;
-      await triggerMail(message);
-    });
-    await agenda.start();
+      agenda.define('Send Mail', async (job) => {
+        const { message } = job.attrs.data;
+        await triggerMail(message);
+      });
+      await agenda.start();
 
-    await agenda.schedule('in 20 seconds', 'Send Mail', message);
+      await agenda.schedule('in 20 seconds', 'Send Mail', message);
 
-    console.log('Agenda started and job scheduled');
+      console.log('Agenda started and job scheduled');
 
-    const triggerMail = async () => {
-      self.transporter.sendMail(message);
-    }
+      const triggerMail = async () => {
+        self.transporter.sendMail(message);
+      }
     } catch (e) {
-      throw e
+      console.log("Error", e)
     }
   }
 }

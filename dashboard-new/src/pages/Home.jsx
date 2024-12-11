@@ -36,7 +36,6 @@ export const Home = (props) => {
     reportService.getReportStats().then((res) => {
       const { data } = res;
       setReportStats(data)
-      console.log("Data ==============>>>>>>>>>>>>> ", data)
     });
   }, [])
 
@@ -75,7 +74,7 @@ export const Home = (props) => {
 
               <div className="section-box">
                 <div className="row">
-                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image">
                         {" "}
@@ -94,40 +93,8 @@ export const Home = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
-                    <div className="card-style-1 hover-up">
-                      <div className="card-image">
-                        {" "}
-                        <img src="/images/bank.svg" alt="jobBox" />
-                      </div>
-                      <div className="card-info">
-                        <div className="card-title">
-                          <h3>
-                            {reportStats.totalIncidents}
-                            <span className="font-sm status up">
-                              <span></span>
-                            </span>
-                          </h3>
-                        </div>
-                        <p className="color-text-paragraph-2">
-                          Total Incidents
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
-                    <div className="card-style-1 hover-up">
-                      <div className="card-image"> <img src="/images/lamp.svg" alt="jobBox" /></div>
-                      <div className="card-info"> 
-                        <div className="card-title">
-                          <h3> {reportStats.totalConflicts}<span className="font-sm status up"><span></span></span>
-                          </h3>
-                        </div>
-                        <p className="color-text-paragraph-2">Total Conflicts</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  
+                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image"> <img src="/images/headphone.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
@@ -139,7 +106,7 @@ export const Home = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image"> <img src="/images/look.svg" alt="jobBox" /></div>
                       <div className="card-info"> 
@@ -151,7 +118,7 @@ export const Home = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xxl-2 col-xl-6 col-lg-6 col-md-4 col-sm-6">
+                  <div className="col-xxl-3 col-xl-6 col-lg-6 col-md-4 col-sm-6">
                     <div className="card-style-1 hover-up">
                       <div className="card-image"> <img src="/images/doc.svg" alt="jobBox" /></div>
                       <div className="card-info"> 

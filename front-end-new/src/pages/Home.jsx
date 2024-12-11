@@ -36,7 +36,6 @@ export const Home = ()=> {
   return (
     <>
     { loading ? <PageLoader /> : 
-    
       <main className="main">
           <section className="section-box d-block d-sm-none">
               <div className="breacrumb-cover bg-img-home">
