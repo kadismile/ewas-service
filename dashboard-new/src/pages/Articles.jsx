@@ -58,7 +58,7 @@ export const Articles = (props) => {
 
   const deleteBundle = (data) => {
     let onOk = async () => {
-      const response = await crudService.delAgency(data);
+      const response = await crudService.delArticle(data);
       const {status, message} = response
       if (status === 'success')
       toastr.success(message);
